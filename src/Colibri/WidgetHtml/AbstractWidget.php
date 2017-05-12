@@ -4,10 +4,10 @@ namespace Colibri\WidgetHtml;
 
 use Colibri\Collection\ArrayCollection;
 use Colibri\Exception\BadArgumentException;
-use Dez\Html\Element\InputElement;
-use Dez\Html\Element\ItalicElement;
-use Dez\Html\Element\SelectElement;
-use Dez\Html\HtmlElement;
+use Colibri\Html\Element\InputElement;
+use Colibri\Html\Element\ItalicElement;
+use Colibri\Html\Element\SelectElement;
+use Colibri\Html\HtmlElement;
 
 /**
  * Class AbstractWidget

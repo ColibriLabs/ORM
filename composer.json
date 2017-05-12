@@ -1,10 +1,10 @@
 {
-  "name": "dezbyte/colibri-orm",
-  "description": "ColibriORM - Yet Another PHP ORM",
-  "keywords": ["php orm","colibri","colibri orm","dezbyte colibri orm"],
+  "name": "colibriphp/orm",
+  "description": "Colibri ORM - Yet Another PHP ORM",
+  "keywords": ["php orm","colibri","colibri orm",],
   "authors": [
     {
-      "name": "Ivan Gontarenko",
+      "name": "Ivan Hontarenko",
       "email": "stewie.dev@gmail.com",
       "homepage": "http://cv.dezz.pro/",
       "role": "Developer"
