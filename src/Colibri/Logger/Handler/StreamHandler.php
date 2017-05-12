@@ -2,7 +2,7 @@
 
 namespace Colibri\Logger\Handler;
 
-use Colibri\Logger\Collection\ArrayCollection;
+use Colibri\Logger\Collection\Collection;
 use Colibri\Logger\Handler\Mask\LogLevelMask;
 
 /**
@@ -29,10 +29,10 @@ class StreamHandler extends AbstractHandler {
   }
 
   /**
-   * @param ArrayCollection $record
+   * @param Collection $record
    * @return null
    */
-  public function handle(ArrayCollection $record)
+  public function handle(Collection $record)
   {
     file_put_contents($this->file, $this->formatter->format($record) . PHP_EOL, FILE_APPEND);
 

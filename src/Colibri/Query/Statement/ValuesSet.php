@@ -2,7 +2,7 @@
 
 namespace Colibri\Query\Statement;
 
-use Colibri\Collection\ArrayCollection;
+use Colibri\Collection\Collection;
 use Colibri\Query\Builder;
 use Colibri\Query\Expr;
 
@@ -16,7 +16,7 @@ class ValuesSet extends AbstractStatement
   use Builder\Syntax\ValuesSetTrait;
   
   /**
-   * @var ArrayCollection|ArrayCollection[]
+   * @var Collection|Collection[]
    */
   protected $dataSet;
   
@@ -28,9 +28,9 @@ class ValuesSet extends AbstractStatement
   {
     parent::__construct($builder);
     
-    $this->dataSet = new ArrayCollection([
-      'valuesSet'     => new ArrayCollection(),
-      'columnHashes'  => new ArrayCollection(),
+    $this->dataSet = new Collection([
+      'valuesSet'     => new Collection(),
+      'columnHashes'  => new Collection(),
     ]);
   }
   

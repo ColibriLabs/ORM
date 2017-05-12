@@ -1,6 +1,6 @@
 <?php
 
-use Colibri\Collection\ArrayCollection;
+use Colibri\Collection\Collection;
 use Colibri\Core\ResultSet\ResultSetIterator;
 use Colibri\Generator\Builder\EntityBuilder;
 use Colibri\Generator\Template\Template;
@@ -10,7 +10,7 @@ use Colibri\Schema\Table;
 /**
  * @var $this Template
  * @var $table Table
- * @var $primaryFields ArrayCollection|Field[]
+ * @var $primaryFields Collection|Field[]
  * @var $namespace string
  */
 

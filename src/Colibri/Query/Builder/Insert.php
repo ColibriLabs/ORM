@@ -2,7 +2,7 @@
 
 namespace Colibri\Query\Builder;
 
-use Colibri\Collection\ArrayCollection;
+use Colibri\Collection\Collection;
 use Colibri\Connection\ConnectionInterface;
 use Colibri\Query\Builder;
 use Colibri\Query\Statement\Modifiers;
@@ -28,7 +28,7 @@ class Insert extends Builder
   {
     parent::__construct($connection);
   
-    $this->statements = new ArrayCollection([
+    $this->statements = new Collection([
       'valuesSet' => new ValuesSet($this),
       'modifiers' => new Modifiers($this, Modifiers::MAP_INSERT),
     ]);

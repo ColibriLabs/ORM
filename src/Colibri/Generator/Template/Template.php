@@ -2,7 +2,7 @@
 
 namespace Colibri\Generator\Template;
 
-use Colibri\Collection\ArrayCollection;
+use Colibri\Collection\Collection;
 
 /**
  * Class Template
@@ -12,7 +12,7 @@ class Template implements \ArrayAccess
 {
 
   /**
-   * @var ArrayCollection
+   * @var Collection
    */
   protected $data;
 
@@ -28,7 +28,7 @@ class Template implements \ArrayAccess
   public function __construct($directory)
   {
     $this->directory = $directory;
-    $this->data = new ArrayCollection();
+    $this->data = new Collection();
   }
 
   /**

@@ -2,7 +2,7 @@
 
 namespace Colibri\Query\Statement;
 
-use Colibri\Collection\ArrayCollection;
+use Colibri\Collection\Collection;
 use Colibri\Query\Builder;
 use Colibri\Query\Expr;
 
@@ -16,7 +16,7 @@ class Set extends AbstractStatement
   use Builder\Syntax\SetTrait;
   
   /**
-   * @var ArrayCollection
+   * @var Collection
    */
   protected $set;
 
@@ -28,7 +28,7 @@ class Set extends AbstractStatement
   {
     parent::__construct($builder);
 
-    $this->set = new ArrayCollection();
+    $this->set = new Collection();
   }
 
   /**

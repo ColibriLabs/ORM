@@ -2,7 +2,7 @@
 
 namespace Colibri\Generator\Parser;
 
-use Colibri\Collection\ArrayCollection;
+use Colibri\Collection\Collection;
 use Colibri\Common\ArrayableInterface;
 use Colibri\Schema\Database;
 

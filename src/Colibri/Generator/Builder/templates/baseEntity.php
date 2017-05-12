@@ -1,6 +1,6 @@
 <?php
 
-use Colibri\Collection\ArrayCollection;
+use Colibri\Collection\Collection;
 use Colibri\Common\Inflector;
 use Colibri\Generator\Builder\EntityBuilder;
 use Colibri\Generator\Template\Template;
@@ -10,8 +10,8 @@ use Colibri\Schema\Table;
 /**
  * @var $this Template
  * @var $table Table
- * @var $primaryFields ArrayCollection|Field[]
- * @var $enumeration ArrayCollection|Field[]
+ * @var $primaryFields Collection|Field[]
+ * @var $enumeration Collection|Field[]
  * @var $namespace string
  */
 

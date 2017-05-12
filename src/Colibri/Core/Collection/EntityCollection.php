@@ -2,7 +2,7 @@
 
 namespace Colibri\Core\Collection;
 
-use Colibri\Collection\ArrayCollection;
+use Colibri\Collection\Collection;
 use Colibri\Collection\CollectionInterface;
 use Colibri\Core\Entity\EntityInterface;
 
@@ -10,7 +10,7 @@ use Colibri\Core\Entity\EntityInterface;
  * Class EntityCollection
  * @package Colibri\Core\Collection
  */
-class EntityCollection extends ArrayCollection
+class EntityCollection extends Collection
 {
 
   /**
@@ -25,7 +25,7 @@ class EntityCollection extends ArrayCollection
   /**
    * @param $keyName
    * @param $valueKey
-   * @return ArrayCollection
+   * @return Collection
    */
   public function dictionary($keyName, $valueKey)
   {
@@ -35,12 +35,12 @@ class EntityCollection extends ArrayCollection
       $collection[$entity->getByName($keyName)] = $entity->getByName($valueKey);
     });
 
-    return new ArrayCollection($collection);
+    return new Collection($collection);
   }
 
   /**
    * @param $name
-   * @return ArrayCollection
+   * @return Collection
    */
   public function values($name)
   {
@@ -51,7 +51,7 @@ class EntityCollection extends ArrayCollection
 
   /**
    * @param $propertyName
-   * @return ArrayCollection
+   * @return Collection
    */
   public function propertyValues($propertyName)
   {

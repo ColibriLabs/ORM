@@ -2,7 +2,7 @@
 
 namespace Colibri\Core;
 
-use Colibri\Collection\ArrayCollection;
+use Colibri\Collection\Collection;
 use Colibri\Common\Inflector;
 use Colibri\Core\Entity\EntityInterface;
 
@@ -20,7 +20,7 @@ abstract class Entity implements EntityInterface
    */
   public function __construct()
   {
-    $this->virtual = new ArrayCollection();
+    $this->virtual = new Collection();
   }
   
   /**

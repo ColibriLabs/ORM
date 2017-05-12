@@ -2,7 +2,7 @@
 
 namespace Colibri\Logger\Formatter;
 
-use Colibri\Logger\Collection\ArrayCollection;
+use Colibri\Logger\Collection\Collection;
 
 /**
  * Class AbstractFormatter
@@ -76,10 +76,10 @@ abstract class AbstractFormatter implements FormatterInterface
   }
 
   /**
-   * @param ArrayCollection $record
+   * @param Collection $record
    * @return array
    */
-  protected function prepare(ArrayCollection $record)
+  protected function prepare(Collection $record)
   {
     $placeholders = $record->toArray();
 

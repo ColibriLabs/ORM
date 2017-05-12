@@ -2,7 +2,7 @@
 
 namespace Colibri\Query\Statement;
 
-use Colibri\Collection\ArrayCollection;
+use Colibri\Collection\Collection;
 use Colibri\Exception\BadArgumentException;
 use Colibri\Query\Builder;
 use Colibri\Query\Expression;
@@ -19,7 +19,7 @@ class Where extends AbstractStatement
   use Builder\Syntax\WhereTrait;
 
   /**
-   * @var ArrayCollection
+   * @var Collection
    */
   protected $conditions;
   
@@ -31,7 +31,7 @@ class Where extends AbstractStatement
   {
     parent::__construct($builder);
 
-    $this->conditions = new ArrayCollection();
+    $this->conditions = new Collection();
   }
 
   /**

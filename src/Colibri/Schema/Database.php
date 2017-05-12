@@ -2,7 +2,7 @@
 
 namespace Colibri\Schema;
 
-use Colibri\Collection\ArrayCollection;
+use Colibri\Collection\Collection;
 use Colibri\Common\ArrayableInterface;
 use Colibri\Common\Inflector;
 
@@ -29,7 +29,7 @@ class Database implements ArrayableInterface
   protected $name;
 
   /**
-   * @var ArrayCollection|Table[]
+   * @var Collection|Table[]
    */
   protected $tables;
 
@@ -40,7 +40,7 @@ class Database implements ArrayableInterface
   public function __construct($name)
   {
     $this->name = $name;
-    $this->tables = new ArrayCollection();
+    $this->tables = new Collection();
   }
 
   /**
@@ -81,7 +81,7 @@ class Database implements ArrayableInterface
   }
 
   /**
-   * @return ArrayCollection|Table[]
+   * @return Collection|Table[]
    */
   public function getTables()
   {

@@ -2,7 +2,7 @@
 
 namespace Colibri\Logger\Handler;
 
-use Colibri\Logger\Collection\ArrayCollection;
+use Colibri\Logger\Collection\Collection;
 
 /**
  * Class CallbackHandler
@@ -33,10 +33,10 @@ class CallbackHandler extends AbstractHandler
   }
 
   /**
-   * @param ArrayCollection $record
+   * @param Collection $record
    * @return null
    */
-  public function handle(ArrayCollection $record)
+  public function handle(Collection $record)
   {
     call_user_func_array($this->callback, [$record, $this]);
 

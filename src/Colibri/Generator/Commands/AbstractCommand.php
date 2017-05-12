@@ -2,7 +2,7 @@
 
 namespace Colibri\Generator\Commands;
 
-use Colibri\Collection\ArrayCollection;
+use Colibri\Collection\Collection;
 use Colibri\Common\Configuration;
 use Colibri\Generator\Helper\Console;
 use Symfony\Component\Console\Command\Command;
@@ -17,7 +17,7 @@ abstract class AbstractCommand extends Command
 {
 
   /**
-   * @var ArrayCollection
+   * @var Collection
    */
   protected $answers;
 
@@ -41,7 +41,7 @@ abstract class AbstractCommand extends Command
    */
   protected function configure()
   {
-    $this->answers = new ArrayCollection();
+    $this->answers = new Collection();
     $this->currentWorkDirectory = getcwd();
   }
 

@@ -2,7 +2,7 @@
 
 namespace Colibri\Logger\Handler;
 
-use Colibri\Logger\Collection\ArrayCollection;
+use Colibri\Logger\Collection\Collection;
 
 /**
  * Class EchoHandler
@@ -11,10 +11,10 @@ use Colibri\Logger\Collection\ArrayCollection;
 class EchoHandler extends AbstractHandler {
 
   /**
-   * @param ArrayCollection $record
+   * @param Collection $record
    * @return null
    */
-  public function handle(ArrayCollection $record)
+  public function handle(Collection $record)
   {
     echo $this->getFormatter()->format($record) . PHP_EOL;
 

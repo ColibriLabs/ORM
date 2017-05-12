@@ -2,7 +2,7 @@
 
 namespace Colibri\ServiceContainer;
 
-use Colibri\Collection\ArrayCollection;
+use Colibri\Collection\Collection;
 use Colibri\Common\Configuration;
 use Colibri\Connection\ConnectionManager;
 use Colibri\Connection\ConnectionManagerInterface;
@@ -24,7 +24,7 @@ final class ServiceLocator implements ServiceLocatorInterface, LoggerAwareInterf
 {
 
   /**
-   * @var ArrayCollection
+   * @var Collection
    */
   protected $instances = null;
 
@@ -33,7 +33,7 @@ final class ServiceLocator implements ServiceLocatorInterface, LoggerAwareInterf
    */
   private function __construct()
   {
-    $this->instances = new ArrayCollection();
+    $this->instances = new Collection();
   }
 
   /**

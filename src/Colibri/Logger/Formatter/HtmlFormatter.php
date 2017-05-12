@@ -2,7 +2,7 @@
 
 namespace Colibri\Logger\Formatter;
 
-use Colibri\Logger\Collection\ArrayCollection;
+use Colibri\Logger\Collection\Collection;
 
 /**
  * Class HtmlFormatter
@@ -12,10 +12,10 @@ class HtmlFormatter extends AbstractFormatter
 {
 
   /**
-   * @param ArrayCollection $placeholders
+   * @param Collection $placeholders
    * @return mixed|void
    */
-  public function format(ArrayCollection $placeholders)
+  public function format(Collection $placeholders)
   {
     // TODO: Implement format() method.
   }

@@ -2,7 +2,7 @@
 
 namespace Colibri\WidgetHtml;
 
-use Colibri\Collection\ArrayCollection;
+use Colibri\Collection\Collection;
 use Colibri\Exception\BadArgumentException;
 use Colibri\Html\Element\InputElement;
 use Colibri\Html\Element\ItalicElement;
@@ -23,7 +23,7 @@ abstract class AbstractWidget
   protected $nameFormat = '%s';
 
   /**
-   * @var ArrayCollection|HtmlElement[]
+   * @var Collection|HtmlElement[]
    */
   protected $htmlElements;
 
@@ -32,11 +32,11 @@ abstract class AbstractWidget
    */
   public function __construct()
   {
-    $this->htmlElements = new ArrayCollection();
+    $this->htmlElements = new Collection();
   }
 
   /**
-   * @return ArrayCollection|HtmlElement[]
+   * @return Collection|HtmlElement[]
    */
   public function getHtmlElements()
   {

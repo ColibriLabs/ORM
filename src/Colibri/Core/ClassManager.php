@@ -2,7 +2,7 @@
 
 namespace Colibri\Core;
 
-use Colibri\Collection\ArrayCollection;
+use Colibri\Collection\Collection;
 use Colibri\Common\Callback;
 use Colibri\Common\ObjectIdentity;
 use Colibri\Core\Entity\EntityInterface;
@@ -22,7 +22,7 @@ class ClassManager
   const REPOSITORY_SUFFIX = 'Repository';
 
   /**
-   * @var ArrayCollection
+   * @var Collection
    */
   protected $instantiated;
 
@@ -31,7 +31,7 @@ class ClassManager
    */
   public function __construct()
   {
-    $this->instantiated = new ArrayCollection();
+    $this->instantiated = new Collection();
   }
 
   /**

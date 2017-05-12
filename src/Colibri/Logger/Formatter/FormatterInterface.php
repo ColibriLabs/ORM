@@ -2,7 +2,7 @@
 
 namespace Colibri\Logger\Formatter;
 
-use Colibri\Logger\Collection\ArrayCollection;
+use Colibri\Logger\Collection\Collection;
 
 /**
  * Interface FormatterInterface
@@ -16,9 +16,9 @@ interface FormatterInterface
   const PLACEHOLDER_MASK_BRACKETS = '{%s}';
 
   /**
-   * @param ArrayCollection $record
+   * @param Collection $record
    * @return mixed
    */
-  public function format(ArrayCollection $record);
+  public function format(Collection $record);
 
 }

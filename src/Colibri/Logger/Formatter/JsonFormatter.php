@@ -2,7 +2,7 @@
 
 namespace Colibri\Logger\Formatter;
 
-use Colibri\Logger\Collection\ArrayCollection;
+use Colibri\Logger\Collection\Collection;
 
 /**
  * Class JsonFormatter
@@ -26,10 +26,10 @@ class JsonFormatter extends AbstractFormatter
   }
 
   /**
-   * @param ArrayCollection $record
+   * @param Collection $record
    * @return string
    */
-  public function format(ArrayCollection $record)
+  public function format(Collection $record)
   {
     return json_encode($this->prepare($record), ($this->prettyPrint ? JSON_PRETTY_PRINT : 0));
   }

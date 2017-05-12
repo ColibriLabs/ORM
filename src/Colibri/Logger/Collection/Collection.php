@@ -8,6 +8,6 @@ use Colibri\Collection;
  * Class ArrayCollection
  * @package Colibri\Logger\Collection
  */
-class ArrayCollection extends Collection\ArrayCollection
+class Collection extends Collection\Collection
 {
 }

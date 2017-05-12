@@ -2,7 +2,7 @@
 
 namespace Colibri\Logger;
 
-use Colibri\Logger\Collection\ArrayCollection;
+use Colibri\Logger\Collection\Collection;
 use Colibri\Logger\Handler\HandlerInterface;
 use Colibri\Logger\Handler\Mask\LogLevelMask;
 use Psr\Log\AbstractLogger;
@@ -11,7 +11,7 @@ class Log extends AbstractLogger
 {
 
   /**
-   * @var ArrayCollection
+   * @var Collection
    */
   protected $handlers = null;
 
@@ -20,7 +20,7 @@ class Log extends AbstractLogger
    */
   public function __construct()
   {
-    $this->handlers = new ArrayCollection();
+    $this->handlers = new Collection();
   }
 
   /**
@@ -68,16 +68,16 @@ class Log extends AbstractLogger
    * @param $level
    * @param $message
    * @param array $context
-   * @return ArrayCollection
+   * @return Collection
    */
   protected function prepareRecord($level, $message, array $context = [])
   {
-    $message = new ArrayCollection([
+    $message = new Collection([
       'content' => $message,
       'context' => $context,
     ]);
 
-    $record = new ArrayCollection([
+    $record = new Collection([
       'level' => strtoupper($level),
       'level_bitmask' => new LogLevelMask($level),
       'datetime' => new DateTime(),

@@ -2,7 +2,7 @@
 
 namespace Colibri\Logger\Handler;
 
-use Colibri\Logger\Collection\ArrayCollection;
+use Colibri\Logger\Collection\Collection;
 
 /**
  * Class ErrorLogHandler
@@ -12,10 +12,10 @@ class ErrorLogHandler extends AbstractHandler
 {
   
   /**
-   * @param ArrayCollection $record
+   * @param Collection $record
    * @return void
    */
-  public function handle(ArrayCollection $record)
+  public function handle(Collection $record)
   {
     error_log($this->formatter->format($record));
   }

@@ -2,7 +2,7 @@
 
 namespace Colibri\Core\Entity;
 
-use Colibri\Collection\ArrayCollection;
+use Colibri\Collection\Collection;
 use Colibri\Common\ArrayableInterface;
 
 /**
@@ -66,7 +66,7 @@ interface EntityInterface extends ArrayableInterface, \JsonSerializable
   public function getVirtual($offset);
   
   /**
-   * @return ArrayCollection
+   * @return Collection
    */
   public function getVirtualColumns();
   

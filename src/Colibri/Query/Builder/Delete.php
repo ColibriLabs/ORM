@@ -2,7 +2,7 @@
 
 namespace Colibri\Query\Builder;
 
-use Colibri\Collection\ArrayCollection;
+use Colibri\Collection\Collection;
 use Colibri\Connection\ConnectionInterface;
 use Colibri\Exception\BadArgumentException;
 use Colibri\Query\Builder;
@@ -26,7 +26,7 @@ class Delete extends Builder
   const TEMPLATE = "DELETE%s%s%s%s%s";
   
   /**
-   * @var ArrayCollection
+   * @var Collection
    */
   protected $statements;
 
@@ -38,7 +38,7 @@ class Delete extends Builder
   {
     parent::__construct($connection);
 
-    $this->statements = new ArrayCollection([
+    $this->statements = new Collection([
       'modifiers' => new Modifiers($this, Modifiers::MAP_DELETE),
       'where' => new Where($this),
       'order' => new OrderBy($this),

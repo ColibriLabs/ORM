@@ -2,7 +2,7 @@
 
 namespace Colibri\Logger\Handler;
 
-use Colibri\Logger\Collection\ArrayCollection;
+use Colibri\Logger\Collection\Collection;
 use Colibri\Logger\Formatter\FormatterInterface;
 
 /**
@@ -12,10 +12,10 @@ use Colibri\Logger\Formatter\FormatterInterface;
 interface HandlerInterface {
 
   /**
-   * @param ArrayCollection $record
+   * @param Collection $record
    * @return null
    */
-  public function handle(ArrayCollection $record);
+  public function handle(Collection $record);
 
   /**
    * @param $level

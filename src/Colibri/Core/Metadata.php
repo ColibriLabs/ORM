@@ -2,7 +2,7 @@
 
 namespace Colibri\Core;
 
-use Colibri\Collection\ArrayCollection;
+use Colibri\Collection\Collection;
 use Colibri\Common\Inflector;
 use Colibri\Core\Entity\MetadataInterface;
 use Colibri\Exception\NotFoundException;
@@ -46,7 +46,7 @@ class Metadata implements MetadataInterface
   const RAW = 'R';
 
   /**
-   * @var ArrayCollection
+   * @var Collection
    */
   protected $metadata;
 
@@ -56,7 +56,7 @@ class Metadata implements MetadataInterface
    */
   public function __construct(array $metadata)
   {
-    $this->metadata = new ArrayCollection($metadata);
+    $this->metadata = new Collection($metadata);
   }
 
   /**

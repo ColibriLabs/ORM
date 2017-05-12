@@ -9,7 +9,7 @@ use Colibri\Exception\NotSupportedException;
  * Class DataStructureCollection
  * @package Colibri\Collection
  */
-class DataStructureCollection extends ArrayCollection
+class DataStructureCollection extends Collection
 {
 
   /**

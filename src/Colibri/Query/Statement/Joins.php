@@ -2,7 +2,7 @@
 
 namespace Colibri\Query\Statement;
 
-use Colibri\Collection\ArrayCollection;
+use Colibri\Collection\Collection;
 use Colibri\Query\Builder;
 use Colibri\Query\Expression;
 use Colibri\Query\Statement\Join\Join;
@@ -20,7 +20,7 @@ class Joins extends AbstractStatement
   const FULL_OUTER = 'FULL OUTER';
 
   /**
-   * @var ArrayCollection|Join[]
+   * @var Collection|Join[]
    */
   protected $joins = null;
 
@@ -32,7 +32,7 @@ class Joins extends AbstractStatement
   {
     parent::__construct($builder);
 
-    $this->joins = new ArrayCollection();
+    $this->joins = new Collection();
   }
 
   /**

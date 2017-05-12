@@ -2,7 +2,7 @@
 
 namespace Colibri\Query\Builder;
 
-use Colibri\Collection\ArrayCollection;
+use Colibri\Collection\Collection;
 use Colibri\Connection\ConnectionInterface;
 use Colibri\Exception\BadArgumentException;
 use Colibri\Query\Builder;
@@ -38,7 +38,7 @@ class Select extends Builder
   const TEMPLATE = 'SELECT%s%s%s%s%s%s%s%s%s';
 
   /**
-   * @var ArrayCollection
+   * @var Collection
    */
   protected $columns = null;
 
@@ -50,7 +50,7 @@ class Select extends Builder
   {
     parent::__construct($connection);
 
-    $this->columns = new ArrayCollection();
+    $this->columns = new Collection();
   }
 
   /**
@@ -84,8 +84,8 @@ class Select extends Builder
   {
     parent::initialize();
 
-    $this->columns = new ArrayCollection();
-    $this->statements = new ArrayCollection([
+    $this->columns = new Collection();
+    $this->statements = new Collection([
       'modifiers' => new Modifiers($this, Modifiers::MAP_SELECT),
       'joins' => new Joins($this),
       'where' => new Where($this),

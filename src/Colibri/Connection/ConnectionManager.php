@@ -2,7 +2,7 @@
 
 namespace Colibri\Connection;
 
-use Colibri\Collection\ArrayCollection;
+use Colibri\Collection\Collection;
 use Colibri\Common\Configuration;
 use Colibri\Exception\BadArgumentException;
 use Colibri\ServiceContainer\ServiceLocator;
@@ -15,12 +15,12 @@ class ConnectionManager implements ConnectionManagerInterface
 {
 
   /**
-   * @var ArrayCollection
+   * @var Collection
    */
   protected static $connections = null;
 
   /**
-   * @var ArrayCollection
+   * @var Collection
    */
   protected $connectionSettings = null;
 
@@ -31,8 +31,8 @@ class ConnectionManager implements ConnectionManagerInterface
    */
   public function __construct(Configuration $connections)
   {
-    static::$connections = new ArrayCollection();
-    $this->connectionSettings = new ArrayCollection();
+    static::$connections = new Collection();
+    $this->connectionSettings = new Collection();
 
     if ($connections->count() == 0) {
       throw new BadArgumentException('Connections configurations is broken');

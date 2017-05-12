@@ -324,7 +324,7 @@ ENTITY_SCRIPT;
 
   /**
    * @param Table $table
-   * @return \Colibri\Collection\ArrayCollection
+   * @return \Colibri\Collection\Collection
    */
   public function getPrimaryFields(Table $table)
   {
@@ -335,7 +335,7 @@ ENTITY_SCRIPT;
 
   /**
    * @param Table $table
-   * @return \Colibri\Collection\ArrayCollection
+   * @return \Colibri\Collection\Collection
    */
   public function getUnsignedFields(Table $table)
   {
@@ -346,7 +346,7 @@ ENTITY_SCRIPT;
 
   /**
    * @param Table $table
-   * @return \Colibri\Collection\ArrayCollection
+   * @return \Colibri\Collection\Collection
    */
   public function getNullableFields(Table $table)
   {
@@ -357,7 +357,7 @@ ENTITY_SCRIPT;
 
   /**
    * @param Table $table
-   * @return \Colibri\Collection\ArrayCollection
+   * @return \Colibri\Collection\Collection
    */
   public function getEnumTypedFields(Table $table)
   {
@@ -368,7 +368,7 @@ ENTITY_SCRIPT;
 
   /**
    * @param Table $table
-   * @return \Colibri\Collection\ArrayCollection
+   * @return \Colibri\Collection\Collection
    */
   public function getDefaultValuesFields(Table $table)
   {

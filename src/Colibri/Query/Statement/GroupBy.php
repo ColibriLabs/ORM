@@ -3,7 +3,7 @@
 namespace Colibri\Query\Statement;
 
 use Colibri\Exception\BadArgumentException;
-use Colibri\Logger\Collection\ArrayCollection;
+use Colibri\Logger\Collection\Collection;
 use Colibri\Query\Builder;
 use Colibri\Query\Builder\Syntax;
 use Colibri\Query\Expression;
@@ -18,7 +18,7 @@ class GroupBy extends AbstractStatement
   use Syntax\GroupByTrait;
 
   /**
-   * @var ArrayCollection|null
+   * @var Collection|null
    */
   protected $map = null;
 
@@ -35,7 +35,7 @@ class GroupBy extends AbstractStatement
   {
     parent::__construct($builder);
 
-    $this->map = new ArrayCollection();
+    $this->map = new Collection();
   }
 
   /**

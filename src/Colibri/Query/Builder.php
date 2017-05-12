@@ -2,7 +2,7 @@
 
 namespace Colibri\Query;
 
-use Colibri\Collection\ArrayCollection;
+use Colibri\Collection\Collection;
 use Colibri\Connection\ConnectionInterface;
 use Colibri\Query\Expr;
 use Colibri\Query\Statement\AbstractStatement;
@@ -36,12 +36,12 @@ abstract class Builder implements SqlableInterface
   protected $table = null;
 
   /**
-   * @var ArrayCollection|ArrayCollection[]|Expression[][]
+   * @var Collection|Collection[]|Expression[][]
    */
   protected $map = null;
 
   /**
-   * @var ArrayCollection
+   * @var Collection
    */
   protected $statements;
 
@@ -62,7 +62,7 @@ abstract class Builder implements SqlableInterface
   {
     $this->map = clone $this->map;
 
-    $statements = new ArrayCollection();
+    $statements = new Collection();
     foreach ($this->statements as $name => $statement) {
       /** @var AbstractStatement $statement */
       $statement->setBuilder($this);
@@ -102,10 +102,10 @@ abstract class Builder implements SqlableInterface
    */
   protected function initialize()
   {
-    $this->map = new ArrayCollection([
-      'expressions' => new ArrayCollection(),
-      'aliases' => new ArrayCollection(),
-      'hashes' => new ArrayCollection(),
+    $this->map = new Collection([
+      'expressions' => new Collection(),
+      'aliases' => new Collection(),
+      'hashes' => new Collection(),
     ]);
   }
 
@@ -395,7 +395,7 @@ abstract class Builder implements SqlableInterface
   }
 
   /**
-   * @return ArrayCollection|Expression[]|mixed|null
+   * @return Collection|Expression[]|mixed|null
    */
   public function getExpressions()
   {
@@ -403,7 +403,7 @@ abstract class Builder implements SqlableInterface
   }
 
   /**
-   * @return ArrayCollection|Expression[]|mixed|null
+   * @return Collection|Expression[]|mixed|null
    */
   public function getAliases()
   {
@@ -429,7 +429,7 @@ abstract class Builder implements SqlableInterface
   }
 
   /**
-   * @return ArrayCollection|Expression[]|mixed|null
+   * @return Collection|Expression[]|mixed|null
    */
   public function getHashes()
   {

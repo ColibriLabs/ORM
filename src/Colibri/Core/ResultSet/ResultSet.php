@@ -2,7 +2,7 @@
 
 namespace Colibri\Core\ResultSet;
 
-use Colibri\Collection\ArrayCollection;
+use Colibri\Collection\Collection;
 use Colibri\Connection\Statement\StatementIterator;
 use Colibri\Core\Collection\EntityCollection;
 use Colibri\Core\Entity\RepositoryInterface;
@@ -94,11 +94,11 @@ abstract class ResultSet extends \IteratorIterator implements \Countable
   }
 
   /**
-   * @return ArrayCollection
+   * @return Collection
    */
   public function getRawCollection()
   {
-    return new ArrayCollection($this->getRawCollectionArray());
+    return new Collection($this->getRawCollectionArray());
   }
 
   /**

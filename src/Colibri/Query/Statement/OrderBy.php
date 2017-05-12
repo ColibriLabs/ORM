@@ -2,7 +2,7 @@
 
 namespace Colibri\Query\Statement;
 
-use Colibri\Collection\ArrayCollection;
+use Colibri\Collection\Collection;
 use Colibri\Query\Builder;
 use Colibri\Query\Expr;
 use Colibri\Query\Expression;
@@ -18,7 +18,7 @@ class OrderBy extends AbstractStatement
   const DESC = 'DESC';
 
   /**
-   * @var ArrayCollection|null
+   * @var Collection|null
    */
   protected $columns = null;
 
@@ -30,7 +30,7 @@ class OrderBy extends AbstractStatement
   {
     parent::__construct($builder);
 
-    $this->columns = new ArrayCollection();
+    $this->columns = new Collection();
   }
 
   /**

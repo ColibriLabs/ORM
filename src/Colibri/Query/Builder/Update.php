@@ -2,7 +2,7 @@
 
 namespace Colibri\Query\Builder;
 
-use Colibri\Collection\ArrayCollection;
+use Colibri\Collection\Collection;
 use Colibri\Connection\ConnectionInterface;
 use Colibri\Exception\BadArgumentException;
 use Colibri\Query\Builder;
@@ -34,7 +34,7 @@ class Update extends Builder
   {
     parent::__construct($connection);
 
-    $this->statements = new ArrayCollection([
+    $this->statements = new Collection([
       'modifiers' => new Modifiers($this, Modifiers::MAP_UPDATE),
       'set' => new Set($this),
       'where' => new Where($this),

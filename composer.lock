@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "fd8488fd3784c1743df3aedcc028d177",
-    "content-hash": "b5ab5dc8bfd6f080650038b48fef5b7c",
+    "hash": "38a28ab7415212e05ad1c52cba81bc07",
+    "content-hash": "279634a13f077b507cd690af25c2e2fd",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -50,6 +50,46 @@
                 "transliterator"
             ],
             "time": "2017-04-04 11:38:05"
+        },
+        {
+            "name": "colibriphp/collection",
+            "version": "v0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/colibriphp/collection.git",
+                "reference": "ed56fcf2de8101b4151ae3972dfe7cda404948f4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/colibriphp/collection/zipball/ed56fcf2de8101b4151ae3972dfe7cda404948f4",
+                "reference": "ed56fcf2de8101b4151ae3972dfe7cda404948f4",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Colibri\\Collection\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ivan Hontarenko",
+                    "email": "stewie.dev@gmail.com"
+                }
+            ],
+            "description": "Collection Library",
+            "keywords": [
+                "collection",
+                "php collection"
+            ],
+            "time": "2017-05-05 12:09:42"
         },
         {
             "name": "colibriphp/html",
