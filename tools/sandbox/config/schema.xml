@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<database platform="mysql" name="jolly-db" package="pro_card.models">
+
+  <table table="test_table" name="my_users">
+    <column column="my_id" name="id" type="integer" autoIncrement="true" primaryKey="true" identifier="true" />
+    <column column="name" name="user_name" type="string" length="32" />
+    <column column="file_blob" type="blob" />
+    <column column="file_blob_base64" type="resource" />
+    <column column="is_trusted" type="boolean" />
+    <column column="status" type="enum" enum="active,registered,banned" />
+    <column column="created_at" name="added_at" type="datetime" format="Y-m-d H/m/s" />
+  </table>
+
+  <table table="departments" name="dep">
+    <column column="dept_no" name="department_code" type="string" length="4" />
+    <column column="dept_name" name="name" type="string" length="40" />
+    <column column="created_at" name="create_date" type="datetime" />
+  </table>
+
+  <table table="dept_emp" name="co_worker">
+    <column column="emp_no" name="code" type="integer" length="11" autoIncrement="true" primaryKey="true" />
+    <column column="dept_no" name="department_code" type="string" length="4" />
+    <column column="add_dat" name="addition_information" type="json" />
+    <column column="from_date" name="start_date" type="datetime" format="Y-m-d" />
+    <column column="to_date" name="until_date_work" type="datetime" format="Y-m-d [Z]" />
+    <relation association="one_to_one" table="departments" name="deps_rel" local="dept_no" foreign="dept_no" />
+  </table>
+
+  <table table="products" name="products">
+    <column column="id" type="integer" length="11" unsigned="true" autoIncrement="true" primaryKey="true"/>
+    <column column="category_id" type="integer"/>
+    <column column="sku" name="name" type="string" length="32"/>
+    <column column="created_at" type="datetime"/>
+    <relation association="many_to_one" table="products_categories" name="category" local="category_id" foreign="id"/>
+  </table>
+
+  <table table="products_categories" name="category">
+    <column column="id" type="integer" length="11" unsigned="true" autoIncrement="true" primaryKey="true"/>
+    <column column="name" name="name" type="string" length="32"/>
+    <column column="description" type="text"/>
+    <column column="created_at" type="datetime"/>
+    <relation association="one_to_many" table="products" name="products" local="id" foreign="category_id"/>
+  </table>
+
+  <table table="products_discount" name="products_discount">
+    <column column="id" type="integer" length="11" unsigned="true" autoIncrement="true" primaryKey="true"/>
+    <column column="object_id" type="integer"/>
+    <column column="spreads_on" name="object_type" enum="category,product" type="enum"/>
+  </table>
+
+  <table table="products_fields_data" name="fields_data">
+    <column column="id" type="integer" length="11" unsigned="true" autoIncrement="true" primaryKey="true"/>
+    <column column="product_id" type="integer" length="11" unsigned="true"/>
+    <column column="fields_id" type="integer" length="11" unsigned="true"/>
+  </table>
+
+  <table table="fields" name="custom_fields">
+    <column column="id" type="integer" length="11" unsigned="true" autoIncrement="true" primaryKey="true"/>
+    <column column="attribute_id" type="integer"/>
+  </table>
+
+</database>
