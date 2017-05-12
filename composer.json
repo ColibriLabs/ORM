@@ -1,7 +1,7 @@
 {
   "name": "colibriphp/orm",
   "description": "Colibri ORM - Yet Another PHP ORM",
-  "keywords": ["php orm","colibri","colibri orm",],
+  "keywords": ["php orm","colibri","colibri orm"],
   "authors": [
     {
       "name": "Ivan Hontarenko",
