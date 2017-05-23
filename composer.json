@@ -1,5 +1,5 @@
 {
-  "name": "colibriphp/orm",
+  "name": "colibrilabs/orm",
   "description": "Colibri ORM - Yet Another PHP ORM",
   "keywords": ["php orm","colibri","colibri orm"],
   "authors": [
@@ -16,9 +16,9 @@
   "prefer-stable" : true,
   "require": {
     "php": ">=5.6",
-    "colibriphp/parameters": "~0.1",
-    "colibriphp/html": "~0.1",
-    "colibriphp/collection": "~0.1",
+    "colibrilabs/parameters": "~0.1",
+    "colibrilabs/html": "~0.1",
+    "colibrilabs/collection": "~0.1",
     "symfony/yaml": "~2.3||~3.0",
     "symfony/console": "~2.3||~3.0",
     "behat/transliterator": "~1.1",
