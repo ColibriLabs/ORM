@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "38a28ab7415212e05ad1c52cba81bc07",
+    "hash": "4a9b0eefea5fb6888ca9cf90ea41062f",
     "content-hash": "279634a13f077b507cd690af25c2e2fd",
     "packages": [
         {
@@ -93,16 +93,16 @@
         },
         {
             "name": "colibriphp/html",
-            "version": "v0.1.0",
+            "version": "v0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/colibriphp/html.git",
-                "reference": "197583256615c0607c4bbe940a0b2c4742a36527"
+                "reference": "c4ba357ee6bb50663ffdde5a6828b5e38635ad74"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/colibriphp/html/zipball/197583256615c0607c4bbe940a0b2c4742a36527",
-                "reference": "197583256615c0607c4bbe940a0b2c4742a36527",
+                "url": "https://api.github.com/repos/colibriphp/html/zipball/c4ba357ee6bb50663ffdde5a6828b5e38635ad74",
+                "reference": "c4ba357ee6bb50663ffdde5a6828b5e38635ad74",
                 "shasum": ""
             },
             "require": {
@@ -111,7 +111,7 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Dez\\Html\\": "src/"
+                    "Colibri\\Html\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -129,7 +129,7 @@
                 "html",
                 "php html"
             ],
-            "time": "2017-05-05 14:49:31"
+            "time": "2017-05-13 08:28:34"
         },
         {
             "name": "colibriphp/parameters",
