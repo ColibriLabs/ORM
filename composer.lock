@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "4a9b0eefea5fb6888ca9cf90ea41062f",
-    "content-hash": "279634a13f077b507cd690af25c2e2fd",
+    "hash": "dcdf827382d38c1f0b0931c68530dae1",
+    "content-hash": "6cf2eb5be255e5da4badd06dc24f3587",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -52,17 +52,17 @@
             "time": "2017-04-04 11:38:05"
         },
         {
-            "name": "colibriphp/collection",
-            "version": "v0.1.0",
+            "name": "colibrilabs/collection",
+            "version": "v0.1.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/colibriphp/collection.git",
-                "reference": "ed56fcf2de8101b4151ae3972dfe7cda404948f4"
+                "url": "https://github.com/colibrilabs/collection.git",
+                "reference": "c5e379f46a75da1e6ec916ff418fe83b96f74630"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/colibriphp/collection/zipball/ed56fcf2de8101b4151ae3972dfe7cda404948f4",
-                "reference": "ed56fcf2de8101b4151ae3972dfe7cda404948f4",
+                "url": "https://api.github.com/repos/colibrilabs/collection/zipball/c5e379f46a75da1e6ec916ff418fe83b96f74630",
+                "reference": "c5e379f46a75da1e6ec916ff418fe83b96f74630",
                 "shasum": ""
             },
             "require": {
@@ -89,20 +89,20 @@
                 "collection",
                 "php collection"
             ],
-            "time": "2017-05-05 12:09:42"
+            "time": "2017-05-23 09:29:23"
         },
         {
-            "name": "colibriphp/html",
-            "version": "v0.1.1",
+            "name": "colibrilabs/html",
+            "version": "v0.1.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/colibriphp/html.git",
-                "reference": "c4ba357ee6bb50663ffdde5a6828b5e38635ad74"
+                "url": "https://github.com/colibrilabs/html.git",
+                "reference": "fe2e3d0c4591f552e68c2a0f85efa334d54fcda0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/colibriphp/html/zipball/c4ba357ee6bb50663ffdde5a6828b5e38635ad74",
-                "reference": "c4ba357ee6bb50663ffdde5a6828b5e38635ad74",
+                "url": "https://api.github.com/repos/colibrilabs/html/zipball/fe2e3d0c4591f552e68c2a0f85efa334d54fcda0",
+                "reference": "fe2e3d0c4591f552e68c2a0f85efa334d54fcda0",
                 "shasum": ""
             },
             "require": {
@@ -129,20 +129,20 @@
                 "html",
                 "php html"
             ],
-            "time": "2017-05-13 08:28:34"
+            "time": "2017-05-23 09:11:06"
         },
         {
-            "name": "colibriphp/parameters",
-            "version": "v0.1.1",
+            "name": "colibrilabs/parameters",
+            "version": "v0.1.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/colibriphp/parameters.git",
-                "reference": "488a7b48478a204b13864471fcedd42e1781d68e"
+                "url": "https://github.com/colibrilabs/parameters.git",
+                "reference": "408c31f0806696384c8af2e5a850365f663af59e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/colibriphp/parameters/zipball/488a7b48478a204b13864471fcedd42e1781d68e",
-                "reference": "488a7b48478a204b13864471fcedd42e1781d68e",
+                "url": "https://api.github.com/repos/colibrilabs/parameters/zipball/408c31f0806696384c8af2e5a850365f663af59e",
+                "reference": "408c31f0806696384c8af2e5a850365f663af59e",
                 "shasum": ""
             },
             "require": {
@@ -170,7 +170,7 @@
                 "parameters",
                 "php parameters"
             ],
-            "time": "2017-05-05 12:07:13"
+            "time": "2017-05-23 08:55:27"
         },
         {
             "name": "psr/cache",

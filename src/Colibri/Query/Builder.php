@@ -44,6 +44,21 @@ abstract class Builder implements SqlableInterface
    * @var Collection
    */
   protected $statements;
+  
+  /**
+   * @var bool
+   */
+  protected $parameterized = false;
+  
+  /**
+   * @var int
+   */
+  protected $parameterCounter = 0;
+  
+  /**
+   * @var array
+   */
+  protected $parametersMap = [];
 
   /**
    * Builder constructor.
@@ -147,7 +162,26 @@ abstract class Builder implements SqlableInterface
   {
     $this->replaceAliases = $replaceAliases;
   }
-
+  
+  /**
+   * @return bool
+   */
+  public function isParameterized()
+  {
+    return $this->parameterized;
+  }
+  
+  /**
+   * @param bool $parameterized
+   * @return $this
+   */
+  public function setParameterized($parameterized)
+  {
+    $this->parameterized = $parameterized;
+    
+    return $this;
+  }
+  
   /**
    * @param Expression $expression
    * @return string
@@ -166,6 +200,17 @@ abstract class Builder implements SqlableInterface
     $this->registerExpression($expression);
 
     switch (true) {
+      case $expression instanceof Expr\Parameter:
+    
+        if ($this->isParameterized()) {
+          $placeholder = new Expr\Raw(':p' . $this->parameterCounter++);
+          $this->parametersMap[(string)$placeholder] = $expression->toSQL();
+      
+          return $placeholder;
+        }
+    
+        return $expression;
+        
       case $expression instanceof Expr\Parameters:
       case $expression instanceof Expr\Func:
 

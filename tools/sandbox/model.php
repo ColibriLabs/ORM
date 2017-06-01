@@ -40,9 +40,12 @@ $sub->subWhere(Cmp::CONJUNCTION_XOR)
 $sub->sub(Cmp::ET)->where('z', 321)->where('x', 333, Cmp::EQ, Cmp::VEL);
 
 $sub->where('d', 777);
+
+$sub->whereIn('qwe', [1, 2, 3]);
+
 $query->where('asdasd', 'dasasdasd');
 
-var_dump($query->toSQL(), $colibri->getConfiguration()->toYaml());
+var_dump($query->toSQL(), $query->getParametersMap());
 
 die();
 

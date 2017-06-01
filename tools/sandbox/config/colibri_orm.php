@@ -11,9 +11,9 @@ return [
     'connection_name' => 'production',
     'connection' => [
       'production' => [
-        'dsn' => 'mysql:host=localhost;dbname=sakila',
+        'dsn' => 'mysql:host=localhost;dbname=procart',
         'user' => 'root',
-        'password' => 'root',
+        'password' => 'dezdev7java',
       ],
     ],
 
