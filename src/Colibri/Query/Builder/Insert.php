@@ -51,7 +51,7 @@ class Insert extends Builder
     return sprintf(
       static::TEMPLATE,
       $this->getModifiersStatement()->toSQL(),
-      $this->table->toSQL(),
+      sprintf(' %s ', $this->table->toSQL()),
       $this->getValuesSetStatement()->toSQL()
     );
   }
