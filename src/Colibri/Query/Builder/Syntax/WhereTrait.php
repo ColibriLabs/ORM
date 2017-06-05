@@ -139,6 +139,15 @@ trait WhereTrait
   }
 
   /**
+   * @param string|Expr\Raw $raw
+   * @return $this
+   */
+  public function whereRaw($raw)
+  {
+    return $this->where(($raw instanceof Expr\Raw) ? $raw : new Expr\Raw($raw), null, Cmp::RAW);
+  }
+  
+  /**
    * @param $column
    * @return $this
    */
