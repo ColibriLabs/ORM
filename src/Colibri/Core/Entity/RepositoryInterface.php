@@ -90,7 +90,7 @@ interface RepositoryInterface
   /**
    * @return SelectQueryBuilder
    */
-  public function getFilterQuery();
+  public function getQuery();
 
   /**
    * @return ClassManager

@@ -64,7 +64,7 @@ class Paginator implements \IteratorAggregate
    */
   public function determineTotalPages()
   {
-    $queryBuild = clone $this->getRepository()->getFilterQuery();
+    $queryBuild = clone $this->getRepository()->getQuery();
     $tableIdentifier = $this->getRepository()->getEntityMetadata()->getIdentifier();
     $connection = $this->getRepository()->getConnection();
     

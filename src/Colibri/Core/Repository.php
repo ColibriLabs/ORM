@@ -177,12 +177,7 @@ abstract class Repository implements RepositoryInterface
    */
   public function executeCriteria($criteria = null)
   {
-    $this->applyCriteria($criteria);
-
-    $queryString = $this->getFilterQuery()->toSQL();
-    $this->cleanupFilterQuery();
-
-    return $this->executeStmtQuery($queryString);
+    return $this->applyCriteria($criteria)->executeQueryStmt();
   }
 
   /**
@@ -208,7 +203,7 @@ abstract class Repository implements RepositoryInterface
    */
   public function findOne($criteria = null)
   {
-    $this->getFilterQuery()->setLimit(1);
+    $this->getQuery()->setLimit(1);
     
     $resultSet = $this->findBy($criteria);
     $resultSet->rewind();
@@ -253,7 +248,7 @@ abstract class Repository implements RepositoryInterface
    */
   public function groupBy($criteria)
   {
-    $this->getFilterQuery()->groupBy(...$criteria);
+    $this->getQuery()->groupBy(...$criteria);
 
     return $this;
   }
@@ -264,7 +259,7 @@ abstract class Repository implements RepositoryInterface
    */
   public function orderBy($criteria)
   {
-    $this->getFilterQuery()->orderBy(...$criteria);
+    $this->getQuery()->orderBy(...$criteria);
 
     return $this;
   }
@@ -420,7 +415,7 @@ abstract class Repository implements RepositoryInterface
   /**
    * @return QueryBuilder\Select
    */
-  public function getFilterQuery()
+  public function getQuery()
   {
     return $this->filterQuery;
   }
@@ -431,7 +426,7 @@ abstract class Repository implements RepositoryInterface
    */
   public function setOffset($offset)
   {
-    $this->getFilterQuery()->offset($offset);
+    $this->getQuery()->offset($offset);
   
     return $this;
   }
@@ -442,7 +437,7 @@ abstract class Repository implements RepositoryInterface
    */
   public function setLimit($length)
   {
-    $this->getFilterQuery()->limit($length);
+    $this->getQuery()->limit($length);
     
     return $this;
   }
@@ -450,10 +445,10 @@ abstract class Repository implements RepositoryInterface
   /**
    * @return $this
    */
-  public function cleanupFilterQuery()
+  public function cleanupQuery()
   {
     $metadata = $this->getEntityMetadata();
-    $query = $this->getFilterQuery();
+    $query    = $this->getQuery();
 
     $query->cleanup();
     $query->addSelectColumns($metadata->getSelectColumns());
@@ -465,7 +460,7 @@ abstract class Repository implements RepositoryInterface
    * @param QueryBuilder\Select $filterQuery
    * @return $this
    */
-  public function setFilterQuery(QueryBuilder\Select $filterQuery)
+  public function setQuery(QueryBuilder\Select $filterQuery)
   {
     $this->filterQuery = $filterQuery;
 
@@ -572,30 +567,34 @@ abstract class Repository implements RepositoryInterface
   {
     $connection = $this->getConnection();
 
-    if ($query === null) {
-      $query = $this->getFilterQuery()->toSQL();
-    }
-
     $connection->transaction(function (ConnectionInterface $connection) use ($query) {
       $connection->execute($query);
     });
 
     return $connection->affectedRows();
   }
-
+  
   /**
-   * @param null $query
    * @return StatementIterator
    */
-  public function executeStmtQuery($query = null)
+  public function executeQueryStmt()
   {
-    $connection = $this->getConnection();
-
-    if ($query === null) {
-      $query = $this->getFilterQuery()->toSQL();
+    $selectQuery  = $this->getQuery();
+    $statement    = $this->getConnection()->prepare($this->getQuery());
+    
+    // if query builder was initialized as parameterized
+    // and it have what to bind to PDOStatement
+    if ($selectQuery->isParameterized() && count($selectQuery->getParametersMap()) > 0) {
+      $statement->bindParams($this->getQuery()->getParametersMap());
     }
-
-    return new StatementIterator($connection->query($query));
+  
+    // executes a prepared statement
+    $statement->execute();
+    
+    // reset qb to previous state
+    $this->cleanupQuery();
+    
+    return new StatementIterator($statement);
   }
   
   /**
@@ -605,8 +604,8 @@ abstract class Repository implements RepositoryInterface
    */
   protected function applyCriteria($criteria)
   {
-    $query = $this->getFilterQuery();
-    $metadata = $this->getEntityMetadata();
+    $query      = $this->getQuery();
+    $metadata   = $this->getEntityMetadata();
 
     if (null !== $criteria) {
       switch (true) {
@@ -616,7 +615,7 @@ abstract class Repository implements RepositoryInterface
           
         case $criteria instanceof QueryBuilder\Select:
           $criteria->setFromTable($metadata->getTableName());
-          $this->setFilterQuery($criteria);
+          $this->setQuery($criteria);
           break;
           
         case (is_array($criteria) and count($criteria) > 0):

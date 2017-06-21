@@ -149,15 +149,16 @@ class Connection extends \PDO implements ConnectionInterface
   {
     /** @var StmtInterface $result */
     try {
+      
       $event = new ConnectionEvent($this, $query);
       $this->container->getDispatcher()->dispatch(ConnectionEvent::ON_QUERY, $event);
+      
       $result = parent::query($query);
     } catch (\Exception $exception) {
-      throw new ConnectionException('Executing query has error: [:code] ":error"', [
-        'code' => $exception->getCode(),
-        'error' => $exception->getMessage(),
-      ]);
+      throw new ConnectionException(sprintf(
+        'Executing SQL Query was failure with error: [%d] (%s)'), $exception->getCode(), $exception->getMessage());
     }
+    
     return $result;
   }
 

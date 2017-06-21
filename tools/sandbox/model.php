@@ -60,7 +60,7 @@ die();
 
 //$userRepository = new MyUsersRepository();
 //
-//$qb = $userRepository->getFilterQuery();
+//$qb = $userRepository->getQuery();
 //
 //$qb->innerJoin('users_tags', [
 //  [MyUsers::ID, 'users_tags.user_id',],

@@ -13,7 +13,14 @@ interface ConnectionInterface
    * @return string
    */
   public function getDriverName();
-
+  
+  /**
+   * @param $statement
+   * @param array $driver_options
+   * @return StmtInterface
+   */
+  public function prepare($statement, array $driver_options = []);
+  
   /**
    * @param null $query
    * @param array $params
