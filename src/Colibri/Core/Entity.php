@@ -63,7 +63,7 @@ abstract class Entity implements EntityInterface
    */
   public function hasProperty($propertyName)
   {
-    return isset($this->$propertyName);
+    return property_exists($this, $propertyName);
   }
 
   /**

@@ -27,7 +27,7 @@ class EnumType extends StringType
   public function toPlatformValue($value)
   {
     if (!is_array($this->getExtra()) || !in_array($value, $this->getExtra())) {
-      throw new BadArgumentException('Enumeration type error');
+      throw new BadArgumentException(sprintf('Enumeration type error. Allowed only (%s)', implode(', ', $this->getExtra())));
     }
 
     return parent::toPlatformValue($value);

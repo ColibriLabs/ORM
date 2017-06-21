@@ -17,7 +17,7 @@ class Custom extends Comparison
    */
   protected function buildCondition()
   {
-    throw new BadCallMethodException('Not implemented yet...');
+    return $this->stringifyExpression($this->getLeftExpression());
   }
 
 }
