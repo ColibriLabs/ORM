@@ -168,14 +168,4 @@ interface RepositoryInterface
    */
   public function createUpdateQuery();
 
-  /**
-   * @return int
-   */
-  public function getResultSetMethod();
-
-  /**
-   * @param int $resultSetMethod
-   */
-  public function setResultSetMethod($resultSetMethod);
-
 }
