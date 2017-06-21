@@ -19,7 +19,7 @@ interface ConnectionInterface
    * @param array $driver_options
    * @return StmtInterface
    */
-  public function prepare($statement, array $driver_options;
+  public function prepare($statement, $driver_options);
   
   /**
    * @param null $query
