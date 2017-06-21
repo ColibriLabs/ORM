@@ -94,10 +94,11 @@ abstract class Repository implements RepositoryInterface
     $this->eventDispatcher = $this->serviceLocator->getDispatcher();
     $this->entityName = $entityName;
     $this->connection = $this->getServiceLocator()->getConnection($this->getEntityMetadata()->getConnectionName());
-    $this->filterQuery = $this->createSelectQuery();
     
     $this->hydrator = new EntityHydrator($this);
     $this->queryFactory = new GenericRepositoryQueryFactory($this);
+    
+    $this->filterQuery = $this->createSelectQuery();
   }
 
   /**
