@@ -12,6 +12,8 @@ use Colibri\Core\Entity\RepositoryInterface;
 use Colibri\Core\Event\EntityLifecycleEvent;
 use Colibri\Core\Hydrator\AbstractHydratorEntity;
 use Colibri\Core\Hydrator\EntityHydrator;
+use Colibri\Core\Repository\GenericRepositoryQueryFactory;
+use Colibri\Core\Repository\RepositoryQueryFactory;
 use Colibri\Core\ResultSet\ResultSet;
 use Colibri\Core\ResultSet\ResultSetIterator;
 use Colibri\EventDispatcher\DispatcherInterface;
@@ -75,12 +77,12 @@ abstract class Repository implements RepositoryInterface
    * @var DispatcherInterface
    */
   protected $eventDispatcher;
-
+  
   /**
-   * @var int
+   * @var RepositoryQueryFactory
    */
-  protected $resultSetMethod = self::RESULT_ITERABLE;
-
+  protected $queryFactory;
+  
   /**
    * EntityRepository constructor.
    * @param string $entityName
@@ -88,11 +90,14 @@ abstract class Repository implements RepositoryInterface
   public function __construct($entityName)
   {
     $this->serviceLocator = ServiceLocator::instance();
+    
     $this->eventDispatcher = $this->serviceLocator->getDispatcher();
     $this->entityName = $entityName;
     $this->connection = $this->getServiceLocator()->getConnection($this->getEntityMetadata()->getConnectionName());
     $this->filterQuery = $this->createSelectQuery();
+    
     $this->hydrator = new EntityHydrator($this);
+    $this->queryFactory = new GenericRepositoryQueryFactory($this);
   }
 
   /**
@@ -130,13 +135,7 @@ abstract class Repository implements RepositoryInterface
    */
   public function createSelectQuery()
   {
-    $queryBuilder = new QueryBuilder\Select($this->getConnection());
-
-    $queryBuilder
-      ->setFromTable($this->getEntityMetadata()->getTableName())
-      ->addSelectColumns($this->getEntityMetadata()->getSelectColumns());
-
-    return $queryBuilder;
+    return $this->getQueryFactory()->createSelectQuery();
   }
 
   /**
@@ -144,8 +143,7 @@ abstract class Repository implements RepositoryInterface
    */
   public function createInsertQuery()
   {
-    return (new QueryBuilder\Insert($this->getConnection()))
-      ->setTableInto($this->getEntityMetadata()->getTableName());
+    return $this->getQueryFactory()->createInsertQuery();
   }
 
   /**
@@ -153,8 +151,7 @@ abstract class Repository implements RepositoryInterface
    */
   public function createDeleteQuery()
   {
-    return (new QueryBuilder\Delete($this->getConnection()))
-      ->setFromTable($this->getEntityMetadata()->getTableName());
+    return $this->getQueryFactory()->createDeleteQuery();
   }
 
   /**
@@ -162,8 +159,7 @@ abstract class Repository implements RepositoryInterface
    */
   public function createUpdateQuery()
   {
-    return (new QueryBuilder\Update($this->getConnection()))
-      ->table($this->getEntityMetadata()->getTableName());
+    return $this->getQueryFactory()->createUpdateQuery();
   }
 
   /**
@@ -210,8 +206,10 @@ abstract class Repository implements RepositoryInterface
    * @param $criteria
    * @return EntityInterface
    */
-  public function findOne($criteria)
+  public function findOne($criteria = null)
   {
+    $this->getFilterQuery()->setLimit(1);
+    
     $resultSet = $this->findBy($criteria);
     $resultSet->rewind();
 
@@ -473,23 +471,7 @@ abstract class Repository implements RepositoryInterface
 
     return $this;
   }
-
-  /**
-   * @return int
-   */
-  public function getResultSetMethod()
-  {
-    return $this->resultSetMethod;
-  }
-
-  /**
-   * @param int $resultSetMethod
-   */
-  public function setResultSetMethod($resultSetMethod)
-  {
-    $this->resultSetMethod = $resultSetMethod;
-  }
-
+  
   /**
    * @return ClassManager
    */
@@ -528,6 +510,25 @@ abstract class Repository implements RepositoryInterface
   public function getEventDispatcher()
   {
     return $this->eventDispatcher;
+  }
+  
+  /**
+   * @return RepositoryQueryFactory
+   */
+  public function getQueryFactory()
+  {
+    return $this->queryFactory;
+  }
+  
+  /**
+   * @param RepositoryQueryFactory $queryFactory
+   * @return $this
+   */
+  public function setQueryFactory(RepositoryQueryFactory $queryFactory)
+  {
+    $this->queryFactory = $queryFactory;
+    
+    return $this;
   }
   
   /**
