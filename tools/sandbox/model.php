@@ -2,6 +2,7 @@
 
 use Colibri\Connection\ConnectionEvent;
 use Colibri\Core\ResultSet\ResultSetIterator;
+use Colibri\Query\Criteria;
 use Colibri\Query\Statement\Comparison\Cmp;
 use Colibri\ServiceContainer\ServiceLocator;
 use ProCard\Models\MyUsers;
@@ -45,7 +46,10 @@ $sub->whereIn('qwe', [1, 2, 3]);
 
 $query->where('asdasd', 'dasasdasd');
 
-var_dump($query->toSQL(), $query->getParametersMap());
+$criteria = new Criteria();
+$criteria->where('1', '2');
+
+var_dump($criteria, $query->toSQL(), $query->getParametersMap());
 
 die();
 

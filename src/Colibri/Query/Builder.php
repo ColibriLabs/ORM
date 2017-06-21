@@ -498,7 +498,15 @@ abstract class Builder implements SqlableInterface
   {
     return $this->map['aliases'][$alias];
   }
-
+  
+  /**
+   * @return array
+   */
+  public function getParametersMap()
+  {
+    return $this->parametersMap;
+  }
+  
   /**
    * @param $string
    * @return string
