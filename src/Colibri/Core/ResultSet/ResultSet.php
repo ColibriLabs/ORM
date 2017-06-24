@@ -33,16 +33,36 @@ abstract class ResultSet extends \IteratorIterator implements \Countable
    */
   protected $hydrator;
 
+   /**
+   * @var string|integer
+   */
+  protected $currentKey;
+
   /**
    * @return mixed
    */
   public function current()
   {
     /** @var EntityInterface $entity */
-    $entity = $this->getReflection()->newInstance();
+    $reflection = $this->getReflection();
+    $entity = $reflection->newInstance();
     $hydrator = $this->getHydrator();
+    $metadata = $this->getMetadata();
 
-    return $hydrator->hydrate(parent::current(), $entity);
+    $entity = $hydrator->hydrate(parent::current(), $entity);
+
+    $identifier = $metadata->getName($metadata->getIdentifier(), Metadata::CAMILIZED);
+    $this->currentKey = $reflection->getProperty($identifier)->getValue($entity);
+
+    return $entity;
+  }
+
+  /**
+   * @return string|integer
+   */
+  public function key()
+  {
+    return $this->currentKey;
   }
 
   /**
