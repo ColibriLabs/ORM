@@ -8,10 +8,9 @@ use Colibri\Core\Entity\EntityInterface;
 use Colibri\Core\Entity\RepositoryInterface;
 use Colibri\Core\Event\EntityLifecycleEvent;
 use Colibri\Core\Hydrator;
-use Colibri\Core\Metadata;
 use Colibri\Core\ORMEvents;
 use Colibri\Core\Proxy\EntityProxy;
-use Colibri\Exception\NotSupportedException;
+use Colibri\Exception\NotFoundException;
 
 /**
  * Class AbstractHydratorEntity
