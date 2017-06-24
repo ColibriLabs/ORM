@@ -53,10 +53,10 @@ abstract class AbstractHydratorEntity extends Hydrator
 
   /**
    * @param EntityInterface $entity
-   * @param array $data
+   * @param array $injectData
    * @return $this
    */
-  protected function hydrateEntityProperties(EntityInterface $entity, array $data)
+  protected function hydrateEntityProperties(EntityInterface $entity, array $injectData)
   {
     $metadata = $this->getRepository()->getEntityMetadata();
 
