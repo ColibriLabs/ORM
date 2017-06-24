@@ -10,6 +10,7 @@ use Colibri\Core\Entity\EntityInterface;
 use Colibri\Core\Entity\MetadataInterface;
 use Colibri\Core\Hydrator;
 use Colibri\Core\Hydrator\AbstractHydratorEntity;
+use Colibri\Core\Metadata;
 
 /**
  * Class ResultSetIterator
