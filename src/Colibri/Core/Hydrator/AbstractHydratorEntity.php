@@ -61,11 +61,13 @@ abstract class AbstractHydratorEntity extends Hydrator
     $metadata = $this->getRepository()->getEntityMetadata();
 
     foreach ($injectData as $keyName => $value) {
-      $columnSQLName = $metadata->getSQLName($keyName);
-      if ($entity->hasName($columnSQLName)) {
-        $entity->setByName($columnSQLName, $value);
-      } else {
-        $entity->setVirtual($columnSQLName, $value);
+      try {
+        $columnSQLName = $metadata->getSQLName($keyName);
+        if ($entity->hasName($columnSQLName)) {
+          $entity->setByName($columnSQLName, $value);
+        }
+      } catch (NotFoundException $exception) {
+        $entity->setVirtual($keyName, $value);
       }
     }
 
