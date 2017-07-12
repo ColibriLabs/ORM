@@ -535,9 +535,10 @@ abstract class Builder implements SqlableInterface
   {
     $placeholders = [];
     
+    /** @var Expr\Parameter $expression */
     foreach ($this->placeholders as $hashCode => $placeholder) {
       $expression = $this->getExpression($hashCode);
-      $placeholders[$placeholder->toSQL()] = $expression->toSQL();
+      $placeholders[$placeholder->toSQL()] = $expression->getParameter();
     }
     
     return $placeholders;
