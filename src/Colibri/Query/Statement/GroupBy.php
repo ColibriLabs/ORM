@@ -6,6 +6,7 @@ use Colibri\Exception\BadArgumentException;
 use Colibri\Logger\Collection\Collection;
 use Colibri\Query\Builder;
 use Colibri\Query\Builder\Syntax;
+use Colibri\Query\Expr\Column;
 use Colibri\Query\Expression;
 
 /**
@@ -45,7 +46,7 @@ class GroupBy extends AbstractStatement
   public function add(...$columns)
   {
     foreach ($columns as $column) {
-      $this->addGroupBy(...(is_array($column) ? $column : [$column]));
+      $this->addGroupBy($column);
     }
 
     return $this;
@@ -53,15 +54,12 @@ class GroupBy extends AbstractStatement
 
   /**
    * @param $expression
-   * @param null $alias
    * @return $this
    */
-  public function addGroupBy($expression, $alias = null)
+  public function addGroupBy($expression)
   {
-    if($expression instanceof Expression) {
-      $this->registerExpression($expression, $alias);
-    } else {
-      $expression = $this->getBuilder()->createColumn($expression, $alias);
+    if(!($expression instanceof Expression)) {
+      $expression = new Column($expression);
     }
 
     $this->map->set($expression->hashCode(), $expression);

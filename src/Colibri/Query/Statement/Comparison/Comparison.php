@@ -85,10 +85,10 @@ abstract class Comparison implements SqlableInterface
    */
   public function __construct(Builder $builder, Expression $left, Expression $right, $comparator = Comparison::EQ)
   {
-    $this->builder = $builder;
-    $this->leftExpression = $left;
-    $this->rightExpression = $right;
-    $this->comparator = $comparator;
+    $this->builder          = $builder;
+    $this->leftExpression   = $left;
+    $this->rightExpression  = $right;
+    $this->comparator       = $comparator;
   }
 
   /**

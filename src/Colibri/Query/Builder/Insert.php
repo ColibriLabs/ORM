@@ -2,6 +2,7 @@
 
 namespace Colibri\Query\Builder;
 
+use Colibri\Query\Expr;
 use Colibri\Collection\Collection;
 use Colibri\Connection\ConnectionInterface;
 use Colibri\Query\Builder;
@@ -48,10 +49,13 @@ class Insert extends Builder
    */
   public function toSQL()
   {
+    /** @var Expr\Table $table */
+    $table = $this->normalizeExpression($this->table);
+    
     return sprintf(
       static::TEMPLATE,
       $this->getModifiersStatement()->toSQL(),
-      sprintf(' %s ', $this->table->toSQL()),
+      sprintf(' %s ', $table),
       $this->getValuesSetStatement()->toSQL()
     );
   }

@@ -13,33 +13,33 @@ use Colibri\Query\Statement\AbstractStatement;
  */
 abstract class Builder implements SqlableInterface
 {
-
+  
   /**
    * @var bool
    */
   protected $replaceAliases = false;
-
+  
   /**
    * @var null|string
    */
   protected $comment = null;
-
+  
   /**
    * @var ConnectionInterface
    */
   protected $connection = null;
-
+  
   /**
    * @var Expr\Table $table
    */
-
+  
   protected $table = null;
-
+  
   /**
    * @var Collection|Collection[]|Expression[][]
    */
   protected $map = null;
-
+  
   /**
    * @var Collection
    */
@@ -58,8 +58,8 @@ abstract class Builder implements SqlableInterface
   /**
    * @var array
    */
-  protected $parametersMap = [];
-
+  protected $placeholders = [];
+  
   /**
    * Builder constructor.
    * @param ConnectionInterface $connection
@@ -69,14 +69,14 @@ abstract class Builder implements SqlableInterface
     $this->connection = $connection;
     $this->initialize();
   }
-
+  
   /**
    * Clone operations
    */
   public function __clone()
   {
     $this->map = clone $this->map;
-
+    
     $statements = new Collection();
     foreach ($this->statements as $name => $statement) {
       /** @var AbstractStatement $statement */
@@ -85,7 +85,7 @@ abstract class Builder implements SqlableInterface
     }
     $this->statements = $statements;
   }
-
+  
   /**
    * @return array
    */
@@ -96,7 +96,7 @@ abstract class Builder implements SqlableInterface
       'map' => $this->map->toArray(),
     ];
   }
-
+  
   /**
    * The __toString method allows a class to decide how it will react when it is converted to a string.
    *
@@ -111,7 +111,7 @@ abstract class Builder implements SqlableInterface
       return $exception->getMessage();
     }
   }
-
+  
   /**
    * @return void
    */
@@ -123,30 +123,28 @@ abstract class Builder implements SqlableInterface
       'hashes' => new Collection(),
     ]);
   }
-
+  
   /**
    * @param $table
    * @return $this
    */
   public function table($table)
   {
-    $table = is_array($table) ? $table : [$table];
-
-    $this->table = $this->createTable(...$table);
-
+    $this->table = $this->completeExpression(new Expr\Table($table));
+    
     return $this;
   }
-
+  
   /**
    * @return $this
    */
   public function cleanup()
   {
     $this->initialize();
-
+    
     return $this;
   }
-
+  
   /**
    * @return boolean
    */
@@ -154,7 +152,7 @@ abstract class Builder implements SqlableInterface
   {
     return $this->replaceAliases;
   }
-
+  
   /**
    * @param boolean $replaceAliases
    */
@@ -188,102 +186,133 @@ abstract class Builder implements SqlableInterface
    */
   public function stringifyExpression(Expression $expression)
   {
-    return (string) $this->normalizeExpression($expression);
+    return (string)$this->normalizeExpression($expression);
   }
-
+  
   /**
    * @param Expression $expression
    * @return Expression
    */
   public function normalizeExpression(Expression $expression)
   {
-    $this->registerExpression($expression);
-
+    $expression = $this->preProcessExpression($expression);
+    
     switch (true) {
-      case $expression instanceof Expr\Parameter:
-    
-        if ($this->isParameterized()) {
-          $placeholder = new Expr\Raw(':p' . $this->parameterCounter++);
-          $this->parametersMap[(string)$placeholder] = $expression->toSQL();
-      
-          return $placeholder;
-        }
-    
-        return $expression;
-        
+      // if has array parameters expression handle it recursively
+      // if function expression extract from it all parameters and handle its
       case $expression instanceof Expr\Parameters:
       case $expression instanceof Expr\Func:
-
+        
         $parameters = ($expression instanceof Expr\Func)
           ? (new Expr\Parameters($expression->getParameters()))->getParameters()
           : $expression->getParameters();
-
+        
         foreach ($parameters as &$parameter) {
           $parameter = $this->normalizeExpression($parameter);
         }
-
+        
         $expression->setParameters($parameters);
-
-        return $expression;
-
-      case $expression instanceof Expr\Column:
-
-        if($this->isReplaceAliases() === true) {
-
-          if($this->hasColumnAlias($expression->getName())) {
-            if(null !== ($normalized = $this->getColumnByAlias($expression->getName()))) {
-              $expression->setName($normalized->getName())->setTable($normalized->getTable());
-            }
+        
+        break;
+      
+      case $expression instanceof Expr\Table:
+  
+        if ($this->isReplaceAliases() === true) {
+          // replace table alias to real table name
+          if ($this->hasTableAlias($expression->getName())) {
+            $expression = $this->getTableByAlias($expression->getName());
           }
-
-          if($this->hasTableAlias($expression->getTable())) {
-            if (null !== ($table = $this->getTableByAlias($expression->getTable()))) {
-              $expression->setTable($table->getName())->setDatabase($table->getDatabase());
-            }
-          }
-
         }
-
-        return $expression;
-
-      default:
-        return $expression;
+        
+        break;
+      
+      // for column process it alias and real table if exist
+      case $expression instanceof Expr\Column:
+        
+        if ($this->isReplaceAliases() === true) {
+          // replace column alias to real column name
+          if ($this->hasColumnAlias($expression->getName())) {
+            $expression = $this->getColumnByAlias($expression->getName());
+          }
+        }
+        
+        break;
     }
-  }
 
+    $expression = $this->postProcessExpression($expression);
+    
+    return $expression;
+  }
+  
   /**
-   * @param $definition
-   * @param null $alias
+   * @param Expression $expression
+   * @return Expr\Raw|Expression
+   */
+  public function postProcessExpression(Expression $expression)
+  {
+    if ($this->hasHash($expression->hashCode())) {
+      $alias = $this->getAlias($expression->hashCode());
+      $alias = new Expr\Parameter($alias);
+      $alias->setBuilder($this);
+      $expression = new Expr\Raw(sprintf('%s AS %s', $expression->toSQL(), $alias->toSQL()));
+    }
+    
+    return $expression;
+  }
+  
+  /**
+   * @param Expression $expression
    * @return Expression
    */
-  public function createTable($definition, $alias = null)
+  public function preProcessExpression(Expression $expression)
   {
-    return $this->registerExpression(new Expr\Table($definition), $alias);
+    $expression = $this->completeExpression($expression);
+    
+    if ($this->isParameterized() && ($expression instanceof Expr\Parameter)) {
+  
+      $placeholder = $this->getPlaceholderForExpression($expression);
+      if (null === $placeholder) {
+        $placeholder = new Expr\Raw(':p' . $this->parameterCounter++);
+        $this->setPlaceholder($expression->hashCode(), $placeholder);
+      }
+      
+      return $placeholder;
+    }
+    
+    return $expression;
   }
-
-  /**
-   * @param $definition
-   * @param null $alias
-   * @return Expression
-   */
-  public function createColumn($definition, $alias = null)
-  {
-    return $this->registerExpression(new Expr\Column($definition), $alias);
-  }
-
+  
   /**
    * @param Expression $expression
    * @param null $alias
    * @return Expression
    */
-  public function registerExpression(Expression $expression, $alias = null)
+  public function completeExpression(Expression $expression, $alias = null)
   {
-    (null === $alias)
+    null === $alias
       ? $this->setExpression($expression) : $this->setAlias($expression, $alias);
-
-    return $expression->setBuilder($this);
+    
+    return $expression;
   }
-
+  
+  /**
+   * @param $definition
+   * @return Expression
+   */
+  public function createTable($definition)
+  {
+    return $this->preProcessExpression(new Expr\Table($definition));
+  }
+  
+  /**
+   * @param $definition
+   * @return Expression
+   */
+  public function createColumn($definition)
+  {
+    return $this->preProcessExpression(new Expr\Column($definition));
+  }
+  
   /**
    * @param $alias
    * @return bool
@@ -292,7 +321,7 @@ abstract class Builder implements SqlableInterface
   {
     return $this->hasAlias($alias) && $this->getExpression($this->getHash($alias)) instanceof Expr\Column;
   }
-
+  
   /**
    * @param $alias
    * @return bool
@@ -301,7 +330,7 @@ abstract class Builder implements SqlableInterface
   {
     return $this->hasAlias($alias) && $this->getExpression($this->getHash($alias)) instanceof Expr\Table;
   }
-
+  
   /**
    * @param $alias
    * @return bool
@@ -310,7 +339,7 @@ abstract class Builder implements SqlableInterface
   {
     return $this->hasAlias($alias) && $this->getExpression($this->getHash($alias)) instanceof Expr\Func;
   }
-
+  
   /**
    * @param $alias
    * @return bool
@@ -319,7 +348,7 @@ abstract class Builder implements SqlableInterface
   {
     return $this->hasAlias($alias) && $this->getExpression($this->getHash($alias)) instanceof Expr\Subquery;
   }
-
+  
   /**
    * @param string $alias
    * @return Expr\Column
@@ -328,7 +357,7 @@ abstract class Builder implements SqlableInterface
   {
     return $this->hasColumnAlias($alias) ? $this->getExpression($this->getHash($alias)) : null;
   }
-
+  
   /**
    * @param string $alias
    * @return Expr\Table
@@ -337,7 +366,7 @@ abstract class Builder implements SqlableInterface
   {
     return $this->hasTableAlias($alias) ? $this->getExpression($this->getHash($alias)) : null;
   }
-
+  
   /**
    * @param $alias
    * @return Expr\Func|null
@@ -346,7 +375,7 @@ abstract class Builder implements SqlableInterface
   {
     return $this->hasFunctionAlias($alias) ? $this->getExpression($this->getHash($alias)) : null;
   }
-
+  
   /**
    * @param $alias
    * @return Expr\Subquery|null
@@ -355,7 +384,7 @@ abstract class Builder implements SqlableInterface
   {
     return $this->hasSubqueryAlias($alias) ? $this->getExpression($this->getHash($alias)) : null;
   }
-
+  
   /**
    * @param Expr\Column $column
    * @param $alias
@@ -365,7 +394,7 @@ abstract class Builder implements SqlableInterface
   {
     return $this->setAlias($column, $alias);
   }
-
+  
   /**
    * @param Expr\Table $table
    * @param $alias
@@ -375,7 +404,7 @@ abstract class Builder implements SqlableInterface
   {
     return $this->setAlias($table, $alias);
   }
-
+  
   /**
    * @param Expr\Func $function
    * @param $alias
@@ -385,7 +414,7 @@ abstract class Builder implements SqlableInterface
   {
     return $this->setAlias($function, $alias);
   }
-
+  
   /**
    * @param Expression $expression
    * @param $alias
@@ -395,23 +424,23 @@ abstract class Builder implements SqlableInterface
   {
     $this->map['hashes']->set($expression->hashCode(), $alias);
     $this->map['aliases']->set($alias, $expression->hashCode());
-
+    
     $this->hasExpression($expression) || $this->setExpression($expression);
-
+    
     return $this;
   }
-
+  
   /**
    * @param Expression $expression
    * @return $this
    */
   public function setExpression(Expression $expression)
   {
-    $this->map['expressions']->set($expression->hashCode(), $expression);
-
+    $this->map['expressions']->set($expression->hashCode(), $expression->setBuilder($this));
+    
     return $this;
   }
-
+  
   /**
    * @param Expression $expression
    * @return bool
@@ -420,7 +449,7 @@ abstract class Builder implements SqlableInterface
   {
     return $this->hasExpressionHash($expression->hashCode());
   }
-
+  
   /**
    * @param $hashCode
    * @return bool
@@ -429,7 +458,7 @@ abstract class Builder implements SqlableInterface
   {
     return $this->map['expressions']->has($hashCode);
   }
-
+  
   /**
    * @param $hashCode
    * @return mixed|null
@@ -438,7 +467,7 @@ abstract class Builder implements SqlableInterface
   {
     return $this->map['expressions']->get($hashCode);
   }
-
+  
   /**
    * @return Collection|Expression[]|mixed|null
    */
@@ -446,7 +475,7 @@ abstract class Builder implements SqlableInterface
   {
     return $this->map['expressions'];
   }
-
+  
   /**
    * @return Collection|Expression[]|mixed|null
    */
@@ -454,7 +483,7 @@ abstract class Builder implements SqlableInterface
   {
     return $this->map['aliases'];
   }
-
+  
   /**
    * @param $alias
    * @return bool
@@ -463,7 +492,7 @@ abstract class Builder implements SqlableInterface
   {
     return $this->map['aliases']->has($alias);
   }
-
+  
   /**
    * @param $hash
    * @return Expression|mixed|null
@@ -472,7 +501,7 @@ abstract class Builder implements SqlableInterface
   {
     return $this->map['hashes'][$hash];
   }
-
+  
   /**
    * @return Collection|Expression[]|mixed|null
    */
@@ -480,7 +509,7 @@ abstract class Builder implements SqlableInterface
   {
     return $this->map['hashes'];
   }
-
+  
   /**
    * @param $hashCode
    * @return bool
@@ -489,7 +518,7 @@ abstract class Builder implements SqlableInterface
   {
     return $this->map['hashes']->has($hashCode);
   }
-
+  
   /**
    * @param $alias
    * @return Expression|mixed|null
@@ -502,9 +531,46 @@ abstract class Builder implements SqlableInterface
   /**
    * @return array
    */
-  public function getParametersMap()
+  public function getPlaceholders()
   {
-    return $this->parametersMap;
+    $placeholders = [];
+    
+    foreach ($this->placeholders as $hashCode => $placeholder) {
+      $expression = $this->getExpression($hashCode);
+      $placeholders[$placeholder->toSQL()] = $expression->toSQL();
+    }
+    
+    return $placeholders;
+  }
+  
+  /**
+   * @param $hashCode
+   * @param Expr\Raw $placeholder
+   * @return $this
+   */
+  public function setPlaceholder($hashCode, Expr\Raw $placeholder)
+  {
+    $this->placeholders[$hashCode] = $placeholder;
+
+    return $this;
+  }
+  
+  /**
+   * @param $hashCode
+   * @return Expr\Raw|null
+   */
+  public function getPlaceholder($hashCode)
+  {
+    return $this->placeholders[$hashCode] ?? null;
+  }
+  
+  /**
+   * @param Expression $expression
+   * @return Expr\Raw|null
+   */
+  public function getPlaceholderForExpression(Expression $expression)
+  {
+    return $this->getPlaceholder($expression->hashCode());
   }
   
   /**
@@ -515,7 +581,7 @@ abstract class Builder implements SqlableInterface
   {
     return null === $string ? null : $this->connection->quoteIdentifier($string);
   }
-
+  
   /**
    * @return ConnectionInterface
    */
@@ -523,7 +589,7 @@ abstract class Builder implements SqlableInterface
   {
     return $this->connection;
   }
-
+  
   /**
    * @param ConnectionInterface $connection
    * @return Builder
@@ -531,10 +597,10 @@ abstract class Builder implements SqlableInterface
   public function setConnection(ConnectionInterface $connection)
   {
     $this->connection = $connection;
-
+    
     return $this;
   }
-
+  
   /**
    * @return null|string
    */
@@ -542,28 +608,27 @@ abstract class Builder implements SqlableInterface
   {
     return $this->comment;
   }
-
+  
   /**
    * @return null|string
    */
   public function getCommentSql()
   {
     $comment = $this->getComment();
-
-    if(null !== $this->comment) {
-      $comment = str_replace("\n", "\n-- ", $this->comment);
-      $comment = "-- $comment\n";
+    
+    if (null !== $this->comment) {
+      $comment = sprintf("-- %s\n", str_replace("\n", "\n-- ", $this->comment));
     }
-
+    
     return $comment;
   }
-
+  
   /**
    * @param null|string $comment
    */
   public function setComment($comment)
   {
-    $this->comment = (string) $comment;
+    $this->comment = (string)$comment;
   }
-
+  
 }

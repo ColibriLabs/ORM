@@ -158,20 +158,15 @@ class Where extends AbstractStatement
    */
   public function toSQL()
   {
-    /**
-     * @var Expression $expression
-     */
-    
+    /** @var Expression $expression */
     if($this->conditions->exists()) {
       
       $clauses = [];
       foreach($this->conditions as $index => $condition) {
-        $expression = $condition['condition'];
-        $conjunction = $condition['conjunction'];
-  
-        $stringCondition = ($index > 0 ? " $conjunction " : null) . ($expression->toSQL());
-  
-        $clauses[] = $stringCondition;
+        $expression       = $condition['condition'];
+        $conjunction      = $condition['conjunction'];
+        $stringCondition  = ($index > 0 ? " $conjunction " : null) . ($expression->toSQL());
+        $clauses[]        = $stringCondition;
       }
 
       return sprintf('(%s)', implode($clauses));

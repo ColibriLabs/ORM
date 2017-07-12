@@ -40,10 +40,7 @@ class OrderBy extends AbstractStatement
    */
   public function order(Expression $expression, $vector = OrderBy::ASC)
   {
-    $this->columns[] = [
-      'expression' => $expression,
-      'vector' => $vector,
-    ];
+    $this->columns[] = ['expression' => $expression, 'vector' => $vector,];
 
     return $this;
   }

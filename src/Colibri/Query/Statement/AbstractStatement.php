@@ -33,9 +33,7 @@ abstract class AbstractStatement implements SqlableInterface
    */
   public function __debugInfo()
   {
-    return [
-      'class' => __CLASS__,
-    ];
+    return ['class' => __CLASS__,];
   }
 
   /**
@@ -92,17 +90,16 @@ abstract class AbstractStatement implements SqlableInterface
   {
     return $this->getBuilder()->stringifyExpression($expression);
   }
-
+  
+  
   /**
    * @param Expression $expression
    * @param null $alias
-   * @return $this
+   * @return Expression
    */
-  public function registerExpression(Expression $expression, $alias = null)
+  public function completeExpression(Expression $expression, $alias = null)
   {
-    $this->getBuilder()->registerExpression($expression, $alias);
-
-    return $this;
+    return $this->getBuilder()->completeExpression($expression, $alias);
   }
 
 }

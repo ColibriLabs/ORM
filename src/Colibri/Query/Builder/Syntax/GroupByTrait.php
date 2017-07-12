@@ -33,7 +33,7 @@ trait GroupByTrait
   /**
    * @return $this
    */
-  public function enableWithRollup()
+  public function withRollup()
   {
     $this->getGroupByStatement()->withRollup(true);
 
@@ -43,7 +43,7 @@ trait GroupByTrait
   /**
    * @return $this
    */
-  public function disableWithRollup()
+  public function withoutRollup()
   {
     $this->getGroupByStatement()->withRollup(false);
 

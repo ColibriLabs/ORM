@@ -47,7 +47,7 @@ class ValuesSet extends AbstractStatement
         return $this->stringifyExpression($valueItem);
       }, $valuesSet)));
     }
-
+    
     foreach ($this->dataSet['columnHashes'] as $columnHash) {
       $columnExpression = $this->getBuilder()->getExpression($columnHash);
       $columns[] = $this->stringifyExpression($columnExpression);
@@ -63,12 +63,12 @@ class ValuesSet extends AbstractStatement
   public function setInsertData(array $values)
   {
     $this->dataSet['valuesSet']->add(array_map(function($value) {
-      return new Expr\Parameter($value);
+      return $this->completeExpression(new Expr\Parameter($value));
     }, $values));
     
     if ($this->dataSet['columnHashes']->count() == 0) {
       $columns = array_map(function($columnName) {
-        $columnExpression = $this->normalizeExpression(new Expr\Column($columnName));
+        $columnExpression = $this->completeExpression(new Expr\Column($columnName));
         return $columnExpression->hashCode();
       }, array_keys($values));
       

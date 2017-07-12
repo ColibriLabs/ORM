@@ -585,8 +585,8 @@ abstract class Repository implements RepositoryInterface
     
     // if query builder was initialized as parameterized
     // and it have what to bind to PDOStatement
-    if ($selectQuery->isParameterized() && count($selectQuery->getParametersMap()) > 0) {
-      $statement->bindParams($this->getQuery()->getParametersMap());
+    if ($selectQuery->isParameterized() && count($selectQuery->getPlaceholders()) > 0) {
+      $statement->bindParams($this->getQuery()->getPlaceholders());
     }
   
     // executes a prepared statement

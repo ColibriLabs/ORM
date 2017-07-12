@@ -123,9 +123,7 @@ class Select extends Builder
     foreach ($columns as $column) {
       is_array($column)
         ? count($column) != count($column, true)
-          ? $this->addSelectColumns(...$column)
-          : $this->addSelectColumn(...$column)
-        : $this->addSelectColumn($column);
+          ? $this->addSelectColumns(...$column) : $this->addSelectColumn(...$column) : $this->addSelectColumn($column);
     }
 
     return $this;
@@ -141,8 +139,8 @@ class Select extends Builder
     if (!($expression instanceof Expression)) {
       $expression = new Expr\Column($expression);
     }
-
-    $this->registerExpression($expression, $alias);
+  
+    $expression = $this->completeExpression($expression, $alias);
 
     $this->columns->add($expression->hashCode());
 
@@ -268,26 +266,28 @@ class Select extends Builder
   {
     $statements = [];
 
-    /** @var Expr\Parameters $parameters */
     $expressions = $this->columns->map(function ($hashCode) {
       return $this->getExpression($hashCode);
-    })->toArray();
-
-    $columns = (string) $this->normalizeExpression(new Expr\Parameters($expressions));
+    });
+    
+    $columns = $this->normalizeExpression(new Expr\Parameters($expressions->toArray()));
 
     $statementsNames = [
-      'joins' => "\n%s",
-      'where' => "\nWHERE %s",
-      'group' => "\nGROUP BY %s",
-      'order' => "\nORDER BY %s",
-      'having' => "\nHAVING %s",
-      'limit' => "\nLIMIT %s",
+      'joins'   => "\n%s",
+      'where'   => "\nWHERE %s",
+      'group'   => "\nGROUP BY %s",
+      'order'   => "\nORDER BY %s",
+      'having'  => "\nHAVING %s",
+      'limit'   => "\nLIMIT %s",
     ];
+    
+    /** @var Expr\Table $table */
+    $table = $this->normalizeExpression($this->table);
 
     $statements[] = (null === ($modifiers = $this->getModifiersStatement()->toSQL())) ? null : $modifiers;
     $statements[] = " $columns ";
-    $statements[] = $this->table->getName() ? "\nFROM {$this->table->toSQL()}" : null;
-
+    $statements[] = "\nFROM {$table}";
+    
     foreach ($statementsNames as $name => $template) {
       if (null !== ($statement = $this->statements->get($name)) && null !== ($statementSQL = $statement->toSQL())) {
         $statements[] = sprintf($template, $statementSQL);

@@ -2,6 +2,7 @@
 
 namespace Colibri\Query\Builder;
 
+use Colibri\Query\Expr;
 use Colibri\Collection\Collection;
 use Colibri\Connection\ConnectionInterface;
 use Colibri\Exception\BadArgumentException;
@@ -68,9 +69,12 @@ class Delete extends Builder
       'order' => "\nORDER BY %s",
       'limit' => "\nLIMIT %s",
     ];
-
+  
+    /** @var Expr\Table $table */
+    $table = $this->normalizeExpression($this->table);
+  
     $statements[] = (null === ($modifiers = $this->getModifiersStatement()->toSQL())) ? null : $modifiers;
-    $statements[] = $this->table->getName() ? "\nFROM {$this->table->toSQL()}" : null;
+    $statements[] = "\nFROM $table";
 
     foreach ($statementsNames as $name => $template) {
       if (null !== ($statement = $this->statements->get($name)) && null !== ($statementSQL = $statement->toSQL())) {

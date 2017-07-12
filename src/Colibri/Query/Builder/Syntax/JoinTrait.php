@@ -27,7 +27,7 @@ trait JoinTrait
     $foreign = is_array($foreign) ? $foreign : [$foreign];
     $foreign[0] = !($foreign[0] instanceof Expression) ? new Table($foreign[0]) : $foreign[0];
 
-    $foreign = $builder->registerExpression(...$foreign);
+    $foreign = $builder->preProcessExpression(...$foreign);
 
     if (is_array($on)) {
       $whereOn = new Statement\Where($builder);

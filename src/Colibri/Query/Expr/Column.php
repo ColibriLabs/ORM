@@ -44,14 +44,15 @@ class Column extends Expression
   }
 
   /**
-   * The __toString method allows a class to decide how it will react when it is converted to a string.
-   *
-   * @return string
-   * @link http://php.net/manual/en/language.oop5.magic.php#language.oop5.magic.tostring
+   * @inheritdoc
    */
   function __toString()
   {
-    return (string) $this->toSQL();
+    try {
+      return (string) $this->toSQL();
+    } catch (\Throwable $exception) {
+      die($exception->getTraceAsString());
+    }
   }
 
   /**

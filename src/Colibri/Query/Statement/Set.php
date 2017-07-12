@@ -38,8 +38,10 @@ class Set extends AbstractStatement
    */
   public function set($column, $value)
   {
-    $column = $this->normalizeExpression(new Expr\Column($column));
-    $this->set->set($column->hashCode(), new Expr\Parameter($value));
+    $column = $this->completeExpression(new Expr\Column($column));
+    $value  = $this->completeExpression(new Expr\Parameter($value));
+    
+    $this->set->set($column->hashCode(), $value);
 
     return $this;
   }
@@ -74,7 +76,7 @@ class Set extends AbstractStatement
 
     foreach ($this->set as $columnHash => $value) {
       $column = $this->getBuilder()->getExpression($columnHash);
-      $set[] = sprintf('%s = %s', $this->stringifyExpression($column), $this->normalizeExpression($value));
+      $set[] = sprintf('%s = %s', $this->stringifyExpression($column), $this->stringifyExpression($value));
     }
 
     return implode(', ', $set);
