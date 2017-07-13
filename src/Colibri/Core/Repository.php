@@ -581,7 +581,7 @@ abstract class Repository implements RepositoryInterface
   public function executeQueryStmt()
   {
     $selectQuery  = $this->getQuery();
-    $statement    = $this->getConnection()->prepare($this->getQuery());
+    $statement    = $this->getConnection()->prepare($this->getQuery(), null);
     
     // if query builder was initialized as parameterized
     // and it have what to bind to PDOStatement
