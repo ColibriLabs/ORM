@@ -101,12 +101,10 @@ class Join extends AbstractStatement
    */
   protected function buildExpression(Expression $expression)
   {
-    $template = $expression instanceof Subquery ? '(%s) %s' : '%s %s';
-
+    $template = $expression instanceof Subquery ? '(%s)' : '%s';
     $expressionString = $this->stringifyExpression($expression);
-    $aliasString = $this->quoteIdentifier($this->getBuilder()->getAlias($expression->hashCode()));
 
-    return trim(sprintf($template, $expressionString, $aliasString));
+    return trim(sprintf($template, $expressionString));
   }
 
 }
