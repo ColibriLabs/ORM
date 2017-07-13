@@ -252,7 +252,7 @@ abstract class Builder implements SqlableInterface
   {
     if ($this->hasHash($expression->hashCode())) {
       $alias = $this->getAlias($expression->hashCode());
-      $alias = new Expr\Parameter($alias);
+      $alias = new Expr\Column($alias);
       $alias->setBuilder($this);
       $expression = new Expr\Raw(sprintf('%s AS %s', $expression->toSQL(), $alias->toSQL()));
     }
