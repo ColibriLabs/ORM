@@ -130,7 +130,8 @@ abstract class Builder implements SqlableInterface
    */
   public function table($table)
   {
-    $this->table = $this->completeExpression(new Expr\Table($table));
+    $this->table = $this->completeExpression(($table instanceof Expr\Subquery)
+      ? $table : new Expr\Table($table));
     
     return $this;
   }
