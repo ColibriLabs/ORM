@@ -135,7 +135,7 @@ trait WhereTrait
    */
   public function whereNotIsNull($column)
   {
-    return $this->where($column, null, Cmp::IS_NULL);
+    return $this->where($column, null, Cmp::NOT_IS_NULL);
   }
 
   /**
