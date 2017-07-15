@@ -31,7 +31,7 @@ class Subquery extends Expression
    */
   public function toSQL()
   {
-    return $this->subquery->toSQL();
+    return sprintf('(%s)', $this->subquery->toSQL());
   }
 
   /**
