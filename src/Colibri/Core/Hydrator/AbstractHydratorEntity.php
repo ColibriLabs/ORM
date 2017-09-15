@@ -63,7 +63,7 @@ abstract class AbstractHydratorEntity extends Hydrator
     foreach ($injectData as $sqlName => $propertyValue) {
       $propertyName = $metadata->getName($sqlName, Metadata::CAMILIZED);
       $propertyValue = $propertyValue !== null
-        ? $metadata->toPhp(Inflector::underscore($propertyName), $propertyValue) : null;
+        ? $metadata->toPhp($sqlName, $propertyValue) : null;
       $this->setProperty($entity, $propertyName, $propertyValue);
     }
     
@@ -99,11 +99,10 @@ abstract class AbstractHydratorEntity extends Hydrator
     
     foreach ($metadata->getNames() as $sqlName) {
       $propertyName = $metadata->getName($sqlName, Metadata::CAMILIZED);
-      $rawPropertyName = $metadata->getSQLName($sqlName);
       $propertyValue = $this->getReflection()->getProperty($propertyName)->getValue($entity);
       $propertyValue = $propertyValue !== null
         ? $metadata->toPlatform($sqlName, $propertyValue) : null;
-      $collection[$rawPropertyName] = $propertyValue;
+      $collection[$sqlName] = $propertyValue;
     }
     
     return $collection;
