@@ -8,6 +8,7 @@ use Colibri\Core\Entity\EntityInterface;
 use Colibri\Core\Entity\RepositoryInterface;
 use Colibri\Core\Event\EntityLifecycleEvent;
 use Colibri\Core\Hydrator;
+use Colibri\Core\Metadata;
 use Colibri\Core\ORMEvents;
 use Colibri\Core\Proxy\EntityProxy;
 use Colibri\Exception\NotFoundException;
@@ -18,12 +19,12 @@ use Colibri\Exception\NotFoundException;
  */
 abstract class AbstractHydratorEntity extends Hydrator
 {
-
+  
   /**
    * @var RepositoryInterface
    */
   protected $repository;
-
+  
   /**
    * HydratorEntity constructor.
    * @param RepositoryInterface $repository
@@ -31,10 +32,10 @@ abstract class AbstractHydratorEntity extends Hydrator
   public function __construct(RepositoryInterface $repository)
   {
     $this->repository = $repository;
-
+    
     parent::__construct($repository->getEntityClassReflection());
   }
-
+  
   /**
    * @param array $data
    * @param EntityInterface|EntityProxy $entity
@@ -49,7 +50,7 @@ abstract class AbstractHydratorEntity extends Hydrator
     
     return $entity;
   }
-
+  
   /**
    * @param EntityInterface $entity
    * @param array $injectData
@@ -58,39 +59,32 @@ abstract class AbstractHydratorEntity extends Hydrator
   protected function hydrateEntityProperties(EntityInterface $entity, array $injectData)
   {
     $metadata = $this->getRepository()->getEntityMetadata();
-
-    foreach ($injectData as $keyName => $value) {
-      try {
-        $columnSQLName = $metadata->getSQLName($keyName);
-        if ($entity->hasName($columnSQLName)) {
-          $entity->setByName($columnSQLName, $value);
-        }
-      } catch (NotFoundException $exception) {
-        $entity->setVirtual($keyName, $value);
-      }
+    
+    foreach ($injectData as $sqlName => $propertyValue) {
+      $propertyName = $metadata->getName($sqlName, Metadata::CAMILIZED);
+      $propertyValue = $propertyValue !== null
+        ? $metadata->toPhp(Inflector::underscore($propertyName), $propertyValue) : null;
+      $this->setProperty($entity, $propertyName, $propertyValue);
     }
-
+    
     return $this;
   }
-
+  
   /**
    * @param EntityInterface|EntityProxy $entity
    * @param string $propertyName
-   * @param mixed $value
+   * @param mixed $propertyValue
    * @return $this
    */
-  protected function setProperty($entity, $propertyName, $value)
+  protected function setProperty($entity, $propertyName, $propertyValue)
   {
-    if($this->getReflection()->hasProperty($propertyName)) {
+    if ($this->getReflection()->hasProperty($propertyName)) {
       $property = $this->getReflection()->getProperty($propertyName);
-
-      if (!$property->isPublic()) {
-        $property->setAccessible(true);
-      }
-
-      $property->setValue($entity, $value);
+      $property->setValue($entity, $propertyValue);
+    } else {
+      $entity->setVirtual($propertyName, $propertyValue);
     }
-
+    
     return $this;
   }
   
@@ -103,20 +97,18 @@ abstract class AbstractHydratorEntity extends Hydrator
     $metadata = $this->getMetadata();
     $collection = [];
     
-    foreach ($metadata->getNames() as $entityPropertyName) {
-      $propertyName = Inflector::camelize($entityPropertyName);
-      $rawPropertyName = $metadata->getSQLName($entityPropertyName);
+    foreach ($metadata->getNames() as $sqlName) {
+      $propertyName = $metadata->getName($sqlName, Metadata::CAMILIZED);
+      $rawPropertyName = $metadata->getSQLName($sqlName);
       $propertyValue = $this->getReflection()->getProperty($propertyName)->getValue($entity);
-  
       $propertyValue = $propertyValue !== null
-        ? $metadata->toPlatform($entityPropertyName, $propertyValue) : null;
-
+        ? $metadata->toPlatform($sqlName, $propertyValue) : null;
       $collection[$rawPropertyName] = $propertyValue;
     }
     
     return $collection;
   }
-
+  
   /**
    * @return RepositoryInterface
    */
@@ -132,5 +124,5 @@ abstract class AbstractHydratorEntity extends Hydrator
   {
     return $this->getRepository()->getEntityMetadata();
   }
-
+  
 }
