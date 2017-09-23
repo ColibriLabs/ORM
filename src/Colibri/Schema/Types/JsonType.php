@@ -23,7 +23,7 @@ class JsonType extends StringType
    */
   public function toPlatformValue($value)
   {
-    return parent::toPlatformValue(json_encode($value, JSON_PRETTY_PRINT));
+    return parent::toPlatformValue(json_encode($value));
   }
   
   /**
