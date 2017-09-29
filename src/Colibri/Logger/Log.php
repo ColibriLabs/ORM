@@ -7,6 +7,10 @@ use Colibri\Logger\Handler\HandlerInterface;
 use Colibri\Logger\Handler\Mask\LogLevelMask;
 use Psr\Log\AbstractLogger;
 
+/**
+ * Class Log
+ * @package Colibri\Logger
+ */
 class Log extends AbstractLogger
 {
 
@@ -14,13 +18,20 @@ class Log extends AbstractLogger
    * @var Collection
    */
   protected $handlers = null;
-
+  
+  /**
+   * @var string
+   */
+  protected $name;
+  
   /**
    * Log constructor.
+   * @param string|null $name
    */
-  public function __construct()
+  public function __construct($name = null)
   {
     $this->handlers = new Collection();
+    $this->name = $name;
   }
 
   /**
@@ -78,10 +89,17 @@ class Log extends AbstractLogger
     ]);
 
     $record = new Collection([
+      'name' => $this->name,
       'level' => strtoupper($level),
       'level_bitmask' => new LogLevelMask($level),
       'datetime' => new DateTime(),
       'message' => $message,
+    ]);
+  
+    $record->batch([
+      'pid' => getmypid(),
+      'uid' => getmyuid(),
+      'gid' => getmygid(),
     ]);
 
     $serverVariables = [
