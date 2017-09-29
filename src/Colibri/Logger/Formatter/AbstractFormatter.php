@@ -82,9 +82,12 @@ abstract class AbstractFormatter implements FormatterInterface
   protected function prepare(Collection $record)
   {
     $placeholders = $record->toArray();
+    
+    $message = $placeholders['message'];
+    unset($placeholders['message']);
 
-    $content = $placeholders['message']['content'];
-    $context = $placeholders['message']['context'];
+    $content = $message['content'];
+    $context = $placeholders + $message['context'];
 
     $message = $this->replace($content, $context);
 
