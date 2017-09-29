@@ -23,12 +23,20 @@ class LineFormatter extends AbstractFormatter
   }
 
   /**
-   * @param Collection $record
+   * @param Collection $replacement
    * @return string
    */
-  public function format(Collection $record)
+  public function format(Collection $replacement)
   {
-    return $this->replace($this->getFormat(), $this->prepare($record));
+    $replacement  = $this->prepare($replacement);
+    $messageLines = explode(PHP_EOL, $replacement['message']);
+    
+    foreach ($messageLines as &$messageLine) {
+      $replacement['message'] = $messageLine;
+      $messageLine = $this->replace($this->getFormat(), $replacement);
+    }
+    
+    return implode(PHP_EOL, $messageLines);
   }
 
 }
