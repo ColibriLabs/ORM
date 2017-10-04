@@ -91,7 +91,7 @@ class Log extends AbstractLogger
     $record = new Collection([
       'name' => $this->name,
       'level' => strtoupper($level),
-      'level_bitmask' => new LogLevelMask($level),
+      'levelBitmask' => new LogLevelMask($level),
       'datetime' => new DateTime(),
       'message' => $message,
     ]);
@@ -106,8 +106,9 @@ class Log extends AbstractLogger
       'ip' => 'REMOTE_ADDR',
       'port' => 'REMOTE_PORT',
       'host' => 'HTTP_HOST',
-      'http_method' => 'REQUEST_METHOD',
-      'uri' => 'REQUEST_URI'
+      'httpMethod' => 'REQUEST_METHOD',
+      'uri' => 'REQUEST_URI',
+      'userAgent' => 'HTTP_USER_AGENT',
     ];
 
     foreach ($serverVariables as $name => $serverKey) {
