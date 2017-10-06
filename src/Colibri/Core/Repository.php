@@ -12,7 +12,7 @@ use Colibri\Core\Entity\RepositoryInterface;
 use Colibri\Core\Event\EntityLifecycleEvent;
 use Colibri\Core\Hydrator\AbstractHydratorEntity;
 use Colibri\Core\Hydrator\EntityHydrator;
-use Colibri\Core\Repository\GenericRepositoryQueryFactory;
+use Colibri\Core\Repository\BasicRepositoryQueryFactory;
 use Colibri\Core\Repository\RepositoryQueryFactory;
 use Colibri\Core\ResultSet\ResultSet;
 use Colibri\Core\ResultSet\ResultSetIterator;
@@ -84,6 +84,11 @@ abstract class Repository implements RepositoryInterface
   protected $queryFactory;
   
   /**
+   * @var EntityManager
+   */
+  protected $entityManager;
+  
+  /**
    * EntityRepository constructor.
    * @param string $entityName
    */
@@ -95,8 +100,10 @@ abstract class Repository implements RepositoryInterface
     $this->entityName = $entityName;
     $this->connection = $this->getServiceLocator()->getConnection($this->getEntityMetadata()->getConnectionName());
     
-    $this->hydrator = new EntityHydrator($this);
-    $this->queryFactory = new GenericRepositoryQueryFactory($this);
+    $this->entityManager = $this->getServiceLocator()->getEntityManager();
+
+    $this->setHydrator(new EntityHydrator($this));
+    $this->setQueryFactory(new BasicRepositoryQueryFactory($this));
     
     $this->filterQuery = $this->createSelectQuery();
   }
@@ -297,6 +304,8 @@ abstract class Repository implements RepositoryInterface
   public function persist(EntityInterface $entity)
   {
     $reflection = $this->getEntityClassReflection();
+    
+    $this->entityManager->persist($entity);
 
     if ($reflection->isInstance($entity)) {
 
@@ -410,7 +419,7 @@ abstract class Repository implements RepositoryInterface
    */
   public function getEntityMetadata()
   {
-    return $this->getServiceLocator()->getMetadataManager()->getMetadataFor($this->getEntityName());
+    return $this->getEntityManager()->getMetadataFor($this->getEntityName());
   }
 
   /**
@@ -475,6 +484,14 @@ abstract class Repository implements RepositoryInterface
   {
     return $this->getServiceLocator()->getClassManager();
   }
+  
+  /**
+   * @return EntityManager
+   */
+  public function getEntityManager(): EntityManager
+  {
+    return $this->entityManager;
+  }
 
   /**
    * @return ConnectionInterface
@@ -498,6 +515,17 @@ abstract class Repository implements RepositoryInterface
   public function getHydrator()
   {
     return $this->hydrator;
+  }
+  
+  /**
+   * @param AbstractHydratorEntity $hydrator
+   * @return $this
+   */
+  public function setHydrator(AbstractHydratorEntity $hydrator)
+  {
+    $this->hydrator = $hydrator;
+    
+    return $this;
   }
   
   /**

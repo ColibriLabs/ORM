@@ -137,6 +137,14 @@ abstract class Entity implements EntityInterface
   }
   
   /**
+   * @inheritdoc
+   */
+  public function hashCode()
+  {
+    
+  }
+  
+  /**
    * @inheritDoc
    */
   public function beforePersist()

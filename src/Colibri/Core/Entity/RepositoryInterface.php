@@ -108,6 +108,12 @@ interface RepositoryInterface
   public function getHydrator();
   
   /**
+   * @param AbstractHydratorEntity $hydrator
+   * @return $this
+   */
+  public function setHydrator(AbstractHydratorEntity $hydrator);
+  
+  /**
    * @return DispatcherInterface
    */
   public function getEventDispatcher();

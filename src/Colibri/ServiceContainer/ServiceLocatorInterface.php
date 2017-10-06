@@ -5,6 +5,7 @@ namespace Colibri\ServiceContainer;
 use Colibri\Common\Configuration;
 use Colibri\Connection\ConnectionManagerInterface;
 use Colibri\Core\ClassManager;
+use Colibri\Core\EntityManager;
 use Colibri\Core\MetadataManager;
 use Colibri\Core\RepositoryManager;
 use Colibri\EventDispatcher\Dispatcher;
@@ -67,6 +68,11 @@ interface ServiceLocatorInterface {
    * @return RepositoryManager
    */
   public function getRepositoryManager();
+  
+  /**
+   * @return EntityManager
+   */
+  public function getEntityManager();
 
   /**
    * @return ConnectionManagerInterface

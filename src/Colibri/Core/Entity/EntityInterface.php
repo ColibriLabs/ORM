@@ -86,5 +86,10 @@ interface EntityInterface extends ArrayableInterface, \JsonSerializable
    * @return $this
    */
   public function beforeRemove();
+  
+  /**
+   * @return string
+   */
+  public function hashCode();
 
 }

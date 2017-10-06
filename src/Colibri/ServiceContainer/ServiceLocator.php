@@ -7,10 +7,10 @@ use Colibri\Common\Configuration;
 use Colibri\Connection\ConnectionManager;
 use Colibri\Connection\ConnectionManagerInterface;
 use Colibri\Core\ClassManager;
+use Colibri\Core\EntityManager;
 use Colibri\Core\MetadataManager;
 use Colibri\Core\RepositoryManager;
 use Colibri\EventDispatcher\Dispatcher;
-use Colibri\Logger\Handler\ErrorLogHandler;
 use Colibri\Logger\Handler\Mask\LogLevelMask;
 use Colibri\Logger\Log;
 use Psr\Log\LoggerAwareInterface;
@@ -108,7 +108,19 @@ final class ServiceLocator implements ServiceLocatorInterface, LoggerAwareInterf
 
     return $this->get('repositoryManager');
   }
-
+  
+  /**
+   * @return EntityManager
+   */
+  public function getEntityManager()
+  {
+    if(!$this->instances->has('entityManager')) {
+      $this->instances->set('entityManager', new EntityManager($this));
+    }
+    
+    return $this->get('entityManager');
+  }
+  
   /**
    * @return Configuration
    */
@@ -137,13 +149,10 @@ final class ServiceLocator implements ServiceLocatorInterface, LoggerAwareInterf
   public function getLogger()
   {
     if (!$this->instances->has('logger')) {
-      $logger = new Log();
-      $logger->pushHandler('error_log', new ErrorLogHandler(LogLevelMask::MASK_ALL));
-      
-      $this->instances['logger'] = $logger;
+      $this->setLogger(new Log('COLIBRI.ORM'));
     }
 
-    return $this->get('logger');
+    return null;
   }
 
   /**
