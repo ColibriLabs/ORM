@@ -66,7 +66,7 @@ abstract class Repository implements RepositoryInterface
   /**
    * @var QueryBuilder\Select
    */
-  protected $filterQuery;
+  protected $query;
   
   /**
    * @var AbstractHydratorEntity
@@ -84,11 +84,6 @@ abstract class Repository implements RepositoryInterface
   protected $queryFactory;
   
   /**
-   * @var EntityManager
-   */
-  protected $entityManager;
-  
-  /**
    * EntityRepository constructor.
    * @param string $entityName
    */
@@ -99,13 +94,11 @@ abstract class Repository implements RepositoryInterface
     $this->eventDispatcher = $this->serviceLocator->getDispatcher();
     $this->entityName = $entityName;
     $this->connection = $this->getServiceLocator()->getConnection($this->getEntityMetadata()->getConnectionName());
-    
-    $this->entityManager = $this->getServiceLocator()->getEntityManager();
 
     $this->setHydrator(new EntityHydrator($this));
     $this->setQueryFactory(new BasicRepositoryQueryFactory($this));
     
-    $this->filterQuery = $this->createSelectQuery();
+    $this->query = $this->createSelectQuery();
   }
 
   /**
@@ -133,9 +126,8 @@ abstract class Repository implements RepositoryInterface
       return $callback->call($arguments);
     }
 
-    throw new BadCallMethodException('Magic calling method should starts either :names', [
-      'names' => 'findBy, findOneBy, filterBy, orderBy or groupBy'
-    ]);
+    throw new BadCallMethodException(sprintf('Trying to call %s::%s(); method. Allowed to call methods which starts with "%s"',
+      __CLASS__, $name, 'findBy, findOneBy, filterBy, orderBy or groupBy'));
   }
 
   /**
@@ -419,7 +411,7 @@ abstract class Repository implements RepositoryInterface
    */
   public function getEntityMetadata()
   {
-    return $this->getEntityManager()->getMetadataFor($this->getEntityName());
+    return $this->getServiceLocator()->getMetadataManager()->getMetadataFor($this->getEntityName());
   }
 
   /**
@@ -427,7 +419,7 @@ abstract class Repository implements RepositoryInterface
    */
   public function getQuery()
   {
-    return $this->filterQuery;
+    return $this->query;
   }
   
   /**
@@ -472,7 +464,7 @@ abstract class Repository implements RepositoryInterface
    */
   public function setQuery(QueryBuilder\Select $filterQuery)
   {
-    $this->filterQuery = $filterQuery;
+    $this->query = $filterQuery;
 
     return $this;
   }
@@ -483,14 +475,6 @@ abstract class Repository implements RepositoryInterface
   public function getClassManager()
   {
     return $this->getServiceLocator()->getClassManager();
-  }
-  
-  /**
-   * @return EntityManager
-   */
-  public function getEntityManager(): EntityManager
-  {
-    return $this->entityManager;
   }
 
   /**
