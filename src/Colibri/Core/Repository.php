@@ -127,7 +127,7 @@ abstract class Repository implements RepositoryInterface
     }
 
     throw new BadCallMethodException(sprintf('Trying to call %s::%s(); method. Allowed to call methods which starts with "%s"',
-      __CLASS__, $name, 'findBy, findOneBy, filterBy, orderBy or groupBy'));
+      static::class, $name, 'findBy, findOneBy, filterBy, orderBy or groupBy'));
   }
 
   /**
