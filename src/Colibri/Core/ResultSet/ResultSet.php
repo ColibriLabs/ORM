@@ -53,6 +53,7 @@ abstract class ResultSet extends \IteratorIterator implements \Countable
 
     $entity = $hydrator->hydrate(parent::current(), $entity);
 
+    // @todo need to determine correct ID
     $identifier = $metadata->getName($metadata->getIdentifier(), Metadata::CAMILIZED);
     $this->currentKey = $reflection->getProperty($identifier)->getValue($entity);
 
