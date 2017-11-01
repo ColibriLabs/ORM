@@ -4,6 +4,7 @@ namespace Colibri\Core\ResultSet;
 
 use Colibri\Collection\Collection;
 use Colibri\Connection\Statement\StatementIterator;
+use Colibri\Core\Collection\ActiveEntityCollection;
 use Colibri\Core\Collection\EntityCollection;
 use Colibri\Core\Entity\RepositoryInterface;
 use Colibri\Core\Entity\EntityInterface;
@@ -130,9 +131,12 @@ abstract class ResultSet extends \IteratorIterator implements \Countable
     return new EntityCollection($this->getCollectionArray());
   }
   
+  /**
+   * @return ActiveEntityCollection
+   */
   public function getActiveRecordCollection()
   {
-    
+    return new ActiveEntityCollection($this->getEntityRepository(), $this->getCollectionArray());
   }
   
   /**
