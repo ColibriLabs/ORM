@@ -296,8 +296,6 @@ abstract class Repository implements RepositoryInterface
   public function persist(EntityInterface $entity)
   {
     $reflection = $this->getEntityClassReflection();
-    
-    $this->entityManager->persist($entity);
 
     if ($reflection->isInstance($entity)) {
 
