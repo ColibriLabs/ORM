@@ -163,6 +163,7 @@ class Func extends Expression
     'MD5' => [],
     'OLD_PASSWORD' => [],
     'PASSWORD' => [],
+    'GROUP_CONCAT' => [],
   ];
 
   /**
