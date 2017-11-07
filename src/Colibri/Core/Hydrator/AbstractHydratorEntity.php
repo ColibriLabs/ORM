@@ -61,10 +61,14 @@ abstract class AbstractHydratorEntity extends Hydrator
     $metadata = $this->getRepository()->getEntityMetadata();
     
     foreach ($injectData as $sqlName => $propertyValue) {
-      $propertyName = $metadata->getName($sqlName, Metadata::CAMILIZED);
-      $propertyValue = $propertyValue !== null
-        ? $metadata->toPhp($metadata->getName($sqlName), $propertyValue) : null;
-      $this->setProperty($entity, $propertyName, $propertyValue);
+      try {
+        $propertyName = $metadata->getName($sqlName, Metadata::CAMILIZED);
+        $propertyValue = $propertyValue !== null
+          ? $metadata->toPhp($metadata->getName($sqlName), $propertyValue) : null;
+        $this->setProperty($entity, $propertyName, $propertyValue);
+      } catch (NotFoundException $exception) {
+        $entity->setVirtual($sqlName, $propertyValue);
+      }
     }
     
     return $this;
