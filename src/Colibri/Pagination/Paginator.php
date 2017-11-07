@@ -5,6 +5,8 @@ namespace Colibri\Pagination;
 use Colibri\Connection\StmtInterface;
 use Colibri\Core\Entity\RepositoryInterface;
 use Colibri\Core\ResultSet\ResultSet;
+use Colibri\Query\Expr\Column;
+use Colibri\Query\Expr\Func\Count;
 
 /**
  * Class Paginator
@@ -62,7 +64,7 @@ class Paginator implements \IteratorAggregate
   /**
    * @return $this
    */
-public function determineTotalPages()
+  public function determineTotalPages()
   {
     $repository = $this->getRepository();
     $queryBuild = clone $repository->getQuery();
@@ -72,7 +74,10 @@ public function determineTotalPages()
     $identifier = $metadata->getIdentifier();
     $identifier = $metadata->getRawSQLName($identifier);
 
-    $queryBuild->clearSelectColumns()->count($identifier, 'totalRows');
+    $queryBuild->clearSelectColumns();
+    $queryBuild->addSelectColumn(new Count(new Column($identifier), true), 'totalRows');
+    $queryBuild->clearGroupByColumns();
+
     /** @var StmtInterface|\PDOStatement $statement */
     $statement = $connection->query($queryBuild->toSQL());
     
