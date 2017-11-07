@@ -19,7 +19,27 @@ trait OrderByTrait
    * @throws BadArgumentException
    */
   abstract public function getOrderByStatement();
-
+  
+  /**
+   * @param $column
+   * @param string $vector
+   * @return $this
+   */
+  public function addOrderBy($column, $vector = OrderBy::ASC)
+  {
+    return $this->orderBy($column, $vector);
+  }
+  
+  /**
+   * @return $this
+   */
+  public function clearOrderByColumns()
+  {
+    $this->getOrderByStatement()->getExpressions()->clear();
+    
+    return $this;
+  }
+  
   /**
    * @param $expression
    * @param string $vector
