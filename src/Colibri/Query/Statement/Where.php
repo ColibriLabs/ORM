@@ -21,7 +21,7 @@ class Where extends AbstractStatement
   /**
    * @var Collection
    */
-  protected $conditions;
+  protected $expressions;
   
   /**
    * WhereStatement constructor.
@@ -31,7 +31,7 @@ class Where extends AbstractStatement
   {
     parent::__construct($builder);
 
-    $this->conditions = new Collection();
+    $this->expressions = new Collection();
   }
 
   /**
@@ -49,8 +49,16 @@ class Where extends AbstractStatement
   {
     return [
       'parent' => parent::__debugInfo(),
-      'conditions' => $this->conditions->toArray(),
+      'conditions' => $this->expressions->toArray(),
     ];
+  }
+  
+  /**
+   * @return Collection
+   */
+  public function getExpressions()
+  {
+    return $this->expressions;
   }
   
   /**
@@ -61,7 +69,7 @@ class Where extends AbstractStatement
   {
     $subWhere = new Where($this->getBuilder());
     
-    $this->conditions[] = ['condition' => $subWhere, 'conjunction' => $conjunction,];
+    $this->expressions[] = ['condition' => $subWhere, 'conjunction' => $conjunction,];
 
     return $subWhere;
   }
@@ -76,7 +84,7 @@ class Where extends AbstractStatement
    */
   public function add(Expression $left, Expression $right, $comparator, $conjunction = Cmp::CONJUNCTION_AND)
   {
-    $this->conditions[] = [
+    $this->expressions[] = [
       'condition' => $this->getNewCondition($left, $right, $comparator),
       'conjunction' => $conjunction,
     ];
@@ -89,7 +97,7 @@ class Where extends AbstractStatement
    */
   public function getLastCondition()
   {
-    $array = $this->conditions->toArray();
+    $array = $this->expressions->toArray();
     
     return end($array);
   }
@@ -141,7 +149,7 @@ class Where extends AbstractStatement
    */
   public function getConditionsArrayCopy()
   {
-    return $this->conditions->toArray();
+    return $this->expressions->toArray();
   }
 
   /**
@@ -159,10 +167,10 @@ class Where extends AbstractStatement
   public function toSQL()
   {
     /** @var Expression $expression */
-    if($this->conditions->exists()) {
+    if($this->expressions->exists()) {
       
       $clauses = [];
-      foreach($this->conditions as $index => $condition) {
+      foreach($this->expressions as $index => $condition) {
         $expression       = $condition['condition'];
         $conjunction      = $condition['conjunction'];
         $stringCondition  = ($index > 0 ? " $conjunction " : null) . ($expression->toSQL());
