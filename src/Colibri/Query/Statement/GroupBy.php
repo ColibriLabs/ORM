@@ -21,7 +21,7 @@ class GroupBy extends AbstractStatement
   /**
    * @var Collection|null
    */
-  protected $map = null;
+  protected $expressions = null;
 
   /**
    * @var bool
@@ -36,17 +36,15 @@ class GroupBy extends AbstractStatement
   {
     parent::__construct($builder);
 
-    $this->map = new Collection();
+    $this->expressions = new Collection();
   }
-
+  
   /**
-   * @return $this
+   * @return Collection
    */
-  public function clearGroupColumns()
+  public function getExpressions()
   {
-    $this->expressions->clear();
-    
-    return $this;
+    return $this->expressions;
   }
   
   /**
@@ -72,7 +70,7 @@ class GroupBy extends AbstractStatement
       $expression = new Column($expression);
     }
 
-    $this->map->set($expression->hashCode(), $expression);
+    $this->expressions->set($expression->hashCode(), $expression);
 
     return $this;
   }
@@ -93,10 +91,10 @@ class GroupBy extends AbstractStatement
    */
   public function toSQL()
   {
-    return $this->map->exists()
+    return $this->expressions->exists()
       ? trim(sprintf("%s %s", implode(', ', array_map(function(Expression $expression) {
         return $this->stringifyExpression($expression);
-      }, $this->map->toArray())), ($this->withRollup ? 'WITH ROLLUP' : null))) : null;
+      }, $this->expressions->toArray())), ($this->withRollup ? 'WITH ROLLUP' : null))) : null;
   }
 
   /**
