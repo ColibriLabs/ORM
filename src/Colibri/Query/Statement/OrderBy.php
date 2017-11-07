@@ -20,7 +20,7 @@ class OrderBy extends AbstractStatement
   /**
    * @var Collection|null
    */
-  protected $columns = null;
+  protected $expressions;
 
   /**
    * OrderBy constructor.
@@ -30,9 +30,17 @@ class OrderBy extends AbstractStatement
   {
     parent::__construct($builder);
 
-    $this->columns = new Collection();
+    $this->expressions = new Collection();
   }
-
+  
+  /**
+   * @return Collection
+   */
+  public function getExpressions()
+  {
+    return $this->expressions;
+  }
+  
   /**
    * @param Expression $expression
    * @param string $vector
@@ -40,7 +48,7 @@ class OrderBy extends AbstractStatement
    */
   public function order(Expression $expression, $vector = OrderBy::ASC)
   {
-    $this->columns[] = ['expression' => $expression, 'vector' => $vector,];
+    $this->expressions[] = ['expression' => $expression, 'vector' => $vector,];
 
     return $this;
   }
@@ -50,12 +58,12 @@ class OrderBy extends AbstractStatement
    */
   public function toSQL()
   {
-    return $this->columns->exists() ? implode(', ', array_map(function(array $definition) {
+    return $this->expressions->exists() ? implode(', ', array_map(function(array $definition) {
       $vector = $definition['vector'];
       $expression = $this->stringifyExpression($definition['expression']);
       return null === $vector
         ? $expression : sprintf('%s %s', $expression, $vector);
-    }, $this->columns->toArray())) : null;
+    }, $this->expressions->toArray())) : null;
   }
 
 }
