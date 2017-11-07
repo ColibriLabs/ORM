@@ -35,11 +35,11 @@ class Where extends AbstractStatement
   }
 
   /**
-   * Clone operations
+   * @inheritdoc
    */
   public function __clone()
   {
-
+    $this->expressions = clone $this->expressions;
   }
 
   /**
