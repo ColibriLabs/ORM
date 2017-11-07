@@ -29,7 +29,26 @@ trait GroupByTrait
 
     return $this;
   }
-
+  
+  /**
+   * @param $column
+   * @return $this
+   */
+  public function addGroupBy($column)
+  {
+    return $this->groupBy([$column]);
+  }
+  
+  /**
+   * @return $this
+   */
+  public function clearGroupByColumns()
+  {
+    $this->getGroupByStatement()->getExpressions()->clear();
+    
+    return $this;
+  }
+  
   /**
    * @return $this
    */
