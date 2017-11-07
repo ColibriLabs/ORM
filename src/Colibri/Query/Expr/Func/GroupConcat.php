@@ -75,12 +75,12 @@ class GroupConcat extends Func
   {
     $arguments = parent::toStringFunctionArguments();
   
-    if (null !== $this->getSeparator()) {
-      $arguments = sprintf("%s SEPARATOR '%s'", $arguments, $this->getSeparator());
-    }
-  
     if (null !== $this->getOrderVector()) {
       $arguments = sprintf("%s ORDER BY %s", $arguments, $this->getOrderVector());
+    }
+  
+    if (null !== $this->getSeparator()) {
+      $arguments = sprintf("%s SEPARATOR '%s'", $arguments, $this->getSeparator());
     }
     
     return $arguments;
