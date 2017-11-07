@@ -156,7 +156,7 @@ class Connection extends \PDO implements ConnectionInterface
       $result = parent::query($query);
     } catch (\Exception $exception) {
       throw new ConnectionException(sprintf(
-        'Executing SQL Query was failure with error: [%d] (%s)'), $exception->getCode(), $exception->getMessage());
+        'Executing SQL Query was failure with error: [%d] (%s)', $exception->getCode(), $exception->getMessage()));
     }
     
     return $result;
