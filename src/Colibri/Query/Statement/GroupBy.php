@@ -40,6 +40,14 @@ class GroupBy extends AbstractStatement
   }
   
   /**
+   * @inheritdoc
+   */
+  public function __clone()
+  {
+    $this->expressions = clone $this->expressions;
+  }
+  
+  /**
    * @return Collection
    */
   public function getExpressions()
