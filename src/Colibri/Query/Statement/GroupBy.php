@@ -40,6 +40,16 @@ class GroupBy extends AbstractStatement
   }
 
   /**
+   * @return $this
+   */
+  public function clearGroupColumns()
+  {
+    $this->expressions->clear();
+    
+    return $this;
+  }
+  
+  /**
    * @param array ...$columns
    * @return $this
    */
