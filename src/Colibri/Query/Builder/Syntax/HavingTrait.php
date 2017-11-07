@@ -30,10 +30,20 @@ trait HavingTrait
    */
   public function having($left, $right, $comparator = Cmp::EQ, $conjunction = Cmp::CONJUNCTION_AND)
   {
-    $left = ($left instanceof Expression) ? $left : new Expr\Column($left);
-    $right = ($right instanceof Expression) ? $right : new Expr\Parameter($right);
+    $left   = ($left instanceof Expression)   ? $left   : new Expr\Column($left);
+    $right  = ($right instanceof Expression)  ? $right  : new Expr\Parameter($right);
     
     return $this->addHavingCondition($left, $right, $comparator, $conjunction);
+  }
+  
+  /**
+   * @return $this
+   */
+  public function clearHavingConditions()
+  {
+    $this->getHavingStatement()->getExpressions()->clear();
+    
+    return $this;
   }
   
   /**
