@@ -177,11 +177,6 @@ class Func extends Expression
   protected $name = null;
 
   /**
-   * @var Column
-   */
-  protected $columns = null;
-
-  /**
    * @var array
    */
   protected $parameters = [];
@@ -195,29 +190,11 @@ class Func extends Expression
   public function __construct($name, array $parameters = [])
   {
     if (!array_key_exists($name, self::FUNCTIONS)) {
-      throw new BadCallMethodException('Not available function name ":name"', [
-        'name' => $name,
-      ]);
+      throw new BadCallMethodException(sprintf('Not available function name "%s"', $name));
     }
 
     $this->name = $name;
     $this->parameters = $parameters;
-  }
-
-  /**
-   * @return null|string
-   */
-  public function format()
-  {
-    $function = null;
-
-    switch ($this->getName()) {
-      default:
-        $function = sprintf(static::TEMPLATE, $this->getName(), implode(', ', $this->getParameters()));
-        break;
-    }
-
-    return $function;
   }
 
   /**
@@ -257,7 +234,7 @@ class Func extends Expression
    */
   public function toSQL()
   {
-    return $this->format();
+    return $this->toString();
   }
 
   /**
@@ -265,7 +242,23 @@ class Func extends Expression
    */
   public function __toString()
   {
-    return $this->toSQL();
+    return $this->toString();
+  }
+  
+  /**
+   * @return null|string
+   */
+  protected function toString()
+  {
+    return sprintf(static::TEMPLATE, $this->getName(), $this->toStringFunctionArguments());
+  }
+  
+  /**
+   * @return string
+   */
+  protected function toStringFunctionArguments()
+  {
+    return implode(', ', $this->getParameters());
   }
 
 }
