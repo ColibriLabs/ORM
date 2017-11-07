@@ -3,6 +3,7 @@
 namespace Colibri\Query\Statement;
 
 use Colibri\Collection\Collection;
+use Colibri\Exception\BadArgumentException;
 use Colibri\Query\Builder;
 use Colibri\Query\Expr;
 use Colibri\Query\Expression;
@@ -13,6 +14,8 @@ use Colibri\Query\Expression;
  */
 class OrderBy extends AbstractStatement
 {
+  
+  use Builder\Syntax\OrderByTrait;
 
   const ASC = 'ASC';
   const DESC = 'DESC';
@@ -65,5 +68,13 @@ class OrderBy extends AbstractStatement
         ? $expression : sprintf('%s %s', $expression, $vector);
     }, $this->expressions->toArray())) : null;
   }
-
+  
+  /**
+   * @inheritDoc
+   */
+  public function getOrderByStatement()
+  {
+    return $this;
+  }
+  
 }
