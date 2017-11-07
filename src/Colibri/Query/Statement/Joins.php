@@ -34,6 +34,20 @@ class Joins extends AbstractStatement
 
     $this->joins = new Collection();
   }
+  
+  /**
+   * @inheritdoc
+   */
+  public function __clone()
+  {
+    $joins = new Collection();
+    
+    foreach ($this->joins as $join) {
+      $joins->add(clone $join);
+    }
+    
+    $this->joins = $joins;
+  }
 
   /**
    * @param Expression $foreign
