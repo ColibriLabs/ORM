@@ -2,7 +2,10 @@
 
 namespace Colibri\Query\Expr\Func;
 
+use Colibri\Query\Expr\Column;
 use Colibri\Query\Expr\Func;
+use Colibri\Query\Expression;
+use Colibri\Query\Statement\OrderBy;
 
 /**
  * Class GroupConcat
@@ -12,14 +15,24 @@ class GroupConcat extends Func
 {
   
   /**
+   * @var bool
+   */
+  private $isDistinct = false;
+  
+  /**
    * @var string
    */
   private $separator;
   
   /**
+   * @var Expression
+   */
+  private $expression;
+  
+  /**
    * @var string
    */
-  private $orderVector;
+  private $vector;
   
   /**
    * GroupConcat constructor.
@@ -28,6 +41,25 @@ class GroupConcat extends Func
   public function __construct(...$parameters)
   {
     parent::__construct('GROUP_CONCAT', $parameters);
+  }
+  
+  /**
+   * @return bool
+   */
+  public function isDistinct()
+  {
+    return $this->isDistinct;
+  }
+  
+  /**
+   * @param bool $isDistinct
+   * @return $this
+   */
+  public function setDistinct($isDistinct)
+  {
+    $this->isDistinct = $isDistinct;
+    
+    return $this;
   }
   
   /**
@@ -50,21 +82,66 @@ class GroupConcat extends Func
   }
   
   /**
-   * @return string
+   * @param $expression
+   * @param string $vector
+   * @return $this
    */
-  public function getOrderVector()
+  public function setOrderBy($expression, $vector = OrderBy::ASC)
   {
-    return $this->orderVector;
+    if (!($expression instanceof Expression)) {
+      $expression = new Column($expression);
+    }
+    
+    $this->setExpression($expression)->setVector($vector);
+  
+    return $this;
   }
   
   /**
-   * @param string $orderVector
+   * @return Expression
+   */
+  public function getExpression()
+  {
+    return $this->expression;
+  }
+  
+  /**
+   * @param Expression $expression
    * @return $this
    */
-  public function setOrderVector($orderVector)
+  public function setExpression(Expression $expression)
   {
-    $this->orderVector = $orderVector;
+    $this->expression = $expression;
+    
+    return $this;
+  }
   
+  /**
+   * @return string
+   */
+  public function getVector()
+  {
+    return $this->vector;
+  }
+  
+  /**
+   * @param string $vector
+   * @return $this
+   */
+  public function setVector($vector)
+  {
+    $this->vector = $vector;
+    
+    return $this;
+  }
+  
+  /**
+   * @return $this
+   */
+  public function removeOrderBy()
+  {
+    $this->vector = $this->expression = null;
+    
     return $this;
   }
   
@@ -75,8 +152,14 @@ class GroupConcat extends Func
   {
     $arguments = parent::toStringFunctionArguments();
   
-    if (null !== $this->getOrderVector()) {
-      $arguments = sprintf("%s ORDER BY %s", $arguments, $this->getOrderVector());
+    if (true === $this->isDistinct()) {
+      $arguments = sprintf('DISTINCT %s', $arguments);
+    }
+  
+    if ($this->getExpression() instanceof Expression) {
+      $orderBy = new OrderBy($this->getBuilder());
+      $orderBy->order($this->getExpression(), $this->getVector());
+      $arguments = sprintf("%s ORDER BY %s", $arguments, $orderBy->toSQL());
     }
   
     if (null !== $this->getSeparator()) {
