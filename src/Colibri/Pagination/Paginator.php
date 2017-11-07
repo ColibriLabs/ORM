@@ -146,8 +146,6 @@ class Paginator implements \IteratorAggregate
    */
   public function getIterator()
   {
-    $this->processRepository();
-    
     return $this->getRepository()->findAll();
   }
   
