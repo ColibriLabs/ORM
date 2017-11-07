@@ -25,6 +25,16 @@ trait WhereTrait
   abstract public function getWhereStatement();
   
   /**
+   * @return $this
+   */
+  public function clearWhereConditions()
+  {
+    $this->getWhereStatement()->getExpressions()->clear();
+    
+    return $this;
+  }
+  
+  /**
    * @param string $conjunction
    * @return Where
    */
