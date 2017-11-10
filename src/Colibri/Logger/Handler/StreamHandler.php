@@ -14,7 +14,7 @@ class StreamHandler extends AbstractHandler {
   /**
    * @var null|string
    */
-  protected $file = null;
+  protected $filepath = null;
 
   /**
    * StreamHandler constructor.
@@ -25,7 +25,11 @@ class StreamHandler extends AbstractHandler {
   {
     parent::__construct($level);
     
-    $this->file = realpath($filepath);
+    if (!file_exists($filepath)) {
+      touch($filepath);
+    }
+    
+    $this->filepath = realpath($filepath);
   }
 
   /**
@@ -34,7 +38,7 @@ class StreamHandler extends AbstractHandler {
    */
   public function handle(Collection $record)
   {
-    file_put_contents($this->file, $this->formatter->format($record) . PHP_EOL, FILE_APPEND);
+    file_put_contents($this->filepath, $this->formatter->format($record) . PHP_EOL, FILE_APPEND);
 
     return true;
   }
