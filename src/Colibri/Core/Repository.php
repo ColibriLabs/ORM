@@ -621,7 +621,8 @@ abstract class Repository implements RepositoryInterface
     if (null !== $criteria) {
       switch (true) {
         case is_scalar($criteria):
-          $query->addConditions($metadata->getIdentifier(), $criteria);
+          $identifier = $metadata->getRawSQLName($metadata->getIdentifier());
+          $query->addConditions($identifier, $criteria);
           break;
           
         case $criteria instanceof QueryBuilder\Select:
