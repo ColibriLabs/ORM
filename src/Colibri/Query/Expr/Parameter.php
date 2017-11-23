@@ -68,7 +68,13 @@ class Parameter extends Expression
    */
   public function toSQL()
   {
-    return $this->escape($this->parameter, $this->parameterType);
+    switch ($this->parameterType) {
+      case Parameter::TYPE_NUMERIC:
+      case Parameter::TYPE_BOOLEAN:
+        return (integer)$this->parameter;
+      default:
+        return $this->escape($this->parameter, $this->parameterType);
+    }
   }
 
   /**
