@@ -63,11 +63,16 @@ class <?php echo $class; ?> extends Repository
   }
   
   /**
-   * @return <?php echo $entityClass; ?>
+   * @param integer $id Identifier
+   * @return <?php echo $entityClass; ?> Entity instance
    */
   public static function findByPK($id)
   {
-    return (new <?php echo $commonClass; ?>())->retrieve($id);
+    /** @var <?php echo $entityClass; ?> $entity */
+    $repository = new TagRepository();
+    $entity = $repository->retrieve($id);
+    
+    return $entity;
   }
 
 }
