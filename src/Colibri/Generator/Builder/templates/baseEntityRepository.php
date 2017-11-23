@@ -69,7 +69,7 @@ class <?php echo $class; ?> extends Repository
   public static function findByPK($id)
   {
     /** @var <?php echo $entityClass; ?> $entity */
-    $repository = new TagRepository();
+    $repository = new <?php echo $commonClass; ?>();
     $entity = $repository->retrieve($id);
     
     return $entity;
