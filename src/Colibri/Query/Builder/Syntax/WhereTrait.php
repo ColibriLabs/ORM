@@ -35,6 +35,14 @@ trait WhereTrait
   }
   
   /**
+   * @return Where
+   */
+  public function newWhereInstance()
+  {
+    return $this->getWhereStatement()->newInstance();
+  }
+  
+  /**
    * @param string $conjunction
    * @return Where
    */
