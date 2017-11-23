@@ -33,7 +33,7 @@ class Where extends AbstractStatement
 
     $this->expressions = new Collection();
   }
-
+  
   /**
    * @inheritdoc
    */
@@ -67,11 +67,21 @@ class Where extends AbstractStatement
    */
   public function subWhere($conjunction = Cmp::CONJUNCTION_AND)
   {
-    $subWhere = new Where($this->getBuilder());
+    $subWhere = $this->newInstance();
     
     $this->expressions[] = ['condition' => $subWhere, 'conjunction' => $conjunction,];
 
     return $subWhere;
+  }
+  
+  /**
+   * @return Where
+   */
+  public function newInstance()
+  {
+    $where = new Where($this->getBuilder());
+    
+    return $where;
   }
 
   /**
