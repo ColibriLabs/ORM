@@ -61,5 +61,13 @@ class <?php echo $class; ?> extends Repository
   {
     parent::__construct(<?php echo $entityClass; ?>::class);
   }
+  
+  /**
+   * @return <?php echo $entityClass; ?>
+   */
+  public static function findByPK($id)
+  {
+    return (new <?php echo $commonClass; ?>())->retrieve($id);
+  }
 
 }
