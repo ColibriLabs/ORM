@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/DezByte/Colibri/master/static/colibri.jpg" width="301" />
+<img src="https://raw.githubusercontent.com/colibrilabs/orm/master/static/colibri.jpg" width="301" />
 
 ### Yet Another PHP ORM 
 🙈 🙉 🙊
