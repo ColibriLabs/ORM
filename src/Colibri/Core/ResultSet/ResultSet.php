@@ -40,8 +40,9 @@ abstract class ResultSet extends \IteratorIterator implements \Countable
    */
   protected $currentKey;
 
-  /**
-   * @return mixed
+/**
+   * @return EntityInterface
+   * @throws NotFoundException
    */
   public function current()
   {
@@ -54,7 +55,14 @@ abstract class ResultSet extends \IteratorIterator implements \Countable
     $entity = $hydrator->hydrate(parent::current(), $entity);
 
     // @todo need to determine correct ID
-    $identifier = $metadata->getName($metadata->getIdentifier(), Metadata::CAMILIZED);
+    $identifier = $metadata->getIdentifier();
+    
+    if (null === $identifier) {
+      throw new NotFoundException(sprintf('Cannot determine identifier name for "%s" entity',
+        $metadata->getEntityClass()));
+    }
+    
+    $identifier = $metadata->getName($identifier, Metadata::CAMILIZED);
     $this->currentKey = $reflection->getProperty($identifier)->getValue($entity);
 
     return $entity;
