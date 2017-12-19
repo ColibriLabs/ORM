@@ -148,7 +148,8 @@ class Metadata implements MetadataInterface
       }
     }
 
-    return null;
+    throw new NotFoundException(sprintf('Unable to find column name for "%s" with format "%s"',
+      $name, $format));
   }
 
   /**
