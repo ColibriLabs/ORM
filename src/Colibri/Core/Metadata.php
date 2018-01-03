@@ -147,7 +147,7 @@ class Metadata implements MetadataInterface
           throw new NotFoundException('Unable to find correct inflector formatter');
       }
     }
-
+  
     throw new NotFoundException(sprintf('Unable to find column name for "%s" with format "%s"',
       $name, $format));
   }
@@ -291,7 +291,21 @@ class Metadata implements MetadataInterface
   {
     return $this->metadata[Metadata::ENUMERATIONS];
   }
-
+  
+  /**
+   * @inheritdoc
+   */
+  public function getColumnEnumValueSet($columnName)
+  {
+    $enumeration = $this->getColumnsEnumValues();
+    
+    if (!isset($enumeration[$columnName])) {
+      throw new NotFoundException(sprintf('Enumeration for column "%s" was not found', $columnName));
+    }
+    
+    return $enumeration[$columnName];
+  }
+  
   /**
    * @param $name
    * @return bool
