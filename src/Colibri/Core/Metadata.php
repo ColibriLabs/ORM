@@ -303,7 +303,9 @@ class Metadata implements MetadataInterface
       throw new NotFoundException(sprintf('Enumeration for column "%s" was not found', $columnName));
     }
     
-    return $enumeration[$columnName];
+    $valueSet = $enumeration[$columnName];
+    
+    return array_combine($valueSet, $valueSet);
   }
   
   /**
