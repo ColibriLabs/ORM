@@ -2,7 +2,9 @@
 
 namespace Colibri\Query;
 
+use Colibri\Query\Builder\Common;
 use Colibri\Query\Builder\Select;
+use Colibri\Query\Builder\SelectInterface;
 use Colibri\Query\Builder\Syntax\GroupByTrait;
 use Colibri\Query\Builder\Syntax\HavingTrait;
 use Colibri\Query\Builder\Syntax\JoinTrait;
@@ -21,6 +23,7 @@ use Colibri\ServiceContainer\ServiceLocator;
 class Criteria
 {
 
+  use Common\BaseBuilderTrait, Common\SelectTrait;
   use WhereTrait, GroupByTrait, OrderByTrait, ModifiersTrait, HavingTrait, JoinTrait, LimitTrait;
   
   /**
@@ -34,6 +37,22 @@ class Criteria
   public function __construct()
   {
     $this->builder = new Select(ServiceLocator::instance()->getConnection());
+  }
+  
+  /**
+   * @inheritDoc
+   */
+  public function getBuilderObject()
+  {
+    return $this->builder;
+  }
+  
+  /**
+   * @inheritDoc
+   */
+  public function getSelectBuilderObject()
+  {
+    return $this->builder;
   }
   
   /**

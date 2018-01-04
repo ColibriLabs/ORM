@@ -21,7 +21,7 @@ use Colibri\Query\Statement\Where;
  * Class Select
  * @package Colibri\Query\Builder
  */
-class Select extends Builder
+class Select extends Builder implements SelectInterface
 {
 
   use Syntax\WhereTrait;

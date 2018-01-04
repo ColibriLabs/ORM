@@ -11,7 +11,7 @@ use Colibri\Query\Statement\AbstractStatement;
  * Class Builder
  * @package Colibri\Query
  */
-abstract class Builder implements SqlableInterface
+abstract class Builder implements SqlableInterface, BuilderInterface
 {
   
   /**

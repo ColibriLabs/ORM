@@ -16,7 +16,7 @@ class BasicEntityPersister extends AbstractDatabasePersister
    */
   public function create(EntityInterface $entity)
   {
-    $this->getInsertQuery();
+    
   }
   
   /**
