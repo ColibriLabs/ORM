@@ -468,6 +468,17 @@ abstract class Repository implements RepositoryInterface
   }
   
   /**
+   * @param Criteria $criteria
+   * @return $this
+   */
+  public function setCriteria(Criteria $criteria)
+  {
+    $this->setQuery($criteria->getSelectBuilderObject());
+    
+    return $this;
+  }
+  
+  /**
    * @return ClassManager
    */
   public function getClassManager()
