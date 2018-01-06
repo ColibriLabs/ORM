@@ -35,7 +35,13 @@ interface RepositoryInterface
    * @param $criteria
    * @return mixed
    */
-  public function findOne($criteria);
+  public function findFirst($criteria);
+  
+  /**
+   * @param $criteria
+   * @return mixed
+   */
+  public function findOneBy($criteria);
 
   /**
    * @return mixed
