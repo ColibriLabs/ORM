@@ -15,7 +15,6 @@ use Colibri\Query\Builder\Insert;
 use Colibri\Query\Builder\Select as SelectQueryBuilder;
 use Colibri\Query\Builder\Select;
 use Colibri\Query\Builder\Update;
-use Colibri\Query\Statement\Comparison\Cmp;
 use Colibri\ServiceContainer\ServiceLocatorInterface;
 
 /**
