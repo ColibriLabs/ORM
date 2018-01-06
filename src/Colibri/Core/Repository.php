@@ -18,6 +18,7 @@ use Colibri\Core\ResultSet\ResultSet;
 use Colibri\Core\ResultSet\ResultSetIterator;
 use Colibri\EventDispatcher\DispatcherInterface;
 use Colibri\EventDispatcher\EventInterface;
+use Colibri\Exception\BadArgumentException;
 use Colibri\Exception\BadCallMethodException;
 use Colibri\Exception\InvalidArgumentException;
 use Colibri\Exception\NotSupportedException;
@@ -202,7 +203,7 @@ abstract class Repository implements RepositoryInterface
    * @param $criteria
    * @return EntityInterface
    */
-  public function findOne($criteria = null)
+  public function findFirst($criteria = null)
   {
     $this->getQuery()->setLimit(1);
     
@@ -211,14 +212,19 @@ abstract class Repository implements RepositoryInterface
 
     return $resultSet->valid() ? $resultSet->current() : null;
   }
-
+  
   /**
    * @param $criteria
    * @return EntityInterface
+   * @throws BadArgumentException
    */
   public function findOneBy($criteria)
   {
-    return $this->findOne($criteria);
+    if (false === (boolean)$criteria) {
+      throw new BadArgumentException(sprintf('Method "%s" could not been invoked with empty criteria', __METHOD__));
+    }
+    
+    return $this->findFirst($criteria);
   }
 
   /**
@@ -286,7 +292,7 @@ abstract class Repository implements RepositoryInterface
    */
   public function retrieve($id)
   {
-    return $this->findOne($id);
+    return $this->findOneBy($id);
   }
 
   /**
