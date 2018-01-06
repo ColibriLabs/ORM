@@ -292,7 +292,7 @@ abstract class Repository implements RepositoryInterface
    */
   public function retrieve($id)
   {
-    return $this->findOneBy($id);
+    return $this->findOneBy((integer)$id);
   }
 
   /**
