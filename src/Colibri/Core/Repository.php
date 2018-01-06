@@ -220,7 +220,7 @@ abstract class Repository implements RepositoryInterface
    */
   public function findOneBy($criteria)
   {
-    if (false === (boolean)$criteria) {
+    if (in_array($criteria, [null, false], true)) {
       throw new BadArgumentException(sprintf('Method "%s" could not been invoked with empty criteria', __METHOD__));
     }
     
