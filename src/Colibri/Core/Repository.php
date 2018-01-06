@@ -23,6 +23,7 @@ use Colibri\Exception\InvalidArgumentException;
 use Colibri\Exception\NotSupportedException;
 use Colibri\Exception\RuntimeException;
 use Colibri\Query\Builder as QueryBuilder;
+use Colibri\Query\Criteria;
 use Colibri\ServiceContainer\ServiceLocator;
 use Colibri\ServiceContainer\ServiceLocatorInterface;
 
@@ -336,7 +337,8 @@ abstract class Repository implements RepositoryInterface
       return $this;
     }
 
-    throw new NotSupportedException('Unable persist entity, because current repository is not compatible with passed entity');
+    throw new NotSupportedException(sprintf('Unable to persist entity! Actual entity "%s" expected entity "%s"',
+      get_class($entity), $this->getEntityName()));
   }
 
   /**
@@ -375,8 +377,9 @@ abstract class Repository implements RepositoryInterface
       }
       
     }
-    
-    throw new NotSupportedException('Unable persist entity, because current repository is not compatible with passed entity');
+  
+    throw new NotSupportedException(sprintf('Unable to remove entity! Actual entity "%s" expected entity "%s"',
+      get_class($entity), $this->getEntityName()));
   }
   
   /**
