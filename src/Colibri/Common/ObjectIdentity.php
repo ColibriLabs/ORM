@@ -75,7 +75,7 @@ final class ObjectIdentity
    * @return bool
    * @throws BadArgumentException
    */
-  private function validateObject($object)
+  private static function validateObject($object)
   {
     if (!is_object($object)) {
       throw new BadArgumentException('Object identifier takes only the object but ":type" given', ['type' => gettype($object)]);
