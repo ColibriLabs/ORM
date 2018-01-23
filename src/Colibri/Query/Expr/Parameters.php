@@ -56,7 +56,8 @@ class Parameters extends Expression
       }
 
       if (!($parameter instanceof Expression)) {
-        throw new BadArgumentException('Bad parameter type');
+        throw new BadArgumentException(sprintf('Bad parameter passed. Allowed either scalar values or object %s extended',
+          Expression::class));
       }
 
       $this->parameters[] = $parameter;
