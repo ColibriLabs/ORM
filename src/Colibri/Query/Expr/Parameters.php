@@ -45,25 +45,67 @@ class Parameters extends Expression
     $this->parameters = [];
 
     foreach ($parameters as $parameter) {
-      if (is_scalar($parameter)) {
-        if (is_bool($parameter)) {
-          $parameter = new Parameter($parameter, Parameter::TYPE_BOOLEAN);
-        } else if (is_numeric($parameter) || is_float($parameter) || is_double($parameter)) {
-          $parameter = new Parameter($parameter, Parameter::TYPE_NUMERIC);
-        } else {
-          $parameter = new Parameter($parameter, Parameter::TYPE_STR);
-        }
-      }
-
-      if (!($parameter instanceof Expression)) {
-        throw new BadArgumentException(sprintf('Bad parameter passed. Allowed either scalar values or object %s extended',
-          Expression::class));
-      }
-
-      $this->parameters[] = $parameter;
+      $this->append($parameter);
     }
 
     return $this;
+  }
+  
+  /**
+   * @param $parameter
+   * @return $this
+   */
+  public function append($parameter)
+  {
+    array_push($this->parameters, $this->normalizeParameter($parameter));
+    
+    return $this;
+  }
+  
+  /**
+   * @param $parameter
+   * @return $this
+   */
+  public function prepend($parameter)
+  {
+    array_unshift($this->parameters, $this->normalizeParameter($parameter));
+    
+    return $this;
+  }
+  
+  /**
+   * @return $this
+   */
+  public function clearParameters()
+  {
+    $this->parameters = [];
+    
+    return $this;
+  }
+  
+  /**
+   * @param string|int|Expression $parameter
+   * @return Parameter
+   * @throws BadArgumentException
+   */
+  private function normalizeParameter($parameter)
+  {
+    if (is_scalar($parameter)) {
+      if (is_bool($parameter)) {
+        $parameter = new Parameter($parameter, Parameter::TYPE_BOOLEAN);
+      } else if (is_numeric($parameter) || is_float($parameter) || is_double($parameter)) {
+        $parameter = new Parameter($parameter, Parameter::TYPE_NUMERIC);
+      } else {
+        $parameter = new Parameter($parameter, Parameter::TYPE_STR);
+      }
+    }
+  
+    if (!($parameter instanceof Expression)) {
+      throw new BadArgumentException(sprintf('Bad parameter passed. Allowed either scalar values or object %s extended',
+        Expression::class));
+    }
+    
+    return $parameter;
   }
 
   /**
