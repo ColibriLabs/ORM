@@ -280,13 +280,17 @@ class Select extends Builder implements SelectInterface
       'having'  => "\nHAVING %s",
       'limit'   => "\nLIMIT %s",
     ];
+  
+    $table = null;
     
-    /** @var Expr\Table $table */
-    $table = $this->normalizeExpression($this->table);
-
+    if (null !== $this->table) {
+      /** @var Expr\Table $table */
+      $table = $this->normalizeExpression($this->table);
+    }
+    
     $statements[] = (null === ($modifiers = $this->getModifiersStatement()->toSQL())) ? null : $modifiers;
     $statements[] = " $columns ";
-    $statements[] = "\nFROM {$table}";
+    $statements[] = $table === null ? null : "\nFROM {$table}";
     
     foreach ($statementsNames as $name => $template) {
       if (null !== ($statement = $this->statements->get($name)) && null !== ($statementSQL = $statement->toSQL())) {
