@@ -141,7 +141,7 @@ abstract class Entity implements EntityInterface
    */
   public function hashCode()
   {
-    
+    return sha1(json_encode($this->toArray()));
   }
   
   /**

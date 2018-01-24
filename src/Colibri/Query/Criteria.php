@@ -4,7 +4,6 @@ namespace Colibri\Query;
 
 use Colibri\Query\Builder\Common;
 use Colibri\Query\Builder\Select;
-use Colibri\Query\Builder\SelectInterface;
 use Colibri\Query\Builder\Syntax\GroupByTrait;
 use Colibri\Query\Builder\Syntax\HavingTrait;
 use Colibri\Query\Builder\Syntax\JoinTrait;
