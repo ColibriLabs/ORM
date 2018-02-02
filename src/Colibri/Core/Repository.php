@@ -98,7 +98,7 @@ abstract class Repository implements RepositoryInterface
     $this->connection = $this->getServiceLocator()->getConnection($this->getEntityMetadata()->getConnectionName());
 
     $this->setHydrator(new EntityHydrator($this));
-    $this->setQueryFactory(new BasicRepositoryQueryFactory($this));
+    $this->setQueryFactory(new BasicRepositoryQueryFactory());
     
     $this->query = $this->createSelectQuery();
   }
@@ -552,6 +552,8 @@ abstract class Repository implements RepositoryInterface
    */
   public function setQueryFactory(RepositoryQueryFactory $queryFactory)
   {
+    $queryFactory->setRepository($this);
+    
     $this->queryFactory = $queryFactory;
     
     return $this;

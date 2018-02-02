@@ -2,6 +2,7 @@
 
 namespace Colibri\Core\Repository;
 
+use Colibri\Exception\NullPointerException;
 use Colibri\Query\Builder as QueryBuilder;
 use Colibri\Connection\ConnectionInterface;
 use Colibri\Core\Domain\MetadataInterface;
@@ -20,20 +21,27 @@ abstract class RepositoryQueryFactory
   protected $repository;
   
   /**
-   * RepositoryQueryFactory constructor.
-   * @param RepositoryInterface $repository
-   */
-  public function __construct(RepositoryInterface $repository)
-  {
-    $this->repository = $repository;
-  }
-  
-  /**
    * @return RepositoryInterface
+   * @throws NullPointerException
    */
   public function getRepository()
   {
+    if (!($this->repository instanceof RepositoryInterface)) {
+      throw new NullPointerException(sprintf('Repository was not initialized for %s', static::class));
+    }
+    
     return $this->repository;
+  }
+  
+  /**
+   * @param RepositoryInterface $repository
+   * @return $this
+   */
+  public function setRepository(RepositoryInterface $repository)
+  {
+    $this->repository = $repository;
+    
+    return $this;
   }
   
   /**
