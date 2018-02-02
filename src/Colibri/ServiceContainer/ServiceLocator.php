@@ -8,8 +8,10 @@ use Colibri\Connection\ConnectionManager;
 use Colibri\Connection\ConnectionManagerInterface;
 use Colibri\Core\ClassManager;
 use Colibri\Core\EntityManager;
+use Colibri\Core\EntityStateManager;
 use Colibri\Core\MetadataManager;
 use Colibri\Core\RepositoryManager;
+use Colibri\Core\State\StateManagerInterface;
 use Colibri\EventDispatcher\Dispatcher;
 use Colibri\Logger\Handler\Mask\LogLevelMask;
 use Colibri\Logger\Log;
@@ -107,6 +109,18 @@ final class ServiceLocator implements ServiceLocatorInterface, LoggerAwareInterf
     }
 
     return $this->get('repositoryManager');
+  }
+  
+  /**
+   * @return StateManagerInterface|EntityStateManager
+   */
+  public function getEntityStateManager()
+  {
+    if(!$this->instances->has('entityStateManager')) {
+      $this->instances->set('entityStateManager', new EntityStateManager());
+    }
+  
+    return $this->get('entityStateManager');
   }
   
   /**

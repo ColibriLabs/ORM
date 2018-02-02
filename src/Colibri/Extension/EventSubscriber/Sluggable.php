@@ -3,7 +3,7 @@
 namespace Colibri\Extension\EventSubscriber;
 
 use Behat\Transliterator\Transliterator;
-use Colibri\Core\Entity\EntityInterface;
+use Colibri\Core\Domain\EntityInterface;
 use Colibri\Core\Event\EntityLifecycleEvent;
 use Colibri\Core\ORMEvents;
 use Colibri\Extension\AbstractExtension;

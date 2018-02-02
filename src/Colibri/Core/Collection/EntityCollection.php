@@ -4,7 +4,7 @@ namespace Colibri\Core\Collection;
 
 use Colibri\Collection\Collection;
 use Colibri\Collection\CollectionInterface;
-use Colibri\Core\Entity\EntityInterface;
+use Colibri\Core\Domain\EntityInterface;
 
 /**
  * Class EntityCollection

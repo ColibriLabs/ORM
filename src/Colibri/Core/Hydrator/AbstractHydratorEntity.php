@@ -2,10 +2,9 @@
 
 namespace Colibri\Core\Hydrator;
 
-use Colibri\Common\Inflector;
-use Colibri\Core\Entity;
-use Colibri\Core\Entity\EntityInterface;
-use Colibri\Core\Entity\RepositoryInterface;
+use Colibri\Core\Domain;
+use Colibri\Core\Domain\EntityInterface;
+use Colibri\Core\Domain\RepositoryInterface;
 use Colibri\Core\Event\EntityLifecycleEvent;
 use Colibri\Core\Hydrator;
 use Colibri\Core\Metadata;
@@ -121,7 +120,7 @@ abstract class AbstractHydratorEntity extends Hydrator
   }
   
   /**
-   * @return Entity\MetadataInterface
+   * @return Domain\MetadataInterface
    */
   public function getMetadata()
   {

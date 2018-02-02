@@ -15,10 +15,10 @@ use Colibri\ServiceContainer\ServiceLocator;
 final class ColibriORM
 {
 
-  const VERSION_MAJOR = 0;
-  const VERSION_MINOR = 5;
+  const VERSION_MAJOR = 1;
+  const VERSION_MINOR = 13;
   const VERSION_PATCH = 0;
-  const VERSION_STATUS = 'rc';
+  const VERSION_STATUS = 'stable';
   const VERSION_NAME = 'colibri';
 
   /**

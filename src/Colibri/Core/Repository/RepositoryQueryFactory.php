@@ -3,10 +3,9 @@
 namespace Colibri\Core\Repository;
 
 use Colibri\Query\Builder as QueryBuilder;
-
 use Colibri\Connection\ConnectionInterface;
-use Colibri\Core\Entity\MetadataInterface;
-use Colibri\Core\Entity\RepositoryInterface;
+use Colibri\Core\Domain\MetadataInterface;
+use Colibri\Core\Domain\RepositoryInterface;
 
 /**
  * Abstract Class RepositoryQueryFactory

@@ -1,6 +1,6 @@
 <?php
 
-namespace Colibri\Core\Entity;
+namespace Colibri\Core\Domain;
 
 use Colibri\Connection\ConnectionInterface;
 use Colibri\Connection\Statement\StatementIterator;
@@ -19,7 +19,7 @@ use Colibri\ServiceContainer\ServiceLocatorInterface;
 
 /**
  * Interface RepositoryInterface
- * @package Colibri\Core\Entity
+ * @package Colibri\Core\Domain
  */
 interface RepositoryInterface
 {

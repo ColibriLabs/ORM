@@ -29,7 +29,7 @@ class RepositoryManager
 
   /**
    * @param $class
-   * @return Entity\RepositoryInterface
+   * @return Domain\RepositoryInterface
    */
   public function getRepositoryFor($class)
   {

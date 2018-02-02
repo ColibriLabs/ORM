@@ -3,7 +3,7 @@
 namespace Colibri\Pagination;
 
 use Colibri\Connection\StmtInterface;
-use Colibri\Core\Entity\RepositoryInterface;
+use Colibri\Core\Domain\RepositoryInterface;
 use Colibri\Core\ResultSet\ResultSet;
 use Colibri\Query\Expr\Column;
 use Colibri\Query\Expr\Func\Count;

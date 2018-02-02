@@ -5,9 +5,9 @@ namespace Colibri\Core;
 use Colibri\Collection\Collection;
 use Colibri\Common\Callback;
 use Colibri\Common\ObjectIdentity;
-use Colibri\Core\Entity\EntityInterface;
-use Colibri\Core\Entity\MetadataInterface;
-use Colibri\Core\Entity\RepositoryInterface;
+use Colibri\Core\Domain\EntityInterface;
+use Colibri\Core\Domain\MetadataInterface;
+use Colibri\Core\Domain\RepositoryInterface;
 use Colibri\Exception\NotFoundException;
 use Colibri\Exception\NotSupportedException;
 

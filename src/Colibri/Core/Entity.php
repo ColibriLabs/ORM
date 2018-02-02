@@ -4,11 +4,11 @@ namespace Colibri\Core;
 
 use Colibri\Collection\Collection;
 use Colibri\Common\Inflector;
-use Colibri\Core\Entity\EntityInterface;
+use Colibri\Core\Domain\EntityInterface;
 
 /**
- * Class Entity
- * @package Colibri\Core\Entity
+ * Class Domain
+ * @package Colibri\Core\Domain
  */
 abstract class Entity implements EntityInterface
 {
@@ -16,7 +16,7 @@ abstract class Entity implements EntityInterface
   protected $virtual;
 
   /**
-   * Entity constructor.
+   * Domain constructor.
    */
   public function __construct()
   {

@@ -2,8 +2,8 @@
 
 namespace Colibri\Core\Proxy;
 
-use Colibri\Core\Entity\EntityInterface;
-use Colibri\Core\Entity\RepositoryInterface;
+use Colibri\Core\Domain\EntityInterface;
+use Colibri\Core\Domain\RepositoryInterface;
 use Colibri\Core\ProxyInterface;
 
 /**

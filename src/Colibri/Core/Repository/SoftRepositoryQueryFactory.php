@@ -20,4 +20,12 @@ class SoftRepositoryQueryFactory extends RepositoryQueryFactory
     return parent::createInsertQuery()->addModifier(Modifiers::IGNORE);
   }
   
+  /**
+   * @return Builder\Update
+   */
+  public function createUpdateQuery()
+  {
+    return parent::createUpdateQuery()->addModifier(Modifiers::IGNORE);
+  }
+  
 }

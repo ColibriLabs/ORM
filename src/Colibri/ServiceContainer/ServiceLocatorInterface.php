@@ -6,8 +6,10 @@ use Colibri\Common\Configuration;
 use Colibri\Connection\ConnectionManagerInterface;
 use Colibri\Core\ClassManager;
 use Colibri\Core\EntityManager;
+use Colibri\Core\EntityStateManager;
 use Colibri\Core\MetadataManager;
 use Colibri\Core\RepositoryManager;
+use Colibri\Core\State\StateManagerInterface;
 use Colibri\EventDispatcher\Dispatcher;
 use Psr\Log\LoggerInterface;
 
@@ -68,6 +70,11 @@ interface ServiceLocatorInterface {
    * @return RepositoryManager
    */
   public function getRepositoryManager();
+  
+  /**
+   * @return StateManagerInterface|EntityStateManager
+   */
+  public function getEntityStateManager();
   
   /**
    * @return EntityManager

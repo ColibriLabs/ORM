@@ -2,7 +2,7 @@
 
 namespace Colibri\Core\ResultSet;
 
-use Colibri\Core\Entity\RepositoryInterface;
+use Colibri\Core\Domain\RepositoryInterface;
 
 /**
  * Class ResultSetIterator

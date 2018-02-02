@@ -1,6 +1,6 @@
 <?php
 
-namespace Colibri\Core\Entity;
+namespace Colibri\Core\Domain;
 
 use Colibri\Core\Metadata;
 use Colibri\Schema\Field;
@@ -8,7 +8,7 @@ use Colibri\Schema\Types\Type;
 
 /**
  * Interface MetadataInterface
- * @package Colibri\Core\Entity
+ * @package Colibri\Core\Domain
  */
 interface MetadataInterface
 {

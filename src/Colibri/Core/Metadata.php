@@ -4,7 +4,7 @@ namespace Colibri\Core;
 
 use Colibri\Collection\Collection;
 use Colibri\Common\Inflector;
-use Colibri\Core\Entity\MetadataInterface;
+use Colibri\Core\Domain\MetadataInterface;
 use Colibri\Exception\NotFoundException;
 use Colibri\Schema\Field;
 use Colibri\Schema\Types\Type as ColumnType;

@@ -2,7 +2,7 @@
 
 namespace Colibri\Extension\EventSubscriber;
 
-use Colibri\Core\Entity\EntityInterface;
+use Colibri\Core\Domain\EntityInterface;
 use Colibri\Core\Event\EntityLifecycleEvent;
 use Colibri\Parameters\ParametersCollection;
 use Colibri\Filters\FilterInterface;

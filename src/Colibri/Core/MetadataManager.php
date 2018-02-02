@@ -3,7 +3,7 @@
 namespace Colibri\Core;
 
 use Colibri\Common\ObjectIdentity;
-use Colibri\Core\Entity\MetadataInterface;
+use Colibri\Core\Domain\MetadataInterface;
 use Colibri\Core\Event\MetadataLoadEvent;
 use Colibri\Exception\NotFoundException;
 use Colibri\ServiceContainer\ServiceLocatorInterface;

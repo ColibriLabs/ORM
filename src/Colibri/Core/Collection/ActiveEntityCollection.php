@@ -3,8 +3,8 @@
 namespace Colibri\Core\Collection;
 
 use Colibri\Core\ActiveRecordInterface;
-use Colibri\Core\Entity\EntityInterface;
-use Colibri\Core\Entity\RepositoryInterface;
+use Colibri\Core\Domain\EntityInterface;
+use Colibri\Core\Domain\RepositoryInterface;
 
 /**
  * Class ActiveEntityCollection

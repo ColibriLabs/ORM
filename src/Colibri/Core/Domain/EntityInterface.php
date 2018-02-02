@@ -1,6 +1,6 @@
 <?php
 
-namespace Colibri\Core\Entity;
+namespace Colibri\Core\Domain;
 
 use Colibri\Collection\Collection;
 use Colibri\Common\ArrayableInterface;

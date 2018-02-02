@@ -2,7 +2,7 @@
 
 namespace Colibri\Core\Storage;
 
-use Colibri\Core\Entity\EntityInterface;
+use Colibri\Core\Domain\EntityInterface;
 
 /**
  * Interface PersisterInterface

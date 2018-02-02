@@ -2,7 +2,7 @@
 
 namespace Colibri\Core;
 
-use Colibri\Core\Entity\EntityInterface;
+use Colibri\Core\Domain\EntityInterface;
 use Colibri\ServiceContainer\ServiceLocatorInterface;
 
 /**
@@ -61,7 +61,7 @@ class EntityManager
   
   /**
    * @param $class
-   * @return Entity\RepositoryInterface
+   * @return Domain\RepositoryInterface
    */
   public function getRepositoryFor($class)
   {

@@ -2,7 +2,7 @@
 
 namespace Colibri\Core\Event;
 
-use Colibri\Core\Entity\MetadataInterface;
+use Colibri\Core\Domain\MetadataInterface;
 use Colibri\EventDispatcher\Event;
 
 /**
