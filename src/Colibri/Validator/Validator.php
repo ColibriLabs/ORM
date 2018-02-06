@@ -4,12 +4,13 @@ namespace Colibri\Validator;
 
 use Colibri\Collection\Collection;
 use Colibri\Collection\CollectionInterface;
+use Colibri\Common\StringableInterface;
 
 /**
  * Class Validator
  * @package Colibri\Validator
  */
-class Validator implements ValidatorInterface
+class Validator implements ValidatorInterface, StringableInterface
 {
   
   /**
@@ -98,6 +99,22 @@ class Validator implements ValidatorInterface
   public function isFailed(): boolean
   {
     return $this->messages->count() > 0;
+  }
+  
+  /**
+   * @return string
+   */
+  public function toString(): string
+  {
+    return implode($this->messages->toArray());
+  }
+  
+  /**
+   * @return string
+   */
+  public function __toString()
+  {
+    return $this->toString();
   }
   
 }

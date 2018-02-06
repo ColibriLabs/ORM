@@ -74,4 +74,12 @@ abstract class AbstractMessage implements MessageInterface
     return sprintf('%s [%d]', $this->getMessage(), $this->getCode());
   }
   
+  /**
+   * @return string
+   */
+  public function __toString()
+  {
+    return $this->toString();
+  }
+  
 }
