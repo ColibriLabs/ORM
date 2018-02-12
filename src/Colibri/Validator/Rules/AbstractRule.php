@@ -23,7 +23,7 @@ abstract class AbstractRule implements ValidatorRuleInterface
    */
   public function __construct(MessageInterface $message = null)
   {
-    $this->message = $message;
+    $this->setMessage($message);
   }
   
   /**
@@ -35,11 +35,27 @@ abstract class AbstractRule implements ValidatorRuleInterface
   }
   
   /**
+   * @param MessageInterface $message
+   * @return ValidatorRuleInterface
+   */
+  public function setMessage(MessageInterface $message = null): ValidatorRuleInterface
+  {
+    $this->message = $message ?? $this->setupDefaultMessage();
+    
+    return $this;
+  }
+  
+  /**
    * @return bool
    */
   public function isInterruptible(): boolean
   {
     return false;
   }
+  
+  /**
+   * @return MessageInterface
+   */
+  abstract protected function setupDefaultMessage(): MessageInterface;
   
 }

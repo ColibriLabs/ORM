@@ -10,6 +10,12 @@ interface ValidableInterface
 {
   
   /**
+   * @param mixed $value
+   * @return ValidableInterface
+   */
+  public function with(mixed $value): ValidableInterface;
+  
+  /**
    * @return bool
    */
   public function validate(): boolean;

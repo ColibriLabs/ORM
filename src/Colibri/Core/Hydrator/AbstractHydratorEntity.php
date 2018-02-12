@@ -7,6 +7,7 @@ use Colibri\Core\Domain\EntityInterface;
 use Colibri\Core\Domain\RepositoryInterface;
 use Colibri\Core\Event\EntityLifecycleEvent;
 use Colibri\Core\Hydrator;
+use Colibri\Core\Hydrator\MetadataValidator\Validator;
 use Colibri\Core\Metadata;
 use Colibri\Core\ORMEvents;
 use Colibri\Core\Proxy\EntityProxy;
@@ -25,12 +26,18 @@ abstract class AbstractHydratorEntity extends Hydrator
   protected $repository;
   
   /**
+   * @var Validator
+   */
+  protected $validator;
+  
+  /**
    * HydratorEntity constructor.
    * @param RepositoryInterface $repository
    */
   public function __construct(RepositoryInterface $repository)
   {
     $this->repository = $repository;
+    $this->validator  = new Validator($repository->getEntityMetadata());
     
     parent::__construct($repository->getEntityClassReflection());
   }
@@ -117,6 +124,14 @@ abstract class AbstractHydratorEntity extends Hydrator
   public function getRepository()
   {
     return $this->repository;
+  }
+  
+  /**
+   * @return Validator
+   */
+  public function getValidator()
+  {
+    return $this->validator;
   }
   
   /**

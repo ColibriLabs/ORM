@@ -24,12 +24,28 @@ class Validator implements ValidatorInterface, StringableInterface
   protected $messages;
   
   /**
+   * @var mixed
+   */
+  protected $with;
+  
+  /**
    * Validator constructor.
    */
   public function __construct()
   {
     $this->rules = new Collection([], ValidatorRuleInterface::class);
     $this->messages = new Collection([], MessageInterface::class);
+  }
+  
+  /**
+   * @param mixed $value
+   * @return ValidableInterface
+   */
+  public function with(mixed $value): ValidableInterface
+  {
+    $this->with = $value;
+    
+    return $this;
   }
   
   /**
