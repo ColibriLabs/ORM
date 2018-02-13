@@ -54,10 +54,12 @@ final class ColibriORM
   {
     return $configuration->get('colibri_orm');
   }
-
+  
   /**
    * @param Configuration $configuration
    * @throws InvalidArgumentException
+   * @throws NotFoundException
+   * @throws \InvalidArgumentException
    */
   public static function initialize(Configuration $configuration)
   {
@@ -92,6 +94,7 @@ final class ColibriORM
   
   /**
    * @param Configuration $configuration
+   * @throws \InvalidArgumentException
    */
   protected static function loadAdditionalConfiguration(Configuration $configuration)
   {

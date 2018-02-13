@@ -4,6 +4,7 @@ namespace Demo;
 
 use Colibri\ColibriORM;
 use Colibri\Common\Configuration;
+use Colibri\Extension\EventSubscriber\SoftDeletion;
 use ProCard\Models\CoWorker;
 
 
@@ -39,9 +40,5 @@ if(file_exists($dev)) {
 }
 
 ColibriORM::initialize($configuration);
-$colibri = ColibriORM::getServiceContainer();
 
-$metadata1 = $colibri->getMetadataManager()->getMetadataFor(CoWorker::class);
-$metadata2 = $colibri->getMetadataManager()->getMetadataFor(CoWorker::class);
-
-var_dump(spl_object_hash($metadata1), spl_object_hash($metadata2)); die;
+ColibriORM::getServiceContainer()->getDispatcher()->subscribeListener(new SoftDeletion($configuration));

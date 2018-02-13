@@ -148,16 +148,24 @@ abstract class Entity implements EntityInterface
    * @inheritDoc
    */
   public function beforePersist()
-  {
-    
-  }
+  {}
   
   /**
    * @inheritDoc
    */
   public function beforeRemove()
-  {
-    
-  }
+  {}
+  
+  /**
+   * @inheritDoc
+   */
+  public function afterPersist()
+  {}
+  
+  /**
+   * @inheritDoc
+   */
+  public function afterRemove()
+  {}
   
 }

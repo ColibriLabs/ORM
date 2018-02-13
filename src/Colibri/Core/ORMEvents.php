@@ -25,6 +25,11 @@ final class ORMEvents
   const beforeRemove = 'beforeRemove';
   
   /**
+   * Event occurs before repository trying to delete entity
+   */
+  const afterRemove = 'afterRemove';
+  
+  /**
    * Event occurs after metadata for entity was loaded.
    * Called one time because then its cached
    */

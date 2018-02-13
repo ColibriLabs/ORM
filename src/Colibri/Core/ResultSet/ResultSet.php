@@ -10,8 +10,8 @@ use Colibri\Core\Domain\RepositoryInterface;
 use Colibri\Core\Domain\EntityInterface;
 use Colibri\Core\Domain\MetadataInterface;
 use Colibri\Core\Hydrator;
-use Colibri\Core\Hydrator\AbstractHydratorEntity;
 use Colibri\Core\Metadata;
+use Colibri\Exception\NotFoundException;
 
 /**
  * Class ResultSetIterator
@@ -50,19 +50,14 @@ abstract class ResultSet extends \IteratorIterator implements \Countable
     $reflection = $this->getReflection();
     $entity = $reflection->newInstance();
     $hydrator = $this->getHydrator();
+    $repository = $this->getEntityRepository();
     $metadata = $this->getMetadata();
 
     $entity = $hydrator->hydrate(parent::current(), $entity);
 
-    // @todo need to determine correct ID
-    $identifier = $metadata->getIdentifier();
-    
-    if (null === $identifier) {
-      throw new NotFoundException(sprintf('Cannot determine identifier name for "%s" entity',
-        $metadata->getEntityClass()));
-    }
-    
+    $identifier = $repository->getEntityIdentifier();
     $identifier = $metadata->getName($identifier, Metadata::CAMILIZED);
+    
     $this->currentKey = $reflection->getProperty($identifier)->getValue($entity);
 
     return $entity;

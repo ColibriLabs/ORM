@@ -41,7 +41,7 @@ class Validator implements ValidatorInterface, StringableInterface
    * @param mixed $value
    * @return ValidableInterface
    */
-  public function with(mixed $value): ValidableInterface
+  public function with($value): ValidableInterface
   {
     $this->with = $value;
     

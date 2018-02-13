@@ -36,7 +36,7 @@ class Validator extends BaseValidator
    * @return ValidableInterface
    * @throws ValidatorException
    */
-  public function with(mixed $value): ValidableInterface
+  public function with($value): ValidableInterface
   {
     parent::with($value);
     
@@ -47,15 +47,19 @@ class Validator extends BaseValidator
     return $this;
   }
   
+  /**
+   * @throws ValidatorException
+   * @return Validator
+   */
   public function setupRules()
   {
     $metadata = $this->getEntityMetadata();
     
-    if ($this->with instanceof EntityInterface) {
+    /*if ($this->with instanceof EntityInterface) {
       foreach ($metadata->getNames() as $name) {
-        $metadata
+      
       }
-    }
+    }*/
   
     throw new ValidatorException(sprintf('Tatget entity do not specified yet. Call %s::with() before', __CLASS__));
   }

@@ -51,7 +51,7 @@ class Column extends Expression
     try {
       return (string) $this->toSQL();
     } catch (\Throwable $exception) {
-      die($exception->getTraceAsString());
+      return sprintf('unknownTableName.unknownColumnName');
     }
   }
 

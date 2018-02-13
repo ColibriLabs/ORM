@@ -21,13 +21,16 @@ include_once './_init.php';
 error_reporting(E_ALL);
 ini_set('display_errors', 'On');
 
-$repository = new \ProCard\Models\ProductsRepository();
+$repository = new \ProCard\Models\CategoryRepository();
+
+$category = new \ProCard\Models\Category();
+
+$repository->remove($category);
 
 $query = $repository->createSelectQuery();
 
 $query->clearSelectColumns();
 
-//$query->setParameterized(true);
 $query->setReplaceAliases(true);
 
 $query->where('a', 1);
@@ -63,8 +66,7 @@ $query->setComment(sprintf("\n%s\n", __FILE__));
 
 $query->setParameterized(true);
 
-//$criteria = new Criteria();
-//$criteria->where('1', '2');
+echo $query . PHP_EOL;
 
 $insert = new Insert($query->getConnection());
 
@@ -76,9 +78,9 @@ $insert->setDataBatch([
 
 $insert->setParameterized(true);
 
-//var_dump($query->toSQL(), $query->getPlaceholders());
-//
-var_dump($insert->toSQL(), $insert->getPlaceholders());
+echo $insert . PHP_EOL;
+
+var_dump($insert->getPlaceholders());
 
 $query = new Select($query->getConnection());
 $query->setReplaceAliases(true);
@@ -87,10 +89,12 @@ $query->setColumnAlias(new Column('P.surname'), 'name');
 
 $query->setTableAlias(new Table('products'), 'P');
 $query->setFromTable('P');
-
+$query->setComment('Hello World! I will remove you!');
 $query->addSelectColumns([
   'P.name'
 ]);
+
+echo $query . PHP_EOL;
 
 $update = new \Colibri\Query\Builder\Update($query->getConnection());
 $update->setParameterized(true);
@@ -104,6 +108,8 @@ $update->setDataBatch([
   'fuck' => 123
 ]);
 
+echo $update . PHP_EOL;
+
 $delete = new \Colibri\Query\Builder\Delete($query->getConnection());
 //$delete->setParameterized(true);
 $delete->setFromTable('test');
@@ -113,47 +119,4 @@ $sub = $delete->subWhere(Cmp::VEL)->where('b', 3, '=', 'OR')->where('b', 4, '=',
 
 $sub->subWhere(Cmp::CONJUNCTION_XOR)
   ->where('c', 123)->where('c', 312, Cmp::EQ, Cmp::VEL);
-
-var_dump($delete->toSQL(), $delete->getPlaceholders());
-
-var_dump($query->toSQL(), $update->toSQL(), $update->getPlaceholders());
-
-//$imagePath = __DIR__ . '/../../static/colibri.png';
-//$imageResource = file_get_contents($imagePath);
-
-//die;
-
-//$userRepository = new MyUsersRepository();
-//
-//$qb = $userRepository->getQuery();
-//
-//$qb->innerJoin('users_tags', [
-//  [MyUsers::ID, 'users_tags.user_id',],
-//  [MyUsers::ID, 'users_tags.user_parent_id', Cmp::GT, Cmp::CONJUNCTION_OR]
-//]);
-//$qb->innerJoin('tags', ['users_tags.tag_id', 'tags.id']);
-//
-//die(var_dump($qb->toSQL()));
-//
-//$userMetadata = $userRepository->getEntityMetadata();
-//
-//$userRepository->filterById(123);
-//
-//$collection = $userRepository->findAll();
-//
-///** @var $user MyUsers */
-//$user = $userRepository->findOne(4);
-//
-//$user->setUserName(sprintf('Anna 0x%s', dechex(time())));
-//$user->setIsTrusted(true);
-////$user->setFileBlob($imageResource);
-//$user->setFileBlobBase64($imageResource);
-//
-////$userRepository->persist($user);
-//
-//
-//var_dump($user);
-//
-//$resultSet = new ResultSetIterator($userRepository, $userRepository->execute());
-//
-////var_dump($resultSet->getCollection()->toArray());
+echo $delete . PHP_EOL;

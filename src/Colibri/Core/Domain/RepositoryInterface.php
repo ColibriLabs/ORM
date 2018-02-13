@@ -10,6 +10,7 @@ use Colibri\Core\Hydrator\AbstractHydratorEntity;
 use Colibri\Core\ResultSet\ResultSet;
 use Colibri\EventDispatcher\DispatcherInterface;
 use Colibri\EventDispatcher\EventInterface;
+use Colibri\Exception\NotFoundException;
 use Colibri\Query\Builder\Delete;
 use Colibri\Query\Builder\Insert;
 use Colibri\Query\Builder\Select as SelectQueryBuilder;
@@ -86,6 +87,12 @@ interface RepositoryInterface
    * @return \ReflectionClass|\ReflectionObject
    */
   public function getEntityClassReflection();
+  
+  /**
+   * @return string
+   * @throws NotFoundException
+   */
+  public function getEntityIdentifier();
 
   /**
    * @return MetadataInterface
