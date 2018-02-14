@@ -24,7 +24,6 @@ class RepositoryManager
   public function __construct(ServiceLocatorInterface $serviceLocator)
   {
     $this->serviceLocator = $serviceLocator;
-    $this->metadataManager = $this->getServiceLocator()->getMetadataManager();
   }
 
   /**

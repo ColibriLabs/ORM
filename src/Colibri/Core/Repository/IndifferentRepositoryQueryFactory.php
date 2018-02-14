@@ -9,7 +9,7 @@ use Colibri\Query\Statement\Modifiers;
  * Class SoftRepositoryQueryFactory
  * @package Colibri\Core\Repository
  */
-class SoftRepositoryQueryFactory extends RepositoryQueryFactory
+class IndifferentRepositoryQueryFactory extends AbstractRepositoryQueryFactory
 {
   
   /**

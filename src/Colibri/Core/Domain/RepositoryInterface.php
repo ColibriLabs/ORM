@@ -7,6 +7,7 @@ use Colibri\Connection\Statement\StatementIterator;
 use Colibri\Connection\StmtInterface;
 use Colibri\Core\ClassManager;
 use Colibri\Core\Hydrator\AbstractHydratorEntity;
+use Colibri\Core\Repository\AbstractRepositoryQueryFactory;
 use Colibri\Core\ResultSet\ResultSet;
 use Colibri\EventDispatcher\DispatcherInterface;
 use Colibri\EventDispatcher\EventInterface;
@@ -142,6 +143,17 @@ interface RepositoryInterface
    * @return RepositoryInterface
    */
   public function getRepositoryFor($class);
+  
+  /**
+   * @return AbstractRepositoryQueryFactory
+   */
+  public function getQueryFactory();
+  
+  /**
+   * @param AbstractRepositoryQueryFactory $queryFactory
+   * @return RepositoryInterface
+   */
+  public function setQueryFactory(AbstractRepositoryQueryFactory $queryFactory);
   
   /**
    * @param $criteria

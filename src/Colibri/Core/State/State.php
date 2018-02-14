@@ -35,7 +35,7 @@ class State implements StateInterface, StringableInterface
    * @param StateIdentifierInterface $identifier
    * @param StateIdentifierInterface $owner
    */
-  public function __construct($state, $identifier, $owner)
+  public function __construct(string $state, StateIdentifierInterface $identifier, StateIdentifierInterface $owner)
   {
     $this->state = $state;
     $this->identifier = $identifier;
@@ -45,7 +45,7 @@ class State implements StateInterface, StringableInterface
   /**
    * @return StateIdentifierInterface
    */
-  public function getIdentifier()
+  public function getIdentifier(): StateIdentifierInterface
   {
     return $this->identifier;
   }
@@ -53,7 +53,7 @@ class State implements StateInterface, StringableInterface
   /**
    * @return StateIdentifierInterface
    */
-  public function getOwner()
+  public function getOwner(): StateIdentifierInterface
   {
     return $this->owner;
   }

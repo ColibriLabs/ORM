@@ -6,7 +6,7 @@ namespace Colibri\Core\Repository;
  * Class BasicRepositoryQueryFactory
  * @package Colibri\Core\Repository
  */
-class BasicRepositoryQueryFactory extends RepositoryQueryFactory
+class BasicRepositoryQueryFactory extends AbstractRepositoryQueryFactory
 {
   
 }

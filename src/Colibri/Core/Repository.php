@@ -19,7 +19,7 @@ use Colibri\Core\Event\EntityLifecycleEvent;
 use Colibri\Core\Hydrator\AbstractHydratorEntity;
 use Colibri\Core\Hydrator\EntityHydrator;
 use Colibri\Core\Repository\BasicRepositoryQueryFactory;
-use Colibri\Core\Repository\RepositoryQueryFactory;
+use Colibri\Core\Repository\AbstractRepositoryQueryFactory;
 use Colibri\Core\ResultSet\ResultSet;
 use Colibri\Core\ResultSet\ResultSetIterator;
 use Colibri\EventDispatcher\DispatcherInterface;
@@ -86,7 +86,7 @@ abstract class Repository implements RepositoryInterface
   protected $eventDispatcher;
   
   /**
-   * @var RepositoryQueryFactory
+   * @var AbstractRepositoryQueryFactory
    */
   protected $queryFactory;
   
@@ -107,6 +107,37 @@ abstract class Repository implements RepositoryInterface
     $this->setQueryFactory(new BasicRepositoryQueryFactory());
     
     $this->query = $this->createSelectQuery();
+  }
+  
+  /**
+   * @param       $name
+   * @param array $arguments
+   * @return mixed
+   * @throws BadArgumentException
+   * @throws BadCallMethodException
+   * @throws NotFoundException
+   */
+  public function __call($name, array $arguments = [])
+  {
+    preg_match(static::MAGIC_CALL_REGEXP, $name, $matches);
+    
+    if (isset($matches[0])) {
+      $metadata = $this->getEntityMetadata();
+      
+      array_shift($matches);
+      
+      list($methodName, $columnName) = $matches;
+      
+      $columnName = $metadata->getRawSQLName(Inflector::underscore($columnName));
+      array_unshift($arguments, $columnName);
+      
+      $callback = new Callback([$this, $methodName]);
+      
+      return $callback->call($arguments);
+    }
+    
+    throw new BadCallMethodException(sprintf('Trying to call %s::%s(); method. Allowed to call methods which starts with "%s"',
+      static::class, $name, 'findBy, findOneBy, filterBy, orderBy or groupBy'));
   }
   
   /**
@@ -143,7 +174,7 @@ abstract class Repository implements RepositoryInterface
   }
   
   /**
-   * @return RepositoryQueryFactory
+   * @return AbstractRepositoryQueryFactory
    */
   public function getQueryFactory()
   {
@@ -151,47 +182,16 @@ abstract class Repository implements RepositoryInterface
   }
   
   /**
-   * @param RepositoryQueryFactory $queryFactory
+   * @param AbstractRepositoryQueryFactory $queryFactory
    * @return $this
    */
-  public function setQueryFactory(RepositoryQueryFactory $queryFactory)
+  public function setQueryFactory(AbstractRepositoryQueryFactory $queryFactory)
   {
     $queryFactory->setRepository($this);
     
     $this->queryFactory = $queryFactory;
     
     return $this;
-  }
-  
-  /**
-   * @param       $name
-   * @param array $arguments
-   * @return mixed
-   * @throws BadArgumentException
-   * @throws BadCallMethodException
-   * @throws NotFoundException
-   */
-  public function __call($name, array $arguments = [])
-  {
-    preg_match(static::MAGIC_CALL_REGEXP, $name, $matches);
-    
-    if (isset($matches[0])) {
-      $metadata = $this->getEntityMetadata();
-      
-      array_shift($matches);
-      
-      list($methodName, $columnName) = $matches;
-      
-      $columnName = $metadata->getRawSQLName(Inflector::underscore($columnName));
-      array_unshift($arguments, $columnName);
-      
-      $callback = new Callback([$this, $methodName]);
-      
-      return $callback->call($arguments);
-    }
-    
-    throw new BadCallMethodException(sprintf('Trying to call %s::%s(); method. Allowed to call methods which starts with "%s"',
-      static::class, $name, 'findBy, findOneBy, filterBy, orderBy or groupBy'));
   }
   
   /**

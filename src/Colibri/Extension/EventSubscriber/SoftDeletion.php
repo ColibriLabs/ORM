@@ -4,6 +4,7 @@ namespace Colibri\Extension\EventSubscriber;
 
 use Colibri\Core\Event\EntityLifecycleEvent;
 use Colibri\Core\ORMEvents;
+use Colibri\Core\Repository\AbstractRepositoryQueryFactory;
 use Colibri\Extension\AbstractExtension;
 
 /**
@@ -18,7 +19,17 @@ class SoftDeletion extends AbstractExtension
    */
   public function beforeRemove(EntityLifecycleEvent $lifecycleEvent)
   {
-    $lifecycleEvent->getQueryOfAction();
+    $lifecycleEvent->getRepository()->setQueryFactory(new class extends AbstractRepositoryQueryFactory {
+      
+      /**
+       * @inheritDoc
+       */
+      public function createDeleteQuery()
+      {
+        return parent::createUpdateQuery();
+      }
+      
+    });
   }
   
   /**

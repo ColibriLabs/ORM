@@ -12,7 +12,7 @@ use Colibri\Core\Domain\RepositoryInterface;
  * Abstract Class RepositoryQueryFactory
  * @package Colibri\Core\Repository
  */
-abstract class RepositoryQueryFactory
+abstract class AbstractRepositoryQueryFactory
 {
   
   /**
