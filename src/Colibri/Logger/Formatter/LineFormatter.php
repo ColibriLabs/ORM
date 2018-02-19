@@ -35,7 +35,7 @@ class LineFormatter extends AbstractFormatter
       $replacement['message'] = $messageLine;
       $messageLine = $this->replace($this->getFormat(), $replacement);
     }
-    
+
     return implode(PHP_EOL, $messageLines);
   }
 

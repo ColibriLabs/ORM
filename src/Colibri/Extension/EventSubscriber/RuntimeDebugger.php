@@ -8,7 +8,10 @@
 
 namespace Colibri\Extension\EventSubscriber;
 
+use Colibri\Common\ArrayableInterface;
 use Colibri\Common\Inflector;
+use Colibri\Common\StringableInterface;
+use Colibri\Core\Domain\EntityInterface;
 use Colibri\Core\Event\EntityLifecycleEvent;
 use Colibri\Core\Event\FinderExecutionEvent;
 use Colibri\Core\Event\MetadataLoadEvent;
@@ -74,7 +77,7 @@ class RuntimeDebugger implements EventSubscriber
   }
   
   /**
-   * @param Event  $event
+   * @param Event $event
    * @param string $eventName
    * @return null|string
    */
@@ -85,17 +88,14 @@ class RuntimeDebugger implements EventSubscriber
     if ($event instanceof OrmEventInterface) {
       switch (true) {
         case ($event instanceof EntityLifecycleEvent):
-          $template = "EntityName: %s\nDump: %s";
-          $message = sprintf($template,
-            $event->getRepository()->getEntityName(), json_encode($event->getEntity()->toArray(), 128));
+          $message = $this->entityToString($event->getEntity());
           break;
         case ($event instanceof MetadataLoadEvent):
           $message = sprintf('Metadata for %s entity loaded', $event->getMetadata()->getEntityClass());
           break;
         case ($event instanceof FinderExecutionEvent):
-          $repository = $event->getRepository();
           $query = $event->getSelectQuery();
-          $message = sprintf("EntityName: %s\nSQL: (%s)", $repository->getEntityName(), $query->toSQL());
+          $message = sprintf("SQL: (%s)", str_replace("\n", "\x20", $query->toSQL()));
           break;
       }
     }
@@ -103,9 +103,62 @@ class RuntimeDebugger implements EventSubscriber
     $eventName = Inflector::underscore($eventName);
     $eventName = strtoupper($eventName);
     
-    $separator  = str_repeat('-', 32);
+    $separator = str_repeat('-', 32);
     
     return sprintf("%s\n[%s]\n%s", $separator, $eventName, $message);
+  }
+  
+  /**
+   * @param EntityInterface $entity
+   * @return string
+   */
+  private function entityToString(EntityInterface $entity)
+  {
+    $template = "EntityName: %s\nValues: %s";
+    
+    $entityName = (new \ReflectionObject($entity))->getShortName();
+    $entityValues = null;
+    
+    foreach ($entity->toArray() as $propertyName => $propertyValue) {
+      $entityValues = sprintf("%s\n\t%s = '%s'", $entityValues, $propertyName, $this->stringifyValue($propertyValue));
+    }
+    
+    return sprintf($template, $entityName, $entityValues);
+  }
+  
+  /**
+   * @param $value
+   * @return string
+   */
+  private function stringifyValue($value)
+  {
+    switch (true) {
+      case $value === null:
+        $value = 'NULL';
+        break;
+      case ($value instanceof \DateTime):
+        $value = $value->format(DATE_RFC822);
+        break;
+      case ($value instanceof StringableInterface):
+        $value = $value->toString();
+        break;
+      case ($value instanceof ArrayableInterface):
+        $value  = sprintf('Arrayable::%s (%s)', (new \ReflectionObject($value))->getShortName(),
+          $this->stringifyValue($value->toArray()));
+        break;
+      case is_scalar($value):
+      case method_exists($value, '__toString'):
+        $value = (string)$value;
+        break;
+      case is_object($value):
+        $value = sprintf('Object (%s)', get_class($value));
+        break;
+      case is_array($value):
+        $value = sprintf('Array (%s)', implode(', ', array_map([$this, 'stringifyValue'], $value)));
+        break;
+    }
+    
+    return $value;
   }
   
   /**

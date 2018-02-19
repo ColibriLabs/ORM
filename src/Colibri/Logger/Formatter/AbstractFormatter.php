@@ -88,12 +88,36 @@ abstract class AbstractFormatter implements FormatterInterface
 
     $content = $message['content'];
     $context = $placeholders + $message['context'];
-
-    $message = $this->replace($content, $context);
+  
+    $flattened = [];
+    $this->flatten($context, [], $flattened);
+    
+    $message = $this->replace($content, $flattened);
 
     $placeholders['message'] = $message;
 
     return $placeholders;
+  }
+  
+  /**
+   * @param array $input
+   * @param array $keys
+   * @param array $output
+   * @return array
+   */
+  protected function flatten(array $input, array $keys = [], array &$output)
+  {
+    foreach ($input as $index => $placeholder) {
+      
+      $key    = array_merge($keys, [$index]);
+      $dotted = implode('.', array_merge($keys, [$index]));
+      
+      if (is_array($placeholder)) {
+        $this->flatten($placeholder, $key, $output);
+      } else {
+        $output[$dotted] = $placeholder;
+      }
+    }
   }
 
 }

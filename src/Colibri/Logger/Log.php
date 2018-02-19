@@ -68,11 +68,11 @@ class Log extends AbstractLogger
 
     return true;
   }
-
+  
   /**
    * @param $name
    * @param HandlerInterface $handler
-   * @return $this
+   * @return LoggerInterface
    */
   public function pushHandler($name, HandlerInterface $handler): LoggerInterface
   {

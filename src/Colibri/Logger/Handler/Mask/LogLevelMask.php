@@ -19,6 +19,6 @@ class LogLevelMask extends AbstractMask
   const MASK_DEBUG = 128;
   const MASK_EVENT = 256;
 
-  const MASK_ALL = 511;
+  const MASK_ALL = (self::MASK_EVENT * 2) - 1;
 
 }
