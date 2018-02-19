@@ -24,6 +24,7 @@ class Update extends Builder
   use Syntax\OrderByTrait;
   use Syntax\SetTrait;
   use Syntax\ModifiersTrait;
+  use Syntax\LimitTrait;
   
   const TEMPLATE = "UPDATE%s%s%s%s%s%s";
   

@@ -19,6 +19,7 @@ class SoftDeletion extends AbstractExtension
    */
   public function beforeRemove(EntityLifecycleEvent $lifecycleEvent)
   {
+    $lifecycleEvent->getRepository()->getQueryFactory();
     $lifecycleEvent->getRepository()->setQueryFactory(new class extends AbstractRepositoryQueryFactory {
       
       /**

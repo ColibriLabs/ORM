@@ -10,6 +10,16 @@ final class ORMEvents
 {
   
   /**
+   * Event occurs before repository execute search query
+   */
+  const beforeFindExecute = 'beforeFindExecute';
+  
+  /**
+   * Event occurs after repository execute search query
+   */
+  const afterFindExecute = 'afterFindExecute';
+  
+  /**
    * Event occurs before repository trying to persist entity
    */
   const beforePersist = 'beforePersist';

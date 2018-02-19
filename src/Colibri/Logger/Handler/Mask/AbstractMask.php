@@ -27,7 +27,6 @@ abstract class AbstractMask implements MaskInterface, JsonSerializable
 
   /**
    * @param mixed $mask
-   * @throws \InvalidArgumentException
    * @return $this
    */
   public function set($mask)

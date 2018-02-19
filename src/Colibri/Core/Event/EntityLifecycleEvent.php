@@ -4,14 +4,12 @@ namespace Colibri\Core\Event;
 
 use Colibri\Core\Domain\EntityInterface;
 use Colibri\Core\Domain\RepositoryInterface;
-use Colibri\EventDispatcher\Event;
-use Colibri\Query\Builder;
 
 /**
  * Class EntityLifecycleEvent
  * @package Colibri\Core\Event
  */
-class EntityLifecycleEvent extends Event
+class EntityLifecycleEvent extends AbstractEvent
 {
   
   /**

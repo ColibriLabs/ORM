@@ -6,7 +6,7 @@ use Colibri\Query\Builder;
 use Colibri\Query\Statement\Modifiers;
 
 /**
- * Class SoftRepositoryQueryFactory
+ * Class IndifferentRepositoryQueryFactory
  * @package Colibri\Core\Repository
  */
 class IndifferentRepositoryQueryFactory extends AbstractRepositoryQueryFactory
@@ -14,6 +14,7 @@ class IndifferentRepositoryQueryFactory extends AbstractRepositoryQueryFactory
   
   /**
    * @return Builder\Insert
+   * @throws \Colibri\Exception\NullPointerException
    */
   public function createInsertQuery()
   {
@@ -22,6 +23,7 @@ class IndifferentRepositoryQueryFactory extends AbstractRepositoryQueryFactory
   
   /**
    * @return Builder\Update
+   * @throws \Colibri\Exception\NullPointerException
    */
   public function createUpdateQuery()
   {

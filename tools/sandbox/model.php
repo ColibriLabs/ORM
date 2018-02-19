@@ -1,20 +1,13 @@
 <?php
 
-use Colibri\Connection\ConnectionEvent;
-use Colibri\Core\ResultSet\ResultSetIterator;
+
 use Colibri\Query\Builder\Insert;
 use Colibri\Query\Builder\Select;
-use Colibri\Query\Criteria;
 use Colibri\Query\Expr\Column;
 use Colibri\Query\Expr\Func\Concat;
-use Colibri\Query\Expr\Func\Rand;
-use Colibri\Query\Expr\Raw;
 use Colibri\Query\Expr\Table;
 use Colibri\Query\Statement\Comparison\Cmp;
-use Colibri\ServiceContainer\ServiceLocator;
-use ProCard\Models\MyUsers;
-use ProCard\Models\MyUsersRepository;
-use ProCard\Models\Products;
+use ProCard\Models\Product;
 
 include_once './_init.php';
 
@@ -23,9 +16,12 @@ ini_set('display_errors', 'On');
 
 $repository = new \ProCard\Models\CategoryRepository();
 
-$category = new \ProCard\Models\Category();
+/** @var \ProCard\Models\Category $category */
+$category = $repository->retrieve(1);
 
-$repository->remove($category);
+$category->setModified(new DateTime());
+
+$repository->persist($category);
 
 $query = $repository->createSelectQuery();
 
@@ -38,7 +34,7 @@ $query->where('a', 2);
 $query->where('a', 3, '=', 'OR');
 $query->where('a', 4);
 
-$query->setColumnAlias(new Column(Products::NAME), 'nm');
+$query->setColumnAlias(new Column(Product::NAME), 'nm');
 
 $query->where('cre', 2);
 $sub = $query->subWhere(Cmp::VEL)->where('b', 3, '=', 'OR')->where('b', 4, '=', 'OR')->where('a', 5);
@@ -56,7 +52,7 @@ $query->where('asdasd', 'dasasdasd');
 
 $query->addSelectColumn(new Concat('qwe', '123', new Column('user.hash')), 'total_str');
 $query->addSelectColumns([
-  'qwe', ['qwe2', 'qwe2_alias'], [Products::CREATED_AT, 'cre'], 'nm'
+  'qwe', ['qwe2', 'qwe2_alias'], [Product::PRICE_KEY, 'cre'], 'nm'
 ]);
 
 $query->orderBy('qwe2_alias');
@@ -73,7 +69,7 @@ $insert = new Insert($query->getConnection());
 $insert->setTableInto('teste');
 $insert->setDataBatch([
   'qwe' => 123,
-  Products::CATEGORY_ID_KEY => 123
+  Product::CATEGORY_ID_KEY => 123
 ]);
 
 $insert->setParameterized(true);

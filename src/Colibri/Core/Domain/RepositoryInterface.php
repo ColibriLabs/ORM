@@ -12,6 +12,7 @@ use Colibri\Core\ResultSet\ResultSet;
 use Colibri\EventDispatcher\DispatcherInterface;
 use Colibri\EventDispatcher\EventInterface;
 use Colibri\Exception\NotFoundException;
+use Colibri\Query\Builder;
 use Colibri\Query\Builder\Delete;
 use Colibri\Query\Builder\Insert;
 use Colibri\Query\Builder\Select as SelectQueryBuilder;
@@ -197,5 +198,15 @@ interface RepositoryInterface
    * @return Update
    */
   public function createUpdateQuery();
+  
+  /**
+   * @return Builder|Delete|Update
+   */
+  public function getRemover();
+  
+  /**
+   * @return Builder|Insert|Update
+   */
+  public function getPersister();
 
 }

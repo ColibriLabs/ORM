@@ -16,6 +16,7 @@ use Colibri\Core\Domain\EntityInterface;
 use Colibri\Core\Domain\MetadataInterface;
 use Colibri\Core\Domain\RepositoryInterface;
 use Colibri\Core\Event\EntityLifecycleEvent;
+use Colibri\Core\Event\FinderExecutionEvent;
 use Colibri\Core\Hydrator\AbstractHydratorEntity;
 use Colibri\Core\Hydrator\EntityHydrator;
 use Colibri\Core\Repository\BasicRepositoryQueryFactory;
@@ -206,8 +207,6 @@ abstract class Repository implements RepositoryInterface
   /**
    * @param array $criteria
    * @return ResultSet
-   * @throws NotSupportedException
-   * @throws NotFoundException
    */
   public function find(array $criteria)
   {
@@ -217,8 +216,6 @@ abstract class Repository implements RepositoryInterface
   /**
    * @param mixed $criteria
    * @return ResultSet
-   * @throws NotSupportedException
-   * @throws NotFoundException
    */
   public function findBy($criteria)
   {
@@ -228,8 +225,6 @@ abstract class Repository implements RepositoryInterface
   /**
    * @param null $criteria
    * @return StatementIterator
-   * @throws NotSupportedException
-   * @throws NotFoundException
    */
   public function executeCriteria($criteria = null)
   {
@@ -238,11 +233,13 @@ abstract class Repository implements RepositoryInterface
   
   /**
    * @return StatementIterator
-   * @throws NotFoundException
    */
   public function executeQueryStmt()
   {
     $selectQuery = $this->getQuery();
+    
+    $this->dispatchEvent(ORMEvents::beforeFindExecute, new FinderExecutionEvent($this, $selectQuery));
+    
     $statement = $this->getConnection()->prepare($this->getQuery(), []);
     
     // if query builder was initialized as parameterized
@@ -253,6 +250,8 @@ abstract class Repository implements RepositoryInterface
     
     // executes a prepared statement
     $statement->execute();
+  
+    $this->dispatchEvent(ORMEvents::afterFindExecute, new FinderExecutionEvent($this, $selectQuery));
     
     // reset qb to previous state
     $this->cleanupQuery();
@@ -440,14 +439,12 @@ abstract class Repository implements RepositoryInterface
     
     if ($reflection->isInstance($entity)) {
       
-      $entity->beforePersist();
+      $this->dispatchEvent(ORMEvents::beforePersist, new EntityLifecycleEvent($this, $entity));
       
       $connection = $this->getConnection();
       $metadata = $this->getEntityMetadata();
       $isEntityNew = $this->isNewEntity($entity);
       $entityData = [];
-      
-      $this->dispatchEvent(ORMEvents::beforePersist, new EntityLifecycleEvent($this, $entity));
       
       foreach ($this->getHydrator()->extract($entity) as $sqlName => $value) {
         if ($sqlName !== $metadata->getIdentifier() && null !== $value) {
@@ -474,6 +471,7 @@ abstract class Repository implements RepositoryInterface
       
       $this->dispatchEvent(ORMEvents::afterPersist, new EntityLifecycleEvent($this, $entity));
       
+      // commit changes after event dispatching
       $connection->commit();
       
       return $this;
@@ -494,20 +492,17 @@ abstract class Repository implements RepositoryInterface
     $reflection = $this->getEntityClassReflection();
     
     if ($reflection->isInstance($entity)) {
+  
+      // trigger event for entity and dispatcher on before remove
+      $this->dispatchEvent(ORMEvents::beforeRemove, new EntityLifecycleEvent($this, $entity));
+      
+      // needed variables
       $metadata = $this->getEntityMetadata();
       $remover = $this->createDeleteQuery();
       $identifier = $this->getEntityIdentifier();
-      
       $connection = $this->getConnection();
       $propertyIdentifier = $metadata->getName($identifier, Metadata::CAMILIZED);
-      $event = new EntityLifecycleEvent($this, $entity);
 
-      // die(var_dump((string)$remover));
-      
-      // trigger event for entity and dispatcher on before remove
-      $entity->beforeRemove();
-      $this->dispatchEvent(ORMEvents::beforeRemove, $event);
-      
       // refinement of the request
       $remover->addConditions($identifier, $entity->getByProperty($propertyIdentifier));
       $remover->setLimit(1)->setOffset(0);
@@ -517,12 +512,11 @@ abstract class Repository implements RepositoryInterface
         $connection->execute($remover->toSQL());
       });
       
-      // trigger event for entity and dispatcher on after remove
-      $entity->afterRemove();
-      $this->dispatchEvent(ORMEvents::afterRemove, $event);
-      
       // reset identifier for removed entity
       $entity->setByProperty($propertyIdentifier, null);
+  
+      // trigger event for entity and dispatcher on after remove and all actions
+      $this->dispatchEvent(ORMEvents::afterRemove, new EntityLifecycleEvent($this, $entity));
       
       return $this;
     }
@@ -649,6 +643,22 @@ abstract class Repository implements RepositoryInterface
   public function createDeleteQuery()
   {
     return $this->getQueryFactory()->createDeleteQuery();
+  }
+  
+  /**
+   * @inheritDoc
+   */
+  public function getRemover()
+  {
+    return null;
+  }
+  
+  /**
+   * @inheritDoc
+   */
+  public function getPersister()
+  {
+    return null;
   }
   
   /**

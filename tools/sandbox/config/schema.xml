@@ -2,62 +2,34 @@
 
 <database platform="mysql" name="jolly-db" package="pro_card.models">
 
-  <table table="test_table" name="my_users">
-    <column column="my_id" name="id" type="integer" autoIncrement="true" primaryKey="true" identifier="true" />
-    <column column="name" name="user_name" type="string" length="32" />
-    <column column="file_blob" type="blob" />
-    <column column="file_blob_base64" type="resource" />
-    <column column="is_trusted" type="boolean" />
-    <column column="status" type="enum" enum="active,registered,banned" />
-    <column column="created_at" name="added_at" type="datetime" format="Y-m-d H/m/s" />
-  </table>
-
-  <table table="departments" name="dep">
-    <column column="dept_no" name="department_code" type="string" length="4" />
-    <column column="dept_name" name="name" type="string" length="40" />
-    <column column="created_at" name="create_date" type="datetime" />
-  </table>
-
-  <table table="dept_emp" name="co_worker">
-    <column column="emp_no" name="code" type="integer" length="11" autoIncrement="true" primaryKey="true" />
-    <column column="dept_no" name="department_code" type="string" length="4" />
-    <column column="add_dat" name="addition_information" type="json" />
-    <column column="from_date" name="start_date" type="datetime" format="Y-m-d" />
-    <column column="to_date" name="until_date_work" type="datetime" format="Y-m-d [Z]" />
-    <relation association="one_to_one" table="departments" name="deps_rel" local="dept_no" foreign="dept_no" />
-  </table>
-
-  <table table="products" name="products">
+  <table table="categories" name="category">
     <column column="id" type="integer" length="11" unsigned="true" autoIncrement="true" primaryKey="true"/>
-    <column column="category_id" type="integer"/>
-    <column column="sku" name="name" type="string" length="32"/>
-    <column column="created_at" type="datetime"/>
-    <relation association="many_to_one" table="products_categories" name="category" local="category_id" foreign="id"/>
-  </table>
-
-  <table table="products_categories" name="category">
-    <column column="id" type="integer" length="11" unsigned="true" autoIncrement="true" primaryKey="true"/>
+    <column column="parent_id" type="integer" length="11" unsigned="true"/>
+    <column column="left_key" type="integer" length="11" unsigned="true"/>
+    <column column="right_key" type="integer" length="11" unsigned="true"/>
+    <column column="depth" type="integer" length="11" unsigned="true"/>
     <column column="name" name="name" type="string" length="32"/>
-    <column column="description" type="text"/>
-    <column column="created_at" type="datetime"/>
-    <relation association="one_to_many" table="products" name="products" local="id" foreign="category_id"/>
+    <column column="label" name="label" type="string" length="32"/>
+    <column column="short_description" name="description" type="string" length="64"/>
+    <column column="created" name="created" type="datetime"/>
+    <column column="modified" name="modified" type="datetime"/>
   </table>
 
-  <table table="products_discount" name="products_discount">
+  <table table="products" name="product">
     <column column="id" type="integer" length="11" unsigned="true" autoIncrement="true" primaryKey="true"/>
-    <column column="object_id" type="integer"/>
-    <column column="spreads_on" name="object_type" enum="category,product" type="enum"/>
-  </table>
-
-  <table table="products_fields_data" name="fields_data">
-    <column column="id" type="integer" length="11" unsigned="true" autoIncrement="true" primaryKey="true"/>
-    <column column="product_id" type="integer" length="11" unsigned="true"/>
-    <column column="fields_id" type="integer" length="11" unsigned="true"/>
-  </table>
-
-  <table table="fields" name="custom_fields">
-    <column column="id" type="integer" length="11" unsigned="true" autoIncrement="true" primaryKey="true"/>
-    <column column="attribute_id" type="integer"/>
+    <column column="category_id" type="integer" length="11" unsigned="true"/>
+    <column column="manufacturer_id" type="integer" length="11" unsigned="true" />
+    <column column="picture_id" type="integer" length="11" unsigned="true" />
+    <column column="slug" name="slug" type="string" length="64"/>
+    <column column="vendor_code" name="code" type="string" length="16"/>
+    <column column="name" type="string" length="128"/>
+    <column column="price" name="price" type="decimal" length="10" precision="4"/>
+    <column column="product_in_stock" name="has_in_stock" type="boolean" />
+    <column column="quantity" type="integer" length="11" unsigned="true" />
+    <column column="status" type="enum" enum="OK,AO,RQ,XX" default="RQ" />
+    <column column="version" type="integer" length="11" unsigned="true"/>
+    <column column="created" name="created" type="datetime"/>
+    <column column="created" name="modified" type="datetime"/>
   </table>
 
 </database>

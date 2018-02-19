@@ -23,10 +23,4 @@ interface PersisterInterface
    */
   public function update(EntityInterface $entity);
   
-  /**
-   * @param EntityInterface $entity
-   * @return $this
-   */
-  public function remove(EntityInterface $entity);
-  
 }

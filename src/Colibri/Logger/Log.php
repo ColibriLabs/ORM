@@ -6,6 +6,7 @@ use Colibri\Logger\Collection\Collection;
 use Colibri\Logger\Handler\HandlerInterface;
 use Colibri\Logger\Handler\Mask\LogLevelMask;
 use Psr\Log\AbstractLogger;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class Log
@@ -23,6 +24,11 @@ class Log extends AbstractLogger
    * @var string
    */
   protected $name;
+  
+  /**
+   * @var string
+   */
+  protected $datetimeFormat = DATE_ATOM;
   
   /**
    * Log constructor.
@@ -68,7 +74,7 @@ class Log extends AbstractLogger
    * @param HandlerInterface $handler
    * @return $this
    */
-  public function pushHandler($name, HandlerInterface $handler)
+  public function pushHandler($name, HandlerInterface $handler): LoggerInterface
   {
     $this->handlers->set($name, $handler);
 
@@ -81,18 +87,21 @@ class Log extends AbstractLogger
    * @param array $context
    * @return Collection
    */
-  protected function prepareRecord($level, $message, array $context = [])
+  protected function prepareRecord(string $level, string $message = null, array $context = []): Collection
   {
     $message = new Collection([
       'content' => $message,
       'context' => $context,
     ]);
+    
+    $datetime = new DateTime();
+    $datetime->setFormat($this->getDatetimeFormat());
 
     $record = new Collection([
       'name' => $this->name,
       'level' => strtoupper($level),
       'levelBitmask' => new LogLevelMask($level),
-      'datetime' => new DateTime(),
+      'datetime' => $datetime,
       'message' => $message,
     ]);
   
@@ -118,6 +127,22 @@ class Log extends AbstractLogger
     }
 
     return $record;
+  }
+  
+  /**
+   * @return string
+   */
+  public function getDatetimeFormat(): string
+  {
+    return $this->datetimeFormat;
+  }
+  
+  /**
+   * @param string $datetimeFormat
+   */
+  public function setDatetimeFormat(string $datetimeFormat)
+  {
+    $this->datetimeFormat = $datetimeFormat;
   }
 
 }

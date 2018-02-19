@@ -4,6 +4,7 @@ namespace Demo;
 
 use Colibri\ColibriORM;
 use Colibri\Common\Configuration;
+use Colibri\Extension\EventSubscriber\RuntimeDebugger;
 use Colibri\Extension\EventSubscriber\SoftDeletion;
 use ProCard\Models\CoWorker;
 
@@ -41,4 +42,7 @@ if(file_exists($dev)) {
 
 ColibriORM::initialize($configuration);
 
-ColibriORM::getServiceContainer()->getDispatcher()->subscribeListener(new SoftDeletion($configuration));
+$dispatcher = ColibriORM::getServiceContainer()->getDispatcher();
+
+$dispatcher->subscribeListener(new SoftDeletion($configuration));
+$dispatcher->subscribeListener(new RuntimeDebugger());

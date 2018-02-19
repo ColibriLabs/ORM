@@ -14,6 +14,7 @@ class FastRepositoryQueryFactory extends AbstractRepositoryQueryFactory
   
   /**
    * @return Builder\Insert
+   * @throws \Colibri\Exception\NullPointerException
    */
   public function createInsertQuery()
   {

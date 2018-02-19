@@ -2,6 +2,7 @@
 
 namespace Colibri\Logger\Handler;
 
+use Colibri\Extension\ExtensionException;
 use Colibri\Logger\Collection\Collection;
 use Colibri\Logger\Handler\Mask\LogLevelMask;
 
@@ -12,35 +13,69 @@ use Colibri\Logger\Handler\Mask\LogLevelMask;
 class StreamHandler extends AbstractHandler {
 
   /**
-   * @var null|string
+   * @var resource
    */
-  protected $filepath = null;
-
+  protected $resource;
+  
   /**
    * StreamHandler constructor.
-   * @param $filepath
-   * @param int $level
+   * @param string|resource $source
+   * @param int             $level
+   * @throws ExtensionException
    */
-  public function __construct($filepath, $level = LogLevelMask::MASK_ALL)
+  public function __construct($source, $level = LogLevelMask::MASK_ALL)
   {
     parent::__construct($level);
     
-    if (!file_exists($filepath)) {
-      touch($filepath);
+    switch (true) {
+      case is_resource($source):
+        $this->resource = $source;
+        break;
+      case is_string($source):
+        $this->resource = $this->openStream($source);
+        break;
+      default:
+        throw new ExtensionException(sprintf('Source doesn\'t not supported'));
+        break;
     }
-    
-    $this->filepath = realpath($filepath);
   }
 
   /**
    * @param Collection $record
-   * @return null
+   * @return boolean
    */
   public function handle(Collection $record)
   {
-    file_put_contents($this->filepath, $this->formatter->format($record) . PHP_EOL, FILE_APPEND);
+    $stringMessage = $this->formatter->format($record) . PHP_EOL;
 
-    return true;
+    return (boolean) $this->writeStream($stringMessage);
+  }
+  
+  /**
+   * @param $message
+   * @return bool|int
+   */
+  private function writeStream($message)
+  {
+    return fwrite($this->resource, $message);
+  }
+  
+  /**
+   * @param $filename
+   * @return bool|resource
+   * @throws ExtensionException
+   */
+  private function openStream($filename)
+  {
+    if (!file_exists($filename)) {
+      throw new ExtensionException(sprintf('File path (%s) doesn\'t exist', $filename));
+    }
+  
+    if (!is_readable($filename)) {
+      throw new ExtensionException(sprintf('File path (%s) doesn\'t readable', $filename));
+    }
+    
+    return fopen($filename, 'a+');
   }
 
 

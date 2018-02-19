@@ -46,6 +46,7 @@ abstract class AbstractRepositoryQueryFactory
   
   /**
    * @return MetadataInterface
+   * @throws NullPointerException
    */
   public function getEntityMetadata()
   {
@@ -54,6 +55,7 @@ abstract class AbstractRepositoryQueryFactory
   
   /**
    * @return ConnectionInterface
+   * @throws NullPointerException
    */
   public function getConnection()
   {
@@ -62,6 +64,7 @@ abstract class AbstractRepositoryQueryFactory
   
   /**
    * @return QueryBuilder\Select
+   * @throws NullPointerException
    */
   public function createSelectQuery()
   {
@@ -76,6 +79,7 @@ abstract class AbstractRepositoryQueryFactory
   
   /**
    * @return QueryBuilder\Insert
+   * @throws NullPointerException
    */
   public function createInsertQuery()
   {
@@ -89,6 +93,7 @@ abstract class AbstractRepositoryQueryFactory
   
   /**
    * @return QueryBuilder\Delete
+   * @throws NullPointerException
    */
   public function createDeleteQuery()
   {
@@ -102,6 +107,7 @@ abstract class AbstractRepositoryQueryFactory
   
   /**
    * @return QueryBuilder\Update
+   * @throws NullPointerException
    */
   public function createUpdateQuery()
   {

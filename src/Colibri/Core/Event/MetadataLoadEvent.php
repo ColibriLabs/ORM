@@ -3,13 +3,12 @@
 namespace Colibri\Core\Event;
 
 use Colibri\Core\Domain\MetadataInterface;
-use Colibri\EventDispatcher\Event;
 
 /**
  * Class MetadataLoadEvent
  * @package Colibri\Core\Event
  */
-class MetadataLoadEvent extends Event
+class MetadataLoadEvent extends AbstractEvent
 {
   
   /**
