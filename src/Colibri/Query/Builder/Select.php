@@ -24,7 +24,7 @@ use Colibri\Query\Statement\Where;
 class Select extends Builder implements SelectInterface
 {
 
-  use Syntax\WhereTrait;
+  use Syntax\WhereTraitPHP7;
   use Syntax\GroupByTrait;
   use Syntax\OrderByTrait;
   use Syntax\ModifiersTrait;

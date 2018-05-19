@@ -15,6 +15,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 'On');
 
 $repository = new \ProCard\Models\CategoryRepository();
+$productes = new \ProCard\Models\ProductRepository();
 
 /** @var \ProCard\Models\Category $category */
 $category = $repository->retrieve(1);
@@ -23,7 +24,11 @@ $category->setModified(new DateTime());
 
 $repository->persist($category);
 
-$query = $repository->createSelectQuery();
+$product = $productes->retrieve(1);
+
+$productes->remove($product ?? new Product());
+
+$query = $repository->createFinder();
 
 $query->clearSelectColumns();
 
@@ -37,7 +42,7 @@ $query->where('a', 4);
 $query->setColumnAlias(new Column(Product::NAME), 'nm');
 
 $query->where('cre', 2);
-$sub = $query->subWhere(Cmp::VEL)->where('b', 3, '=', 'OR')->where('b', 4, '=', 'OR')->where('a', 5);
+$sub = $query->subWhere(Cmp::VEL)->and('b', 3, '=', 'OR')->where('b', 4, '=', 'OR')->where('a', 5);
 
 $sub->subWhere(Cmp::CONJUNCTION_XOR)
   ->where('c', 123)->where('c', 312, Cmp::EQ, Cmp::VEL);

@@ -107,7 +107,7 @@ abstract class Repository implements RepositoryInterface
     $this->setHydrator(new EntityHydrator($this));
     $this->setQueryFactory(new BasicRepositoryQueryFactory());
     
-    $this->query = $this->createSelectQuery();
+    $this->query = $this->createFinder();
   }
   
   /**
@@ -169,7 +169,7 @@ abstract class Repository implements RepositoryInterface
   /**
    * @return QueryBuilder\Select
    */
-  public function createSelectQuery()
+  public function createFinder()
   {
     return $this->getQueryFactory()->createSelectQuery();
   }
@@ -498,7 +498,7 @@ abstract class Repository implements RepositoryInterface
       
       // needed variables
       $metadata = $this->getEntityMetadata();
-      $remover = $this->createDeleteQuery();
+      $remover = $this->createRemover();
       $identifier = $this->getEntityIdentifier();
       $connection = $this->getConnection();
       $propertyIdentifier = $metadata->getName($identifier, Metadata::CAMILIZED);
@@ -618,19 +618,20 @@ abstract class Repository implements RepositoryInterface
    */
   public function getPersisterForEntity(EntityInterface $entity)
   {
-    return $this->isNewEntity($entity) ? $this->createInsertQuery() : $this->createUpdateQuery();
+    return $this->isNewEntity($entity) ? $this->createPersister() : $this->createUpdateQuery();
   }
   
   /**
    * @return QueryBuilder\Insert
    */
-  public function createInsertQuery()
+  public function createPersister()
   {
     return $this->getQueryFactory()->createInsertQuery();
   }
   
   /**
    * @return QueryBuilder\Update
+   * @deprecated
    */
   public function createUpdateQuery()
   {
@@ -640,7 +641,7 @@ abstract class Repository implements RepositoryInterface
   /**
    * @return QueryBuilder\Delete
    */
-  public function createDeleteQuery()
+  public function createRemover()
   {
     return $this->getQueryFactory()->createDeleteQuery();
   }

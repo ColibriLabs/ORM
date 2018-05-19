@@ -4,6 +4,8 @@ return [
   /// ...
   'colibri_orm' => [
     
+    'logs' => '/var/www/logs',
+    
     'identity' => __FILE__,
     'dev_configuration' => 'config.dev.php',
     'configuration_glob_pattern' => 'glob://%s/colibri_orm/*.(php|yml|ini|json)',
@@ -36,6 +38,12 @@ return [
           'separator' => '-',
         ],
       ],
+    ],
+    'runtimeDebugger' => [
+      'streamFilename' => '{colibri_orm.logs}/lifeCycle.log',
+      'logFormat' => '[:datetime] [:name.:level] :message',
+      'datetimeFormat' => 'Y-m-d H:i:s.u P',
+      'prefixName' => 'ORM.Runtime',
     ],
   ],
 ];

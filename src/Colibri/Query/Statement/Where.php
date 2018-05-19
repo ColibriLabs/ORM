@@ -16,7 +16,7 @@ use Colibri\Query\Statement\Comparison\Cmp;
 class Where extends AbstractStatement
 {
 
-  use Builder\Syntax\WhereTrait;
+  use Builder\Syntax\WhereTraitPHP7;
 
   /**
    * @var Collection

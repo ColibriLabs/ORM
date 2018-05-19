@@ -8,15 +8,26 @@ namespace Colibri\EventDispatcher;
  */
 interface EventInterface
 {
-
+  
   /**
-   * @return mixed
+   * @return bool
    */
-  public function isStopped();
-
+  public function isStopped(): bool;
+  
   /**
-   * @return mixed
+   * @return EventInterface
    */
-  public function stop();
+  public function stop(): EventInterface;
+  
+  /**
+   * @return string
+   */
+  public function getName(): string;
+  
+  /**
+   * @param string $name
+   * @return EventInterface
+   */
+  public function setName(string $name): EventInterface;
 
 }

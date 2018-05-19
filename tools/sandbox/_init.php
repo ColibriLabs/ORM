@@ -40,9 +40,11 @@ if(file_exists($dev)) {
   $configuration->merge(new Configuration(include_once $dev));
 }
 
+$configuration->handlePlaceholders();
+
 ColibriORM::initialize($configuration);
 
 $dispatcher = ColibriORM::getServiceContainer()->getDispatcher();
 
 $dispatcher->subscribeListener(new SoftDeletion($configuration));
-$dispatcher->subscribeListener(new RuntimeDebugger());
+$dispatcher->subscribeListener(new RuntimeDebugger($configuration));

@@ -27,9 +27,10 @@ class Dispatcher implements DispatcherInterface
   public function dispatch($eventName, EventInterface $event = null)
   {
     if ($this->hasListeners($eventName)) {
-      if ($event === null)
-        $event = new Event();
-
+      
+      $event = $event ?? new Event();
+      $event->setName($eventName);
+      
       foreach ($this->getListeners($eventName) as $listener) {
         if (is_callable($listener, true)) {
           call_user_func_array($listener, [$event, $eventName, $this]);

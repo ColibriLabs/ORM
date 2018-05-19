@@ -9,10 +9,12 @@ use Colibri\Core\ClassManager;
 use Colibri\Core\Hydrator\AbstractHydratorEntity;
 use Colibri\Core\Repository\AbstractRepositoryQueryFactory;
 use Colibri\Core\ResultSet\ResultSet;
+use Colibri\Core\Storage\FinderInterface;
+use Colibri\Core\Storage\PersisterInterface;
+use Colibri\Core\Storage\RemoverInterface;
 use Colibri\EventDispatcher\DispatcherInterface;
 use Colibri\EventDispatcher\EventInterface;
 use Colibri\Exception\NotFoundException;
-use Colibri\Query\Builder;
 use Colibri\Query\Builder\Delete;
 use Colibri\Query\Builder\Insert;
 use Colibri\Query\Builder\Select as SelectQueryBuilder;
@@ -182,31 +184,37 @@ interface RepositoryInterface
   /**
    * @return Select
    */
-  public function createSelectQuery();
+  public function createFinder();
 
   /**
    * @return Insert
    */
-  public function createInsertQuery();
+  public function createPersister();
 
   /**
    * @return Delete
    */
-  public function createDeleteQuery();
-
-  /**
-   * @return Update
-   */
-  public function createUpdateQuery();
+  public function createRemover();
   
   /**
-   * @return Builder|Delete|Update
+   * @return RemoverInterface
    */
   public function getRemover();
   
   /**
-   * @return Builder|Insert|Update
+   * @return PersisterInterface
    */
   public function getPersister();
+  
+  /**
+   * @return FinderInterface
+   */
+  public function getFinder();
+  
+  /**
+   * @return Update
+   * @deprecated
+   */
+  public function createUpdateQuery();
 
 }

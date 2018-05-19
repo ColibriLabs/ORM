@@ -12,23 +12,26 @@ use Colibri\Common\ArrayableInterface;
 use Colibri\Common\Inflector;
 use Colibri\Common\StringableInterface;
 use Colibri\Core\Domain\EntityInterface;
+use Colibri\Core\Domain\MetadataInterface;
 use Colibri\Core\Event\EntityLifecycleEvent;
 use Colibri\Core\Event\FinderExecutionEvent;
 use Colibri\Core\Event\MetadataLoadEvent;
 use Colibri\Core\Event\OrmEventInterface;
 use Colibri\Core\ORMEvents;
+use Colibri\Core\ProxyInterface;
 use Colibri\EventDispatcher\Event;
-use Colibri\EventDispatcher\EventSubscriber;
+use Colibri\Extension\AbstractExtension;
 use Colibri\Logger\Formatter\LineFormatter;
 use Colibri\Logger\Handler\Mask\LogLevelMask;
 use Colibri\Logger\Handler\StreamRotatedHandler;
 use Colibri\Logger\Log;
+use Colibri\Parameters\ParametersCollection;
 
 /**
  * Class RuntimeDebugger
  * @package Colibri\Extension\EventSubscriber
  */
-class RuntimeDebugger implements EventSubscriber
+class RuntimeDebugger extends AbstractExtension implements ProxyInterface
 {
   
   /**
@@ -37,26 +40,51 @@ class RuntimeDebugger implements EventSubscriber
   protected $logger;
   
   /**
-   * RuntimeDebugger constructor.
+   * @var bool
    */
-  public function __construct()
-  {
-    $name = 'ORM.Runtime';
-    
-    $handler = new StreamRotatedHandler('/var/www/logs/lifeCycle.log', LogLevelMask::MASK_DEBUG);
-    $handler->setFormatter(new LineFormatter('[:datetime] [:name.:level] :message'));
-    
-    $this->logger = new Log($name);
-    $this->logger->setDatetimeFormat('Y-m-d H:i:s.u P');
-    $this->logger->pushHandler('stream', $handler);
-  }
+  protected $isInitialized = false;
   
   /**
    * Destructor
    */
   public function __destruct()
   {
-    $this->logger->debug(null);
+    $this->debug(null);
+  }
+  
+  /**
+   * @inheritDoc
+   */
+  public function getNameNS()
+  {
+    return 'runtimeDebugger';
+  }
+  
+  /**
+   * @inheritDoc
+   */
+  public function initialize()
+  {
+    if ($this->isInitialized() === false) {
+      $configuration = $this->getConfiguration();
+      
+      $handler = new StreamRotatedHandler($configuration->get('streamFilename'), LogLevelMask::MASK_DEBUG);
+      $handler->setFormatter(new LineFormatter($configuration->get('logFormat')));
+  
+      $this->logger = new Log($configuration->get('prefixName'));
+      $this->logger->setDatetimeFormat($configuration->get('datetimeFormat'));
+      $this->logger->pushHandler('stream', $handler);
+      
+      $this->isInitialized = true;
+    }
+  }
+  
+  /**
+   * @inheritDoc
+   */
+  public function isInitialized()
+  {
+    return $this->isInitialized;
   }
   
   /**
@@ -78,34 +106,57 @@ class RuntimeDebugger implements EventSubscriber
   
   /**
    * @param Event $event
-   * @param string $eventName
    * @return null|string
    */
-  private function formatEventMessage(Event $event, $eventName = null)
+  private function formatEventMessage(Event $event)
   {
     $message = null;
+    $entityName = null;
     
     if ($event instanceof OrmEventInterface) {
       switch (true) {
         case ($event instanceof EntityLifecycleEvent):
+          $entityName = $event->getRepository()->getEntityName();
           $message = $this->entityToString($event->getEntity());
           break;
         case ($event instanceof MetadataLoadEvent):
-          $message = sprintf('Metadata for %s entity loaded', $event->getMetadata()->getEntityClass());
+          $message = $this->metadataToString($event->getMetadata());
+          $entityName = $event->getMetadata()->getEntityClass();
           break;
         case ($event instanceof FinderExecutionEvent):
+          $entityName = $event->getRepository()->getEntityName();
           $query = $event->getSelectQuery();
           $message = sprintf("SQL: (%s)", str_replace("\n", "\x20", $query->toSQL()));
           break;
       }
     }
     
-    $eventName = Inflector::underscore($eventName);
-    $eventName = strtoupper($eventName);
-    
+    $eventName = sprintf('%s::%s', (new \ReflectionObject($event))->getShortName(), $event->getName());
     $separator = str_repeat('-', 32);
     
-    return sprintf("%s\n[%s]\n%s", $separator, $eventName, $message);
+    return sprintf("%s\n[%s]\nEntityClassName: %s\n%s", $separator, $eventName, $entityName, $message);
+  }
+  
+  /**
+   * @param MetadataInterface $metadata
+   * @return string
+   */
+  private function metadataToString(MetadataInterface $metadata)
+  {
+    $string = "Metadata:";
+    $defaults = $metadata->getColumnsDefaultValues();
+    
+    foreach ($metadata->getNames() as $columnName) {
+      $string = sprintf("%s\n%s:\n\tPRIMARY=%s, UNSIGNED=%s, NULLABLE=%s, DEFAULT=%s",
+        $string, $columnName,
+        $metadata->isPrimary($columnName) ? 'Y' : 'N',
+        $metadata->isNullable($columnName) ? 'Y' : 'N',
+        $metadata->isUnsigned($columnName) ? 'Y' : 'N',
+        $this->stringifyValue($defaults[$columnName] ?? null)
+      );
+    }
+    
+    return $string;
   }
   
   /**
@@ -114,16 +165,14 @@ class RuntimeDebugger implements EventSubscriber
    */
   private function entityToString(EntityInterface $entity)
   {
-    $template = "EntityName: %s\nValues: %s";
-    
-    $entityName = (new \ReflectionObject($entity))->getShortName();
+    $template     = "Values: %s";
     $entityValues = null;
     
     foreach ($entity->toArray() as $propertyName => $propertyValue) {
       $entityValues = sprintf("%s\n\t%s = '%s'", $entityValues, $propertyName, $this->stringifyValue($propertyValue));
     }
     
-    return sprintf($template, $entityName, $entityValues);
+    return sprintf($template, $entityValues);
   }
   
   /**
@@ -162,11 +211,22 @@ class RuntimeDebugger implements EventSubscriber
   }
   
   /**
+   * @param $message
+   * @param array $context
+   */
+  public function debug($message, array $context = [])
+  {
+    $this->initialize();
+  
+    $this->logger->debug($message, $context);
+  }
+  
+  /**
    * @param MetadataLoadEvent $metadataEvent
    */
   public function onMetadataLoad(MetadataLoadEvent $metadataEvent)
   {
-    $this->logger->debug($this->formatEventMessage($metadataEvent, 'onMetadataLoad'));
+    $this->debug($this->formatEventMessage($metadataEvent));
   }
   
   /**
@@ -174,7 +234,7 @@ class RuntimeDebugger implements EventSubscriber
    */
   public function onEntityLoad(EntityLifecycleEvent $lifecycleEvent)
   {
-    $this->logger->debug($this->formatEventMessage($lifecycleEvent, 'onEntityLoad'));
+    $this->debug($this->formatEventMessage($lifecycleEvent));
   }
   
   /**
@@ -182,7 +242,7 @@ class RuntimeDebugger implements EventSubscriber
    */
   public function beforeFindExecute(FinderExecutionEvent $executionEvent)
   {
-    $this->logger->debug($this->formatEventMessage($executionEvent, 'beforeFindExecute'));
+    $this->debug($this->formatEventMessage($executionEvent));
   }
   
   /**
@@ -190,7 +250,7 @@ class RuntimeDebugger implements EventSubscriber
    */
   public function beforePersist(EntityLifecycleEvent $lifecycleEvent)
   {
-    $this->logger->debug($this->formatEventMessage($lifecycleEvent, 'beforePersist'));
+    $this->debug($this->formatEventMessage($lifecycleEvent));
   }
   
   /**
@@ -198,7 +258,7 @@ class RuntimeDebugger implements EventSubscriber
    */
   public function beforeRemove(EntityLifecycleEvent $lifecycleEvent)
   {
-    $this->logger->debug($this->formatEventMessage($lifecycleEvent, 'beforeRemove'));
+    $this->debug($this->formatEventMessage($lifecycleEvent));
   }
   
   /**
@@ -206,7 +266,7 @@ class RuntimeDebugger implements EventSubscriber
    */
   public function afterFindExecute(FinderExecutionEvent $executionEvent)
   {
-    $this->logger->debug($this->formatEventMessage($executionEvent, 'afterFindExecute'));
+    $this->debug($this->formatEventMessage($executionEvent));
   }
   
   /**
@@ -214,7 +274,7 @@ class RuntimeDebugger implements EventSubscriber
    */
   public function afterPersist(EntityLifecycleEvent $lifecycleEvent)
   {
-    $this->logger->debug($this->formatEventMessage($lifecycleEvent, 'afterPersist'));
+    $this->debug($this->formatEventMessage($lifecycleEvent));
   }
   
   /**
@@ -222,7 +282,7 @@ class RuntimeDebugger implements EventSubscriber
    */
   public function afterRemove(EntityLifecycleEvent $lifecycleEvent)
   {
-    $this->logger->debug($this->formatEventMessage($lifecycleEvent, 'afterRemove'));
+    $this->debug($this->formatEventMessage($lifecycleEvent));
   }
   
   /**
