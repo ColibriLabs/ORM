@@ -19,10 +19,11 @@ use Colibri\Core\Event\EntityLifecycleEvent;
 use Colibri\Core\Event\FinderExecutionEvent;
 use Colibri\Core\Hydrator\AbstractHydratorEntity;
 use Colibri\Core\Hydrator\EntityHydrator;
-use Colibri\Core\Repository\BasicRepositoryQueryFactory;
 use Colibri\Core\Repository\AbstractRepositoryQueryFactory;
+use Colibri\Core\Repository\BasicRepositoryQueryFactory;
 use Colibri\Core\ResultSet\ResultSet;
 use Colibri\Core\ResultSet\ResultSetIterator;
+use Colibri\Core\Storage\FinderInterface;
 use Colibri\EventDispatcher\DispatcherInterface;
 use Colibri\EventDispatcher\EventInterface;
 use Colibri\Exception\BadArgumentException;
@@ -94,7 +95,6 @@ abstract class Repository implements RepositoryInterface
   /**
    * EntityRepository constructor.
    * @param string $entityName
-   * @throws NotFoundException
    */
   public function __construct($entityName)
   {
@@ -114,9 +114,7 @@ abstract class Repository implements RepositoryInterface
    * @param       $name
    * @param array $arguments
    * @return mixed
-   * @throws BadArgumentException
    * @throws BadCallMethodException
-   * @throws NotFoundException
    */
   public function __call($name, array $arguments = [])
   {
@@ -151,7 +149,6 @@ abstract class Repository implements RepositoryInterface
   
   /**
    * @return MetadataInterface
-   * @throws NotFoundException
    */
   public function getEntityMetadata()
   {
@@ -250,7 +247,7 @@ abstract class Repository implements RepositoryInterface
     
     // executes a prepared statement
     $statement->execute();
-  
+    
     $this->dispatchEvent(ORMEvents::afterFindExecute, new FinderExecutionEvent($this, $selectQuery));
     
     // reset qb to previous state
@@ -288,7 +285,6 @@ abstract class Repository implements RepositoryInterface
   
   /**
    * @return $this
-   * @throws NotFoundException
    */
   public function cleanupQuery()
   {
@@ -305,7 +301,6 @@ abstract class Repository implements RepositoryInterface
    * @param $criteria
    * @return $this
    * @throws NotSupportedException
-   * @throws NotFoundException
    */
   protected function applyCriteria($criteria)
   {
@@ -339,8 +334,6 @@ abstract class Repository implements RepositoryInterface
   
   /**
    * @return ResultSet
-   * @throws NotSupportedException
-   * @throws NotFoundException
    */
   public function findAll()
   {
@@ -350,8 +343,6 @@ abstract class Repository implements RepositoryInterface
   /**
    * @param $criteria
    * @return $this
-   * @throws NotSupportedException
-   * @throws NotFoundException
    */
   public function filterBy($criteria)
   {
@@ -363,7 +354,6 @@ abstract class Repository implements RepositoryInterface
   /**
    * @param string $criteria
    * @return $this
-   * @throws BadArgumentException
    */
   public function groupBy($criteria)
   {
@@ -386,9 +376,6 @@ abstract class Repository implements RepositoryInterface
   /**
    * @param int $id
    * @return EntityInterface
-   * @throws BadArgumentException
-   * @throws NotSupportedException
-   * @throws NotFoundException
    */
   public function retrieve($id)
   {
@@ -399,8 +386,6 @@ abstract class Repository implements RepositoryInterface
    * @param $criteria
    * @return EntityInterface
    * @throws BadArgumentException
-   * @throws NotSupportedException
-   * @throws NotFoundException
    */
   public function findOneBy($criteria)
   {
@@ -414,8 +399,6 @@ abstract class Repository implements RepositoryInterface
   /**
    * @param $criteria
    * @return EntityInterface
-   * @throws NotSupportedException
-   * @throws NotFoundException
    */
   public function findFirst($criteria = null)
   {
@@ -431,7 +414,6 @@ abstract class Repository implements RepositoryInterface
    * @param EntityInterface $entity
    * @return $this
    * @throws NotSupportedException
-   * @throws NotFoundException
    */
   public function persist(EntityInterface $entity)
   {
@@ -444,19 +426,12 @@ abstract class Repository implements RepositoryInterface
       $connection = $this->getConnection();
       $metadata = $this->getEntityMetadata();
       $isEntityNew = $this->isNewEntity($entity);
-      $entityData = [];
-      
-      foreach ($this->getHydrator()->extract($entity) as $sqlName => $value) {
-        if ($sqlName !== $metadata->getIdentifier() && null !== $value) {
-          $entityData[$metadata->getRawSQLName($metadata->getName($sqlName))] = $value;
-        }
-      }
+      $entityData = $this->getEntityDataArray($entity);
       
       $persister = $this->getPersisterForEntity($entity);
       $persister->setDataBatch($entityData);
       
       $propertyIdentifier = $metadata->getName($metadata->getIdentifier(), Metadata::CAMILIZED);
-      
       
       if (!$isEntityNew && $reflection->hasProperty($propertyIdentifier)) {
         $persister->addConditions($metadata->getIdentifier(), $entity->getByProperty($propertyIdentifier));
@@ -483,16 +458,33 @@ abstract class Repository implements RepositoryInterface
   
   /**
    * @param EntityInterface $entity
+   * @return array
+   */
+  protected function getEntityDataArray(EntityInterface $entity)
+  {
+    $metadata = $this->getEntityMetadata();
+    $array = [];
+  
+    foreach ($this->getHydrator()->extract($entity) as $sqlName => $value) {
+      if ($sqlName !== $metadata->getIdentifier() && null !== $value) {
+        $array[$metadata->getRawSQLName($metadata->getName($sqlName))] = $value;
+      }
+    }
+    
+    return $array;
+  }
+  
+  /**
+   * @param EntityInterface $entity
    * @return $this
    * @throws NotSupportedException
-   * @throws NotFoundException
    */
   public function remove(EntityInterface $entity)
   {
     $reflection = $this->getEntityClassReflection();
     
     if ($reflection->isInstance($entity)) {
-  
+      
       // trigger event for entity and dispatcher on before remove
       $this->dispatchEvent(ORMEvents::beforeRemove, new EntityLifecycleEvent($this, $entity));
       
@@ -502,7 +494,7 @@ abstract class Repository implements RepositoryInterface
       $identifier = $this->getEntityIdentifier();
       $connection = $this->getConnection();
       $propertyIdentifier = $metadata->getName($identifier, Metadata::CAMILIZED);
-
+      
       // refinement of the request
       $remover->addConditions($identifier, $entity->getByProperty($propertyIdentifier));
       $remover->setLimit(1)->setOffset(0);
@@ -514,7 +506,7 @@ abstract class Repository implements RepositoryInterface
       
       // reset identifier for removed entity
       $entity->setByProperty($propertyIdentifier, null);
-  
+      
       // trigger event for entity and dispatcher on after remove and all actions
       $this->dispatchEvent(ORMEvents::afterRemove, new EntityLifecycleEvent($this, $entity));
       
@@ -560,7 +552,6 @@ abstract class Repository implements RepositoryInterface
   /**
    * @param EntityInterface $entity
    * @return bool
-   * @throws NotFoundException
    */
   public function isNewEntity(EntityInterface $entity)
   {
@@ -614,7 +605,6 @@ abstract class Repository implements RepositoryInterface
   /**
    * @param EntityInterface $entity
    * @return QueryBuilder\Insert|QueryBuilder\Update
-   * @throws NotFoundException
    */
   public function getPersisterForEntity(EntityInterface $entity)
   {
@@ -651,7 +641,7 @@ abstract class Repository implements RepositoryInterface
    */
   public function getRemover()
   {
-    return null;
+    throw new NotSupportedException(sprintf('Method %s not implemented yet', __METHOD__));
   }
   
   /**
@@ -659,7 +649,15 @@ abstract class Repository implements RepositoryInterface
    */
   public function getPersister()
   {
-    return null;
+    throw new NotSupportedException(sprintf('Method %s not implemented yet', __METHOD__));
+  }
+  
+  /**
+   * @inheritDoc
+   */
+  public function getFinder()
+  {
+    throw new NotSupportedException(sprintf('Method %s not implemented yet', __METHOD__));
   }
   
   /**
