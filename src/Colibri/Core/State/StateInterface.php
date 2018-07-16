@@ -8,15 +8,15 @@ namespace Colibri\Core\State;
  */
 interface StateInterface
 {
-  
-  /**
-   * @return StateIdentifierInterface
-   */
-  public function getIdentifier();
-  
-  /**
-   * @return StateIdentifierInterface
-   */
-  public function getOwner();
-  
+    
+    /**
+     * @return StateIdentifierInterface
+     */
+    public function getIdentifier();
+    
+    /**
+     * @return StateIdentifierInterface
+     */
+    public function getOwner();
+    
 }

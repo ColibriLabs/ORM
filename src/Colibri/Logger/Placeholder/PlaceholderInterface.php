@@ -10,12 +10,12 @@ use Colibri\Logger\Collection\Collection;
  */
 interface PlaceholderInterface
 {
-  
-  /**
-   * @param Collection $record
-   *
-   * @return void
-   */
-  public function complement(Collection $record);
-  
+    
+    /**
+     * @param Collection $record
+     *
+     * @return void
+     */
+    public function complement(Collection $record);
+    
 }

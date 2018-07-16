@@ -8,15 +8,15 @@ namespace Colibri\Core\State;
  */
 interface StateIdentifierInterface
 {
-  
-  /**
-   * @return string
-   */
-  public function getId(): string;
-  
-  /**
-   * @return string
-   */
-  public function getObjectName(): string;
-  
+    
+    /**
+     * @return string
+     */
+    public function getId(): string;
+    
+    /**
+     * @return string
+     */
+    public function getObjectName(): string;
+    
 }

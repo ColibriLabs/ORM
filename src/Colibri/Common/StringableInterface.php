@@ -8,10 +8,10 @@ namespace Colibri\Common;
  */
 interface StringableInterface
 {
-  
-  /**
-   * @return string
-   */
-  public function toString(): string;
-
+    
+    /**
+     * @return string
+     */
+    public function toString(): string;
+    
 }

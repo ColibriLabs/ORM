@@ -11,35 +11,36 @@ use Colibri\Query\Expression;
  */
 class Subquery extends Expression
 {
-
-  /**
-   * @var Select|null
-   */
-  protected $subquery = null;
-
-  /**
-   * Subquery constructor.
-   * @param Select $select
-   */
-  public function __construct(Select $select)
-  {
-    $this->subquery = $select;
-  }
-
-  /**
-   * @return string
-   */
-  public function toSQL()
-  {
-    return sprintf('(%s)', $this->subquery->toSQL());
-  }
-
-  /**
-   * @return string
-   */
-  public function __toString()
-  {
-    return $this->toSQL();
-  }
-
+    
+    /**
+     * @var Select|null
+     */
+    protected $subquery = null;
+    
+    /**
+     * Subquery constructor.
+     *
+     * @param Select $select
+     */
+    public function __construct(Select $select)
+    {
+        $this->subquery = $select;
+    }
+    
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->toSQL();
+    }
+    
+    /**
+     * @return string
+     */
+    public function toSQL()
+    {
+        return sprintf('(%s)', $this->subquery->toSQL());
+    }
+    
 }

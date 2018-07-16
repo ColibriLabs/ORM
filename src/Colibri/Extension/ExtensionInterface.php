@@ -10,21 +10,22 @@ use Colibri\Parameters\ParametersCollection;
  */
 interface ExtensionInterface
 {
-
-  /**
-   * @param ParametersCollection $collection
-   * @return mixed
-   */
-  public function setConfiguration(ParametersCollection $collection);
-  
-  /**
-   * @return ParametersCollection
-   */
-  public function getConfiguration();
-  
-  /**
-   * @return string
-   */
-  public function getNameNS();
-
+    
+    /**
+     * @param ParametersCollection $collection
+     *
+     * @return mixed
+     */
+    public function setConfiguration(ParametersCollection $collection);
+    
+    /**
+     * @return ParametersCollection
+     */
+    public function getConfiguration();
+    
+    /**
+     * @return string
+     */
+    public function getNameNS();
+    
 }

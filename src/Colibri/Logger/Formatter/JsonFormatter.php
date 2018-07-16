@@ -10,28 +10,30 @@ use Colibri\Logger\Collection\Collection;
  */
 class JsonFormatter extends AbstractFormatter
 {
-
-  /**
-   * @var bool
-   */
-  protected $prettyPrint = false;
-
-  /**
-   * JsonFormatter constructor.
-   * @param bool $prettyPrint
-   */
-  public function __construct($prettyPrint = false)
-  {
-    $this->prettyPrint = $prettyPrint;
-  }
-
-  /**
-   * @param Collection $record
-   * @return string
-   */
-  public function format(Collection $record)
-  {
-    return json_encode($this->prepare($record), ($this->prettyPrint ? JSON_PRETTY_PRINT : 0));
-  }
-
+    
+    /**
+     * @var bool
+     */
+    protected $prettyPrint = false;
+    
+    /**
+     * JsonFormatter constructor.
+     *
+     * @param bool $prettyPrint
+     */
+    public function __construct($prettyPrint = false)
+    {
+        $this->prettyPrint = $prettyPrint;
+    }
+    
+    /**
+     * @param Collection $record
+     *
+     * @return string
+     */
+    public function format(Collection $record)
+    {
+        return json_encode($this->prepare($record), ($this->prettyPrint ? JSON_PRETTY_PRINT : 0));
+    }
+    
 }

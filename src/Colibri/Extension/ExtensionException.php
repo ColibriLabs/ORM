@@ -8,5 +8,5 @@ namespace Colibri\Extension;
  */
 class ExtensionException extends \Exception
 {
-  
+    
 }

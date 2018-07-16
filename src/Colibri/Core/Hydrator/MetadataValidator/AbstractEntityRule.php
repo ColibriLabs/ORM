@@ -12,21 +12,21 @@ use Colibri\Validator\Rules\AbstractRule;
  */
 abstract class AbstractEntityRule extends AbstractRule
 {
-  
-  /**
-   * @return bool
-   */
-  public function validate(): boolean
-  {
-    return false;
-  }
-  
-  /**
-   * @return MessageInterface
-   */
-  protected function setupDefaultMessage(): MessageInterface
-  {
-    return new WarningMessage(sprintf('Validator rule [%s] was failure when validation was executed', static::class));
-  }
-  
+    
+    /**
+     * @return bool
+     */
+    public function validate(): boolean
+    {
+        return false;
+    }
+    
+    /**
+     * @return MessageInterface
+     */
+    protected function setupDefaultMessage(): MessageInterface
+    {
+        return new WarningMessage(sprintf('Validator rule [%s] was failure when validation was executed', static::class));
+    }
+    
 }

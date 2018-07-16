@@ -8,7 +8,6 @@ namespace Colibri\Core\Hydrator;
  */
 class EntityHydrator extends AbstractHydratorEntity
 {
-  
-  
-  
+
+
 }

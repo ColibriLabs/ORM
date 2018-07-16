@@ -10,22 +10,23 @@ use Colibri\Validator\MessageInterface;
  */
 class NoticeMessage extends AbstractMessage
 {
-  
-  /**
-   * NoticeMessage constructor.
-   * @param string $message
-   */
-  public function __construct($message)
-  {
-    parent::__construct($message, MessageInterface::NOTICE_CODE);
-  }
-  
-  /**
-   * @return string
-   */
-  public function toString(): string
-  {
-    return sprintf('Notice: %s', $this->toString());
-  }
-  
+    
+    /**
+     * NoticeMessage constructor.
+     *
+     * @param string $message
+     */
+    public function __construct($message)
+    {
+        parent::__construct($message, MessageInterface::NOTICE_CODE);
+    }
+    
+    /**
+     * @return string
+     */
+    public function toString(): string
+    {
+        return sprintf('Notice: %s', $this->toString());
+    }
+    
 }

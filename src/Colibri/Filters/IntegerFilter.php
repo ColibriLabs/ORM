@@ -8,13 +8,13 @@ namespace Colibri\Filters;
  */
 class IntegerFilter extends AbstractFilter
 {
-  
-  /**
-   * @inheritdoc
-   */
-  public function apply($input)
-  {
-    return (integer)$input;
-  }
-  
+    
+    /**
+     * @inheritdoc
+     */
+    public function apply($input)
+    {
+        return (integer) $input;
+    }
+    
 }

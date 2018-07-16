@@ -8,15 +8,15 @@ namespace Colibri\Core;
  */
 interface ProxyInterface
 {
-
-  /**
-   * @return mixed
-   */
-  public function initialize();
-
-  /**
-   * @return boolean
-   */
-  public function isInitialized();
-
+    
+    /**
+     * @return mixed
+     */
+    public function initialize();
+    
+    /**
+     * @return boolean
+     */
+    public function isInitialized();
+    
 }

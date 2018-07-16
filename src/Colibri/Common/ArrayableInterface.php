@@ -8,10 +8,10 @@ namespace Colibri\Common;
  */
 interface ArrayableInterface
 {
-
-  /**
-   * @return array
-   */
-  public function toArray();
-
+    
+    /**
+     * @return array
+     */
+    public function toArray();
+    
 }

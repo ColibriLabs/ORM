@@ -2,22 +2,23 @@
 
 namespace Colibri\Query\Expr\Func;
 
-use Colibri\Query\Expr\Func;
 use Colibri\Exception\BadCallMethodException;
+use Colibri\Query\Expr\Func;
 
 class Password extends Func
 {
-
-  /**
-   * Password constructor.
-   * MySQL Function PASSWORD
-   *
-   * @param array $parameters
-   * @throws BadCallMethodException
-   */
-  public function __construct(...$parameters)
-  {
-    parent::__construct('PASSWORD', $parameters);
-  }
-  
+    
+    /**
+     * Password constructor.
+     * MySQL Function PASSWORD
+     *
+     * @param array $parameters
+     *
+     * @throws BadCallMethodException
+     */
+    public function __construct(...$parameters)
+    {
+        parent::__construct('PASSWORD', $parameters);
+    }
+    
 }

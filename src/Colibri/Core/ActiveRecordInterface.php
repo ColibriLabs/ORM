@@ -8,15 +8,15 @@ namespace Colibri\Core;
  */
 interface ActiveRecordInterface
 {
-
-  /**
-   * @return integer
-   */
-  public function save();
-
-  /**
-   * @return integer
-   */
-  public function delete();
-
+    
+    /**
+     * @return integer
+     */
+    public function save();
+    
+    /**
+     * @return integer
+     */
+    public function delete();
+    
 }

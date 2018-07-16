@@ -8,10 +8,10 @@ namespace Colibri\EventDispatcher;
  */
 interface EventSubscriber
 {
-  
-  /**
-   * @return array
-   */
-  public function getEvents();
-  
+    
+    /**
+     * @return array
+     */
+    public function getEvents();
+    
 }

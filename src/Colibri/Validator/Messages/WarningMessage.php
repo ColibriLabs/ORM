@@ -10,22 +10,23 @@ use Colibri\Validator\MessageInterface;
  */
 class WarningMessage extends AbstractMessage
 {
-  
-  /**
-   * WarningMessage constructor.
-   * @param string $message
-   */
-  public function __construct($message)
-  {
-    parent::__construct($message, MessageInterface::WARNING_CODE);
-  }
-  
-  /**
-   * @return string
-   */
-  public function toString(): string
-  {
-    return sprintf('Warning: %s', $this->toString());
-  }
-  
+    
+    /**
+     * WarningMessage constructor.
+     *
+     * @param string $message
+     */
+    public function __construct($message)
+    {
+        parent::__construct($message, MessageInterface::WARNING_CODE);
+    }
+    
+    /**
+     * @return string
+     */
+    public function toString(): string
+    {
+        return sprintf('Warning: %s', $this->toString());
+    }
+    
 }

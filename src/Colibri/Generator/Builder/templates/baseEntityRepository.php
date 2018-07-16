@@ -8,10 +8,10 @@ use Colibri\Schema\Field;
 use Colibri\Schema\Table;
 
 /**
- * @var $this Template
- * @var $table Table
+ * @var $this          Template
+ * @var $table         Table
  * @var $primaryFields Collection|Field[]
- * @var $namespace string
+ * @var $namespace     string
  */
 
 echo "<?php\n";
@@ -40,39 +40,39 @@ use <?php echo $namespaceEntityClass; ?>;
 use <?php echo $resultSetReflection->getName(); ?>;
 
 /**
- * Magic methods for query-builder and access to the fields data
- *
-<?php foreach($table->getFields() as $field): ?>
- * @method <?php echo $entityClass; ?> findOneBy<?php echo $field->getClassifyName(); ?>($<?php echo $field->getColumn(); ?>);
- * @method <?php echo $resultSetReflection->getShortName(); ?> findBy<?php echo $field->getClassifyName(); ?>($<?php echo $field->getColumn(); ?>);
- * @method <?php echo $commonClass; ?> filterBy<?php echo $field->getClassifyName(); ?>($<?php echo $field->getColumn(); ?>, $cmp = Cmp::EQ);
- * @method <?php echo $commonClass; ?> orderBy<?php echo $field->getClassifyName(); ?>($vector = OrderBy::ASC);
- * @method <?php echo $commonClass; ?> groupBy<?php echo $field->getClassifyName(); ?>();
+* Magic methods for query-builder and access to the fields data
+*
+<?php foreach ($table->getFields() as $field): ?>
+  * @method <?php echo $entityClass; ?> findOneBy<?php echo $field->getClassifyName(); ?>($<?php echo $field->getColumn(); ?>);
+  * @method <?php echo $resultSetReflection->getShortName(); ?> findBy<?php echo $field->getClassifyName(); ?>($<?php echo $field->getColumn(); ?>);
+  * @method <?php echo $commonClass; ?> filterBy<?php echo $field->getClassifyName(); ?>($<?php echo $field->getColumn(); ?>, $cmp = Cmp::EQ);
+  * @method <?php echo $commonClass; ?> orderBy<?php echo $field->getClassifyName(); ?>($vector = OrderBy::ASC);
+  * @method <?php echo $commonClass; ?> groupBy<?php echo $field->getClassifyName(); ?>();
 <?php endforeach; ?>
 */
 
 class <?php echo $class; ?> extends Repository
 {
-  
-  /**
-   * <?php echo $class; ?> constructor.
-   */
-  public function __construct()
-  {
-    parent::__construct(<?php echo $entityClass; ?>::class);
-  }
-  
-  /**
-   * @param integer $id Identifier
-   * @return <?php echo $entityClass; ?> Entity instance
-   */
-  public static function findByPK($id)
-  {
-    /** @var <?php echo $entityClass; ?> $entity */
-    $repository = new <?php echo $commonClass; ?>();
-    $entity = $repository->retrieve($id);
-    
-    return $entity;
-  }
+
+/**
+* <?php echo $class; ?> constructor.
+*/
+public function __construct()
+{
+parent::__construct(<?php echo $entityClass; ?>::class);
+}
+
+/**
+* @param integer $id Identifier
+* @return <?php echo $entityClass; ?> Entity instance
+*/
+public static function findByPK($id)
+{
+/** @var <?php echo $entityClass; ?> $entity */
+$repository = new <?php echo $commonClass; ?>();
+$entity = $repository->retrieve($id);
+
+return $entity;
+}
 
 }

@@ -10,5 +10,5 @@ use Psr\Log\LogLevel as PsrLogLevel;
  */
 class LogLevel extends PsrLogLevel
 {
-  const EVENT = 'event';
+    const EVENT = 'event';
 }

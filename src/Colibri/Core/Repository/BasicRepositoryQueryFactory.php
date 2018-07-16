@@ -8,5 +8,5 @@ namespace Colibri\Core\Repository;
  */
 class BasicRepositoryQueryFactory extends AbstractRepositoryQueryFactory
 {
-  
+
 }

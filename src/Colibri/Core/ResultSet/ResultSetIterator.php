@@ -10,19 +10,20 @@ use Colibri\Core\Domain\RepositoryInterface;
  */
 class ResultSetIterator extends ResultSet
 {
-
-  /**
-   * ResultSetIterator constructor.
-   * @param RepositoryInterface $repository
-   * @param \Iterator $iterator
-   */
-  public function __construct(RepositoryInterface $repository, \Iterator $iterator)
-  {
-    parent::__construct($iterator);
-  
-    $this->entityRepository = $repository;
-    $this->hydrator = $repository->getHydrator();
-    $this->reflection = $repository->getEntityClassReflection();
-  }
-
+    
+    /**
+     * ResultSetIterator constructor.
+     *
+     * @param RepositoryInterface $repository
+     * @param \Iterator           $iterator
+     */
+    public function __construct(RepositoryInterface $repository, \Iterator $iterator)
+    {
+        parent::__construct($iterator);
+        
+        $this->entityRepository = $repository;
+        $this->hydrator = $repository->getHydrator();
+        $this->reflection = $repository->getEntityClassReflection();
+    }
+    
 }

@@ -11,13 +11,13 @@ use Colibri\Extension\AbstractExtension;
  */
 abstract class AbstractDataFilter extends AbstractExtension
 {
-  
-  /**
-   * @return array
-   */
-  public function getEvents()
-  {
-    return [ORMEvents::beforePersist];
-  }
-  
+    
+    /**
+     * @return array
+     */
+    public function getEvents()
+    {
+        return [ORMEvents::beforePersist];
+    }
+    
 }

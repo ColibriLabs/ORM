@@ -8,7 +8,6 @@ namespace Colibri\Core\Storage;
  */
 abstract class AbstractDatabasePersister implements PersisterInterface
 {
-  
 
-  
+
 }

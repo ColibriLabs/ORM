@@ -23,283 +23,292 @@ use Colibri\Query\Statement\Where;
  */
 class Select extends Builder implements SelectInterface
 {
-
-  use Syntax\WhereTraitPHP7;
-  use Syntax\GroupByTrait;
-  use Syntax\OrderByTrait;
-  use Syntax\ModifiersTrait;
-  use Syntax\HavingTrait;
-  use Syntax\JoinTrait;
-  use Syntax\LimitTrait;
-
-  /**
-   * @var string
-   */
-  const TEMPLATE = 'SELECT%s%s%s%s%s%s%s%s%s';
-
-  /**
-   * @var Collection
-   */
-  protected $columns = null;
-
-  /**
-   * Select constructor.
-   * @param ConnectionInterface $connection
-   */
-  public function __construct(ConnectionInterface $connection)
-  {
-    parent::__construct($connection);
-
-    $this->columns = new Collection();
-  }
-
-  /**
-   * Cloning object
-   */
-  public function __clone()
-  {
-    parent::__clone();
-
-    $this->columns = clone $this->columns;
-    $this->statements = clone $this->statements;
-  }
-
-  /**
-   * @return array
-   */
-  public function __debugInfo()
-  {
-    return [
-      'builder_name' => __CLASS__,
-      'parent_builder' => parent::__debugInfo(),
-      'columns' => $this->columns->toArray(),
-      'statements' => $this->statements,
-    ];
-  }
-
-  /**
-   * @inheritDoc
-   */
-  protected function initialize()
-  {
-    parent::initialize();
-
-    $this->columns = new Collection();
-    $this->statements = new Collection([
-      'modifiers' => new Modifiers($this, Modifiers::MAP_SELECT),
-      'joins' => new Joins($this),
-      'where' => new Where($this),
-      'group' => new GroupBy($this),
-      'order' => new OrderBy($this),
-      'having' => new Having($this),
-      'limit' => new Limit($this),
-    ]);
-  }
-
-  /**
-   * @param string $table
-   * @return Select
-   */
-  public function from($table)
-  {
-    return $this->table($table);
-  }
-
-  /**
-   * @param string $table
-   * @return Select
-   */
-  public function setFromTable($table)
-  {
-    return $this->from($table);
-  }
-
-  /**
-   * @param array $columns
-   * @return Select
-   */
-  public function addSelectColumns(array $columns)
-  {
-    foreach ($columns as $column) {
-      is_array($column)
-        ? count($column) != count($column, true)
-          ? $this->addSelectColumns(...$column) : $this->addSelectColumn(...$column) : $this->addSelectColumn($column);
-    }
-
-    return $this;
-  }
-
-  /**
-   * @param string $expression
-   * @param null $alias
-   * @return $this
-   */
-  public function addSelectColumn($expression, $alias = null)
-  {
-    if (!($expression instanceof Expression)) {
-      $expression = new Expr\Column($expression);
-    }
-  
-    $expression = $this->completeExpression($expression, $alias);
-
-    $this->columns->add($expression->hashCode());
-
-    return $this;
-  }
-
-  /**
-   * @return $this
-   */
-  public function clearSelectColumns()
-  {
-    $this->columns->clear();
-
-    return $this;
-  }
-
-  /**
-   * @param string $column
-   * @param string $alias
-   * @return Select
-   */
-  public function avg($column, $alias)
-  {
-    return $this->addSelectColumn(new Func\Avg(new Expr\Column($column)), $alias);
-  }
-
-  /**
-   * @param $column
-   * @param $alias
-   * @return Select
-   */
-  public function count($column, $alias)
-  {
-    return $this->addSelectColumn(new Func\Count(new Expr\Column($column)), $alias);
-  }
-
-  /**
-   * @param $column
-   * @param $alias
-   * @return Select
-   */
-  public function max($column, $alias)
-  {
-    return $this->addSelectColumn(new Func\Max(new Expr\Column($column)), $alias);
-  }
-
-  /**
-   * @param $column
-   * @param $alias
-   * @return Select
-   */
-  public function min($column, $alias)
-  {
-    return $this->addSelectColumn(new Func\Min(new Expr\Column($column)), $alias);
-  }
-
-  /**
-   * @return GroupBy
-   * @throws BadArgumentException
-   */
-  public function getGroupByStatement()
-  {
-    return $this->statements['group'];
-  }
-
-  /**
-   * @return Having
-   * @throws BadArgumentException
-   */
-  public function getHavingStatement()
-  {
-    return $this->statements['having'];
-  }
-
-  /**
-   * @return Modifiers
-   * @throws BadArgumentException
-   */
-  public function getModifiersStatement()
-  {
-    return $this->statements['modifiers'];
-  }
-
-  /**
-   * @return Joins
-   * @throws BadArgumentException
-   */
-  public function getJoinStatement()
-  {
-    return $this->statements['joins'];
-  }
-
-  /**
-   * @return OrderBy
-   * @throws BadArgumentException
-   */
-  public function getOrderByStatement()
-  {
-    return $this->statements['order'];
-  }
-
-  /**
-   * @return Where
-   * @throws BadArgumentException
-   */
-  public function getWhereStatement()
-  {
-    return $this->statements['where'];
-  }
-
-  /**
-   * @return Limit
-   */
-  public function getLimitStatement()
-  {
-    return $this->statements['limit'];
-  }
-
-  /**
-   * @return string
-   */
-  public function toSQL()
-  {
-    $statements = [];
-
-    $expressions = $this->columns->map(function ($hashCode) {
-      return $this->getExpression($hashCode);
-    });
     
-    $columns = $this->normalizeExpression(new Expr\Parameters($expressions->toArray()));
-
-    $statementsNames = [
-      'joins'   => "\n%s",
-      'where'   => "\nWHERE %s",
-      'group'   => "\nGROUP BY %s",
-      'order'   => "\nORDER BY %s",
-      'having'  => "\nHAVING %s",
-      'limit'   => "\nLIMIT %s",
-    ];
-  
-    $table = null;
+    use Syntax\WhereTraitPHP7;
+    use Syntax\GroupByTrait;
+    use Syntax\OrderByTrait;
+    use Syntax\ModifiersTrait;
+    use Syntax\HavingTrait;
+    use Syntax\JoinTrait;
+    use Syntax\LimitTrait;
     
-    if (null !== $this->table) {
-      /** @var Expr\Table $table */
-      $table = $this->normalizeExpression($this->table);
+    /**
+     * @var string
+     */
+    const TEMPLATE = 'SELECT%s%s%s%s%s%s%s%s%s';
+    
+    /**
+     * @var Collection
+     */
+    protected $columns = null;
+    
+    /**
+     * Select constructor.
+     *
+     * @param ConnectionInterface $connection
+     */
+    public function __construct(ConnectionInterface $connection)
+    {
+        parent::__construct($connection);
+        
+        $this->columns = new Collection();
     }
     
-    $statements[] = (null === ($modifiers = $this->getModifiersStatement()->toSQL())) ? null : $modifiers;
-    $statements[] = " $columns ";
-    $statements[] = $table === null ? null : "\nFROM {$table}";
-    
-    foreach ($statementsNames as $name => $template) {
-      if (null !== ($statement = $this->statements->get($name)) && null !== ($statementSQL = $statement->toSQL())) {
-        $statements[] = sprintf($template, $statementSQL);
-      } else {
-        $statements[] = null;
-      }
+    /**
+     * Cloning object
+     */
+    public function __clone()
+    {
+        parent::__clone();
+        
+        $this->columns = clone $this->columns;
+        $this->statements = clone $this->statements;
     }
-
-    return $this->getCommentSql() . sprintf(static::TEMPLATE, ...$statements);
-  }
+    
+    /**
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return [
+            'builder_name'   => __CLASS__,
+            'parent_builder' => parent::__debugInfo(),
+            'columns'        => $this->columns->toArray(),
+            'statements'     => $this->statements,
+        ];
+    }
+    
+    /**
+     * @param string $table
+     *
+     * @return Select
+     */
+    public function setFromTable($table)
+    {
+        return $this->from($table);
+    }
+    
+    /**
+     * @param string $table
+     *
+     * @return Select
+     */
+    public function from($table)
+    {
+        return $this->table($table);
+    }
+    
+    /**
+     * @param array $columns
+     *
+     * @return Select
+     */
+    public function addSelectColumns(array $columns)
+    {
+        foreach ($columns as $column) {
+            is_array($column)
+                ? count($column) != count($column, true)
+                ? $this->addSelectColumns(...$column) : $this->addSelectColumn(...$column) : $this->addSelectColumn($column);
+        }
+        
+        return $this;
+    }
+    
+    /**
+     * @param string $expression
+     * @param null   $alias
+     *
+     * @return $this
+     */
+    public function addSelectColumn($expression, $alias = null)
+    {
+        if (!($expression instanceof Expression)) {
+            $expression = new Expr\Column($expression);
+        }
+        
+        $expression = $this->completeExpression($expression, $alias);
+        
+        $this->columns->add($expression->hashCode());
+        
+        return $this;
+    }
+    
+    /**
+     * @return $this
+     */
+    public function clearSelectColumns()
+    {
+        $this->columns->clear();
+        
+        return $this;
+    }
+    
+    /**
+     * @param string $column
+     * @param string $alias
+     *
+     * @return Select
+     */
+    public function avg($column, $alias)
+    {
+        return $this->addSelectColumn(new Func\Avg(new Expr\Column($column)), $alias);
+    }
+    
+    /**
+     * @param $column
+     * @param $alias
+     *
+     * @return Select
+     */
+    public function count($column, $alias)
+    {
+        return $this->addSelectColumn(new Func\Count(new Expr\Column($column)), $alias);
+    }
+    
+    /**
+     * @param $column
+     * @param $alias
+     *
+     * @return Select
+     */
+    public function max($column, $alias)
+    {
+        return $this->addSelectColumn(new Func\Max(new Expr\Column($column)), $alias);
+    }
+    
+    /**
+     * @param $column
+     * @param $alias
+     *
+     * @return Select
+     */
+    public function min($column, $alias)
+    {
+        return $this->addSelectColumn(new Func\Min(new Expr\Column($column)), $alias);
+    }
+    
+    /**
+     * @return GroupBy
+     * @throws BadArgumentException
+     */
+    public function getGroupByStatement()
+    {
+        return $this->statements['group'];
+    }
+    
+    /**
+     * @return Having
+     * @throws BadArgumentException
+     */
+    public function getHavingStatement()
+    {
+        return $this->statements['having'];
+    }
+    
+    /**
+     * @return Joins
+     * @throws BadArgumentException
+     */
+    public function getJoinStatement()
+    {
+        return $this->statements['joins'];
+    }
+    
+    /**
+     * @return OrderBy
+     * @throws BadArgumentException
+     */
+    public function getOrderByStatement()
+    {
+        return $this->statements['order'];
+    }
+    
+    /**
+     * @return Where
+     * @throws BadArgumentException
+     */
+    public function getWhereStatement()
+    {
+        return $this->statements['where'];
+    }
+    
+    /**
+     * @return Limit
+     */
+    public function getLimitStatement()
+    {
+        return $this->statements['limit'];
+    }
+    
+    /**
+     * @return string
+     */
+    public function toSQL()
+    {
+        $statements = [];
+        
+        $expressions = $this->columns->map(function ($hashCode) {
+            return $this->getExpression($hashCode);
+        });
+        
+        $columns = $this->normalizeExpression(new Expr\Parameters($expressions->toArray()));
+        
+        $statementsNames = [
+            'joins'  => "\n%s",
+            'where'  => "\nWHERE %s",
+            'group'  => "\nGROUP BY %s",
+            'order'  => "\nORDER BY %s",
+            'having' => "\nHAVING %s",
+            'limit'  => "\nLIMIT %s",
+        ];
+        
+        $table = null;
+        
+        if (null !== $this->table) {
+            /** @var Expr\Table $table */
+            $table = $this->normalizeExpression($this->table);
+        }
+        
+        $statements[] = (null === ($modifiers = $this->getModifiersStatement()->toSQL())) ? null : $modifiers;
+        $statements[] = " $columns ";
+        $statements[] = $table === null ? null : "\nFROM {$table}";
+        
+        foreach ($statementsNames as $name => $template) {
+            if (null !== ($statement = $this->statements->get($name)) && null !== ($statementSQL = $statement->toSQL())) {
+                $statements[] = sprintf($template, $statementSQL);
+            } else {
+                $statements[] = null;
+            }
+        }
+        
+        return $this->getCommentSql() . sprintf(static::TEMPLATE, ...$statements);
+    }
+    
+    /**
+     * @return Modifiers
+     * @throws BadArgumentException
+     */
+    public function getModifiersStatement()
+    {
+        return $this->statements['modifiers'];
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    protected function initialize()
+    {
+        parent::initialize();
+        
+        $this->columns = new Collection();
+        $this->statements = new Collection([
+            'modifiers' => new Modifiers($this, Modifiers::MAP_SELECT),
+            'joins'     => new Joins($this),
+            'where'     => new Where($this),
+            'group'     => new GroupBy($this),
+            'order'     => new OrderBy($this),
+            'having'    => new Having($this),
+            'limit'     => new Limit($this),
+        ]);
+    }
 }

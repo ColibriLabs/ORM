@@ -10,11 +10,12 @@ use Colibri\Core\Domain\EntityInterface;
  */
 interface RemoverInterface
 {
-  
-  /**
-   * @param EntityInterface $entity
-   * @return $this
-   */
-  public function remove(EntityInterface $entity);
-
+    
+    /**
+     * @param EntityInterface $entity
+     *
+     * @return $this
+     */
+    public function remove(EntityInterface $entity);
+    
 }

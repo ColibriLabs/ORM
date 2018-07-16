@@ -10,27 +10,28 @@ use Colibri\Core\Domain\MetadataInterface;
  */
 class MetadataLoadEvent extends AbstractEvent
 {
-  
-  /**
-   * @var MetadataInterface
-   */
-  protected $metadata;
-  
-  /**
-   * MetadataLoadEvent constructor.
-   * @param MetadataInterface $metadata
-   */
-  public function __construct(MetadataInterface $metadata)
-  {
-    $this->metadata = $metadata;
-  }
-  
-  /**
-   * @return MetadataInterface
-   */
-  public function getMetadata()
-  {
-    return $this->metadata;
-  }
-  
+    
+    /**
+     * @var MetadataInterface
+     */
+    protected $metadata;
+    
+    /**
+     * MetadataLoadEvent constructor.
+     *
+     * @param MetadataInterface $metadata
+     */
+    public function __construct(MetadataInterface $metadata)
+    {
+        $this->metadata = $metadata;
+    }
+    
+    /**
+     * @return MetadataInterface
+     */
+    public function getMetadata()
+    {
+        return $this->metadata;
+    }
+    
 }

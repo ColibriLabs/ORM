@@ -10,14 +10,15 @@ use Colibri\Logger\Collection\Collection;
  */
 class HtmlFormatter extends AbstractFormatter
 {
-
-  /**
-   * @param Collection $placeholders
-   * @return mixed|void
-   */
-  public function format(Collection $placeholders)
-  {
-    // TODO: Implement format() method.
-  }
-
+    
+    /**
+     * @param Collection $placeholders
+     *
+     * @return mixed|void
+     */
+    public function format(Collection $placeholders)
+    {
+        // TODO: Implement format() method.
+    }
+    
 }

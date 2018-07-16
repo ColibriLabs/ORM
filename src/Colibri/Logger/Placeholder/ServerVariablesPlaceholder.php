@@ -15,12 +15,12 @@ class ServerVariablesPlaceholder extends AbstractPlaceholder
      * @var array
      */
     private $serverVariables = [
-        'ip' => 'REMOTE_ADDR',
-        'port' => 'REMOTE_PORT',
-        'host' => 'HTTP_HOST',
+        'ip'         => 'REMOTE_ADDR',
+        'port'       => 'REMOTE_PORT',
+        'host'       => 'HTTP_HOST',
         'httpMethod' => 'REQUEST_METHOD',
-        'uri' => 'REQUEST_URI',
-        'userAgent' => 'HTTP_USER_AGENT',
+        'uri'        => 'REQUEST_URI',
+        'userAgent'  => 'HTTP_USER_AGENT',
     ];
     
     /**

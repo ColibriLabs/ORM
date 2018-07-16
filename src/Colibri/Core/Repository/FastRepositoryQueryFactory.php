@@ -11,14 +11,14 @@ use Colibri\Query\Statement\Modifiers;
  */
 class FastRepositoryQueryFactory extends AbstractRepositoryQueryFactory
 {
-  
-  /**
-   * @return Builder\Insert
-   * @throws \Colibri\Exception\NullPointerException
-   */
-  public function createInsertQuery()
-  {
-    return parent::createInsertQuery()->addModifier(Modifiers::DELAYED);
-  }
-  
+    
+    /**
+     * @return Builder\Insert
+     * @throws \Colibri\Exception\NullPointerException
+     */
+    public function createInsertQuery()
+    {
+        return parent::createInsertQuery()->addModifier(Modifiers::DELAYED);
+    }
+    
 }

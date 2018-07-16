@@ -8,10 +8,10 @@ namespace Colibri\Query;
  */
 interface SqlableInterface
 {
-
-  /**
-   * @return string
-   */
-  public function toSQL();
-
+    
+    /**
+     * @return string
+     */
+    public function toSQL();
+    
 }

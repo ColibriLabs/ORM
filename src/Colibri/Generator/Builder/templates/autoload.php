@@ -3,7 +3,7 @@
 use Colibri\Generator\Template\Template;
 
 /**
- * @var $this Template
+ * @var $this      Template
  * @var $namespace string
  */
 

@@ -10,15 +10,16 @@ use Colibri\Logger\Collection\Collection;
  */
 interface FormatterInterface
 {
-
-  const PLACEHOLDER_MASK_DOUBLE_DOT = ':%s';
-
-  const PLACEHOLDER_MASK_BRACKETS = '{%s}';
-
-  /**
-   * @param Collection $record
-   * @return mixed
-   */
-  public function format(Collection $record);
-
+    
+    const PLACEHOLDER_MASK_DOUBLE_DOT = ':%s';
+    
+    const PLACEHOLDER_MASK_BRACKETS = '{%s}';
+    
+    /**
+     * @param Collection $record
+     *
+     * @return mixed
+     */
+    public function format(Collection $record);
+    
 }

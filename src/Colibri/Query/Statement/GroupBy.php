@@ -15,103 +15,107 @@ use Colibri\Query\Expression;
  */
 class GroupBy extends AbstractStatement
 {
-
-  use Syntax\GroupByTrait;
-
-  /**
-   * @var Collection|null
-   */
-  protected $expressions = null;
-
-  /**
-   * @var bool
-   */
-  protected $withRollup = false;
-
-  /**
-   * GroupStatement constructor.
-   * @param Builder $builder
-   */
-  public function __construct(Builder $builder)
-  {
-    parent::__construct($builder);
-
-    $this->expressions = new Collection();
-  }
-  
-  /**
-   * @inheritdoc
-   */
-  public function __clone()
-  {
-    $this->expressions = clone $this->expressions;
-  }
-  
-  /**
-   * @return Collection
-   */
-  public function getExpressions()
-  {
-    return $this->expressions;
-  }
-  
-  /**
-   * @param array ...$columns
-   * @return $this
-   */
-  public function add(...$columns)
-  {
-    foreach ($columns as $column) {
-      $this->addGroupBy($column);
+    
+    use Syntax\GroupByTrait;
+    
+    /**
+     * @var Collection|null
+     */
+    protected $expressions = null;
+    
+    /**
+     * @var bool
+     */
+    protected $withRollup = false;
+    
+    /**
+     * GroupStatement constructor.
+     *
+     * @param Builder $builder
+     */
+    public function __construct(Builder $builder)
+    {
+        parent::__construct($builder);
+        
+        $this->expressions = new Collection();
     }
-
-    return $this;
-  }
-
-  /**
-   * @param $expression
-   * @return $this
-   */
-  public function addGroupBy($expression)
-  {
-    if(!($expression instanceof Expression)) {
-      $expression = new Column($expression);
+    
+    /**
+     * @inheritdoc
+     */
+    public function __clone()
+    {
+        $this->expressions = clone $this->expressions;
     }
-
-    $this->expressions->set($expression->hashCode(), $expression);
-
-    return $this;
-  }
-
-  /**
-   * @param bool $use
-   * @return $this
-   */
-  public function withRollup($use = false)
-  {
-    $this->withRollup = $use;
-
-    return $this;
-  }
-
-  /**
-   * @return string
-   */
-  public function toSQL()
-  {
-    return $this->expressions->exists()
-      ? trim(sprintf("%s %s", implode(', ', array_map(function(Expression $expression) {
-        return $this->stringifyExpression($expression);
-      }, $this->expressions->toArray())), ($this->withRollup ? 'WITH ROLLUP' : null))) : null;
-  }
-
-  /**
-   * @return GroupBy
-   * @throws BadArgumentException
-   */
-  public function getGroupByStatement()
-  {
-    return $this;
-  }
-
+    
+    /**
+     * @return Collection
+     */
+    public function getExpressions()
+    {
+        return $this->expressions;
+    }
+    
+    /**
+     * @param array ...$columns
+     *
+     * @return $this
+     */
+    public function add(...$columns)
+    {
+        foreach ($columns as $column) {
+            $this->addGroupBy($column);
+        }
+        
+        return $this;
+    }
+    
+    /**
+     * @param $expression
+     *
+     * @return $this
+     */
+    public function addGroupBy($expression)
+    {
+        if (!($expression instanceof Expression)) {
+            $expression = new Column($expression);
+        }
+        
+        $this->expressions->set($expression->hashCode(), $expression);
+        
+        return $this;
+    }
+    
+    /**
+     * @param bool $use
+     *
+     * @return $this
+     */
+    public function withRollup($use = false)
+    {
+        $this->withRollup = $use;
+        
+        return $this;
+    }
+    
+    /**
+     * @return string
+     */
+    public function toSQL()
+    {
+        return $this->expressions->exists()
+            ? trim(sprintf("%s %s", implode(', ', array_map(function (Expression $expression) {
+                return $this->stringifyExpression($expression);
+            }, $this->expressions->toArray())), ($this->withRollup ? 'WITH ROLLUP' : null))) : null;
+    }
+    
+    /**
+     * @return GroupBy
+     * @throws BadArgumentException
+     */
+    public function getGroupByStatement()
+    {
+        return $this;
+    }
+    
 }

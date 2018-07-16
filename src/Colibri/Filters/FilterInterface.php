@@ -8,11 +8,12 @@ namespace Colibri\Filters;
  */
 interface FilterInterface
 {
-  
-  /**
-   * @param string|integer|array $input
-   * @return string|integer|array
-   */
-  public function apply($input);
-  
+    
+    /**
+     * @param string|integer|array $input
+     *
+     * @return string|integer|array
+     */
+    public function apply($input);
+    
 }

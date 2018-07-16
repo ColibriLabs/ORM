@@ -2,8 +2,8 @@
 
 namespace Colibri\Query\Expr\Func;
 
-use Colibri\Query\Expr\Func;
 use Colibri\Exception\BadCallMethodException;
+use Colibri\Query\Expr\Func;
 
 /**
  * Class Count
@@ -11,55 +11,57 @@ use Colibri\Exception\BadCallMethodException;
  */
 class Count extends Func
 {
-  
-  private $isDistinct = false;
-  
-  /**
-   * Count constructor.
-   * MySQL Function COUNT
-   *
-   * @throws BadCallMethodException
-   * @param string $columnName
-   * @param bool $isDistinct
-   */
-  public function __construct($columnName, $isDistinct = false)
-  {
-    parent::__construct('COUNT', [$columnName]);
     
-    $this->setDistinct($isDistinct);
-  }
-  
-  /**
-   * @return bool
-   */
-  public function isDistinct()
-  {
-    return $this->isDistinct;
-  }
-  
-  /**
-   * @param bool $isDistinct
-   * @return $this
-   */
-  public function setDistinct($isDistinct)
-  {
-    $this->isDistinct = (boolean)$isDistinct;
+    private $isDistinct = false;
     
-    return $this;
-  }
-  
-  /**
-   * @inheritDoc
-   */
-  protected function toStringFunctionArguments()
-  {
-    $arguments = parent::toStringFunctionArguments();
-    
-    if (true === $this->isDistinct()) {
-      $arguments = sprintf('DISTINCT %s', $arguments);
+    /**
+     * Count constructor.
+     * MySQL Function COUNT
+     *
+     * @throws BadCallMethodException
+     *
+     * @param string $columnName
+     * @param bool   $isDistinct
+     */
+    public function __construct($columnName, $isDistinct = false)
+    {
+        parent::__construct('COUNT', [$columnName]);
+        
+        $this->setDistinct($isDistinct);
     }
     
-    return $arguments;
-  }
-  
+    /**
+     * @param bool $isDistinct
+     *
+     * @return $this
+     */
+    public function setDistinct($isDistinct)
+    {
+        $this->isDistinct = (boolean) $isDistinct;
+        
+        return $this;
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    protected function toStringFunctionArguments()
+    {
+        $arguments = parent::toStringFunctionArguments();
+        
+        if (true === $this->isDistinct()) {
+            $arguments = sprintf('DISTINCT %s', $arguments);
+        }
+        
+        return $arguments;
+    }
+    
+    /**
+     * @return bool
+     */
+    public function isDistinct()
+    {
+        return $this->isDistinct;
+    }
+    
 }

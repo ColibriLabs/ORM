@@ -14,62 +14,64 @@ use Colibri\Validator\ValidatorException;
  */
 class Validator extends BaseValidator
 {
-  
-  /**
-   * @var MetadataInterface
-   */
-  protected $entityMetadata;
-  
-  /**
-   * Validator constructor.
-   * @param MetadataInterface $metadata
-   */
-  public function __construct(MetadataInterface $metadata)
-  {
-    parent::__construct();
     
-    $this->entityMetadata = $metadata;
-  }
-  
-  /**
-   * @param mixed $value
-   * @return ValidableInterface
-   * @throws ValidatorException
-   */
-  public function with($value): ValidableInterface
-  {
-    parent::with($value);
+    /**
+     * @var MetadataInterface
+     */
+    protected $entityMetadata;
     
-    if (false === ($value instanceof EntityInterface)) {
-      throw new ValidatorException(sprintf('Validator accept only (%s) objects', EntityInterface::class));
+    /**
+     * Validator constructor.
+     *
+     * @param MetadataInterface $metadata
+     */
+    public function __construct(MetadataInterface $metadata)
+    {
+        parent::__construct();
+        
+        $this->entityMetadata = $metadata;
     }
     
-    return $this;
-  }
-  
-  /**
-   * @throws ValidatorException
-   * @return Validator
-   */
-  public function setupRules()
-  {
-    $metadata = $this->getEntityMetadata();
+    /**
+     * @param mixed $value
+     *
+     * @return ValidableInterface
+     * @throws ValidatorException
+     */
+    public function with($value): ValidableInterface
+    {
+        parent::with($value);
+        
+        if (false === ($value instanceof EntityInterface)) {
+            throw new ValidatorException(sprintf('Validator accept only (%s) objects', EntityInterface::class));
+        }
+        
+        return $this;
+    }
     
-    /*if ($this->with instanceof EntityInterface) {
-      foreach ($metadata->getNames() as $name) {
-      
-      }
-    }*/
-  
-    throw new ValidatorException(sprintf('Tatget entity do not specified yet. Call %s::with() before', __CLASS__));
-  }
-  
-  /**
-   * @return MetadataInterface
-   */
-  public function getEntityMetadata(): MetadataInterface
-  {
-    return $this->entityMetadata;
-  }
-  
+    /**
+     * @throws ValidatorException
+     * @return Validator
+     */
+    public function setupRules()
+    {
+        $metadata = $this->getEntityMetadata();
+        
+        /*if ($this->with instanceof EntityInterface) {
+          foreach ($metadata->getNames() as $name) {
+          
+          }
+        }*/
+        
+        throw new ValidatorException(sprintf('Tatget entity do not specified yet. Call %s::with() before', __CLASS__));
+    }
+    
+    /**
+     * @return MetadataInterface
+     */
+    public function getEntityMetadata(): MetadataInterface
+    {
+        return $this->entityMetadata;
+    }
+    
 }

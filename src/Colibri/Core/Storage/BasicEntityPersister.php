@@ -10,29 +10,29 @@ use Colibri\Core\Domain\EntityInterface;
  */
 class BasicEntityPersister extends AbstractDatabasePersister
 {
-  
-  /**
-   * @inheritDoc
-   */
-  public function create(EntityInterface $entity)
-  {
     
-  }
-  
-  /**
-   * @inheritDoc
-   */
-  public function update(EntityInterface $entity)
-  {
+    /**
+     * @inheritDoc
+     */
+    public function create(EntityInterface $entity)
+    {
     
-  }
-  
-  /**
-   * @inheritDoc
-   */
-  public function remove(EntityInterface $entity)
-  {
+    }
     
-  }
-  
+    /**
+     * @inheritDoc
+     */
+    public function update(EntityInterface $entity)
+    {
+    
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public function remove(EntityInterface $entity)
+    {
+    
+    }
+    
 }

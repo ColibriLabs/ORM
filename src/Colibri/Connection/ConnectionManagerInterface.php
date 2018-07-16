@@ -10,12 +10,13 @@ use Colibri\Exception\BadArgumentException;
  */
 interface ConnectionManagerInterface
 {
-
-  /**
-   * @param $name
-   * @return ConnectionInterface
-   * @throws BadArgumentException
-   */
-  public function getConnection($name);
-
+    
+    /**
+     * @param $name
+     *
+     * @return ConnectionInterface
+     * @throws BadArgumentException
+     */
+    public function getConnection($name);
+    
 }

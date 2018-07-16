@@ -10,17 +10,17 @@ use Colibri\Exception\BadArgumentException;
  */
 class Logical extends Comparison
 {
-
-  /**
-   * @return string
-   * @throws BadArgumentException
-   */
-  protected function buildCondition()
-  {
-    $left = $this->stringifyExpression($this->getLeftExpression());
-    $right = $this->stringifyExpression($this->getRightExpression());
-
-    return sprintf('%s %s %s', $left, $this->getComparator(), $right);
-  }
-
+    
+    /**
+     * @return string
+     * @throws BadArgumentException
+     */
+    protected function buildCondition()
+    {
+        $left = $this->stringifyExpression($this->getLeftExpression());
+        $right = $this->stringifyExpression($this->getRightExpression());
+        
+        return sprintf('%s %s %s', $left, $this->getComparator(), $right);
+    }
+    
 }

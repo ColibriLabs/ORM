@@ -8,5 +8,5 @@ namespace Colibri\Extension\EventSubscriber\ResourceLogger;
  */
 interface ResourceModelInterface
 {
-
+    
 }

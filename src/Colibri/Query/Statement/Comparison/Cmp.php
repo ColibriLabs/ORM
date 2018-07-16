@@ -8,5 +8,5 @@ namespace Colibri\Query\Statement\Comparison;
  */
 abstract class Cmp extends Comparison
 {
-
+    
 }

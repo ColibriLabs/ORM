@@ -8,5 +8,5 @@ namespace Colibri\Validator;
  */
 class ValidatorException extends \Exception
 {
-
+    
 }

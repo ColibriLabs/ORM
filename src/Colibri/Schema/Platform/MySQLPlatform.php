@@ -10,13 +10,13 @@ use Colibri\Schema\Platform;
  */
 class MySQLPlatform extends Platform
 {
-
-  /**
-   * MySQLPlatform constructor.
-   */
-  public function __construct()
-  {
-    parent::__construct('mysql');
-  }
-
+    
+    /**
+     * MySQLPlatform constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('mysql');
+    }
+    
 }

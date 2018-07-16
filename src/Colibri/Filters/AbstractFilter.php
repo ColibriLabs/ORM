@@ -7,4 +7,5 @@ namespace Colibri\Filters;
  * @package Colibri\Filters
  */
 abstract class AbstractFilter implements FilterInterface
-{}
+{
+}

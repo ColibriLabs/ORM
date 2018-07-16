@@ -10,14 +10,14 @@ use Colibri\Exception\BadCallMethodException;
  */
 class Custom extends Comparison
 {
-
-  /**
-   * @return string
-   * @throws BadCallMethodException
-   */
-  protected function buildCondition()
-  {
-    return $this->stringifyExpression($this->getLeftExpression());
-  }
-
+    
+    /**
+     * @return string
+     * @throws BadCallMethodException
+     */
+    protected function buildCondition()
+    {
+        return $this->stringifyExpression($this->getLeftExpression());
+    }
+    
 }

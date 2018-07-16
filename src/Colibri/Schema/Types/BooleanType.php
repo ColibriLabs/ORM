@@ -8,21 +8,21 @@ namespace Colibri\Schema\Types;
  */
 class BooleanType extends IntegerType
 {
-  
-  /**
-   * @inheritDoc
-   */
-  public function toPhpValue($value)
-  {
-    return (boolean) parent::toPhpValue($value);
-  }
-  
-  /**
-   * @inheritDoc
-   */
-  public function getName()
-  {
-    return static::BOOLEAN;
-  }
-  
+    
+    /**
+     * @inheritDoc
+     */
+    public function toPhpValue($value)
+    {
+        return (boolean) parent::toPhpValue($value);
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public function getName()
+    {
+        return static::BOOLEAN;
+    }
+    
 }

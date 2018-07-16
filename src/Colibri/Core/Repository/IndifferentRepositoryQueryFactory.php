@@ -11,23 +11,23 @@ use Colibri\Query\Statement\Modifiers;
  */
 class IndifferentRepositoryQueryFactory extends AbstractRepositoryQueryFactory
 {
-  
-  /**
-   * @return Builder\Insert
-   * @throws \Colibri\Exception\NullPointerException
-   */
-  public function createInsertQuery()
-  {
-    return parent::createInsertQuery()->addModifier(Modifiers::IGNORE);
-  }
-  
-  /**
-   * @return Builder\Update
-   * @throws \Colibri\Exception\NullPointerException
-   */
-  public function createUpdateQuery()
-  {
-    return parent::createUpdateQuery()->addModifier(Modifiers::IGNORE);
-  }
-  
+    
+    /**
+     * @return Builder\Insert
+     * @throws \Colibri\Exception\NullPointerException
+     */
+    public function createInsertQuery()
+    {
+        return parent::createInsertQuery()->addModifier(Modifiers::IGNORE);
+    }
+    
+    /**
+     * @return Builder\Update
+     * @throws \Colibri\Exception\NullPointerException
+     */
+    public function createUpdateQuery()
+    {
+        return parent::createUpdateQuery()->addModifier(Modifiers::IGNORE);
+    }
+    
 }

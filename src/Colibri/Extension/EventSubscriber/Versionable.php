@@ -14,34 +14,34 @@ use Colibri\Parameters\ParametersCollection;
  */
 class Versionable extends AbstractExtension
 {
-  
-  /**
-   * @return array
-   */
-  public function getEvents()
-  {
-    return [ORMEvents::beforePersist];
-  }
-  
-  /**
-   * @inheritDoc
-   */
-  public function getNameNS()
-  {
-    return 'versionable';
-  }
-  
-  /**
-   * @param EntityLifecycleEvent $event
-   */
-  public function beforePersist(EntityLifecycleEvent $event)
-  {
-    $this->resolveEntities($event, function (EntityInterface $entity, ParametersCollection $parameters) {
-      foreach ($parameters->get('properties') as $propertyName) {
-        $version = $entity->getByProperty($propertyName);
-        $entity->setByProperty($propertyName, $version + 1);
-      }
-    });
-  }
-
+    
+    /**
+     * @return array
+     */
+    public function getEvents()
+    {
+        return [ORMEvents::beforePersist];
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public function getNameNS()
+    {
+        return 'versionable';
+    }
+    
+    /**
+     * @param EntityLifecycleEvent $event
+     */
+    public function beforePersist(EntityLifecycleEvent $event)
+    {
+        $this->resolveEntities($event, function (EntityInterface $entity, ParametersCollection $parameters) {
+            foreach ($parameters->get('properties') as $propertyName) {
+                $version = $entity->getByProperty($propertyName);
+                $entity->setByProperty($propertyName, $version + 1);
+            }
+        });
+    }
+    
 }

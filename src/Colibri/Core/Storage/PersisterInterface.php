@@ -10,17 +10,19 @@ use Colibri\Core\Domain\EntityInterface;
  */
 interface PersisterInterface
 {
-  
-  /**
-   * @param EntityInterface $entity
-   * @return $this
-   */
-  public function create(EntityInterface $entity);
-  
-  /**
-   * @param EntityInterface $entity
-   * @return $this
-   */
-  public function update(EntityInterface $entity);
-  
+    
+    /**
+     * @param EntityInterface $entity
+     *
+     * @return $this
+     */
+    public function create(EntityInterface $entity);
+    
+    /**
+     * @param EntityInterface $entity
+     *
+     * @return $this
+     */
+    public function update(EntityInterface $entity);
+    
 }

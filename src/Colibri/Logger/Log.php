@@ -53,6 +53,29 @@ class Log extends AbstractLogger
     }
     
     /**
+     * @return void
+     */
+    private function preSetup()
+    {
+        $this->pushPlaceholder(new SystemIdsPlaceholder());
+        $this->pushPlaceholder(new ServerVariablesPlaceholder());
+    }
+    
+    /**
+     * @param PlaceholderInterface $placeholder
+     *
+     * @return $this
+     */
+    public function pushPlaceholder(PlaceholderInterface $placeholder)
+    {
+        $className = get_class($placeholder);
+        
+        $this->placeholders->set($className, $placeholder);
+        
+        return $this;
+    }
+    
+    /**
      * Logs with an arbitrary level.
      *
      * @param mixed  $level
@@ -106,7 +129,7 @@ class Log extends AbstractLogger
             'message'      => $message,
         ]);
         
-        $this->placeholders->each(function (PlaceholderInterface $placeholder) use ($record) {
+        $this->placeholders->each(function ($name, PlaceholderInterface $placeholder) use ($record) {
             $placeholder->complement($record);
         });
         
@@ -140,29 +163,6 @@ class Log extends AbstractLogger
         $this->handlers->set($name, $handler);
         
         return $this;
-    }
-    
-    /**
-     * @param PlaceholderInterface $placeholder
-     *
-     * @return $this
-     */
-    public function pushPlaceholder(PlaceholderInterface $placeholder)
-    {
-        $className = get_class($placeholder);
-        
-        $this->placeholders->set($className, $placeholder);
-        
-        return $this;
-    }
-    
-    /**
-     * @return void
-     */
-    private function preSetup()
-    {
-        $this->pushPlaceholder(new SystemIdsPlaceholder());
-        $this->pushPlaceholder(new ServerVariablesPlaceholder());
     }
     
 }

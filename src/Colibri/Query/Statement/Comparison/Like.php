@@ -10,18 +10,18 @@ use Colibri\Exception\BadArgumentException;
  */
 class Like extends Comparison
 {
-
-  /**
-   * @return string
-   * @throws BadArgumentException
-   */
-  protected function buildCondition()
-  {
-    return sprintf('%s %s %s',
-      $this->stringifyExpression($this->getLeftExpression()),
-      $this->getComparator(),
-      $this->stringifyExpression($this->getRightExpression())
-    );
-  }
-
+    
+    /**
+     * @return string
+     * @throws BadArgumentException
+     */
+    protected function buildCondition()
+    {
+        return sprintf('%s %s %s',
+            $this->stringifyExpression($this->getLeftExpression()),
+            $this->getComparator(),
+            $this->stringifyExpression($this->getRightExpression())
+        );
+    }
+    
 }
